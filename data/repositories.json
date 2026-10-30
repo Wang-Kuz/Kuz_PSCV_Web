@@ -1,0 +1,376 @@
+{
+  "fetchedAt": "2026-10-30",
+  "owner": "Wang-Kuz",
+  "coverage": "complete",
+  "source": "gh-authenticated",
+  "repositories": [
+    {
+      "name": "AgroTradePlatform",
+      "url": "https://github.com/Wang-Kuz/AgroTradePlatform",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 48824,
+      "updatedAt": "2026-10-21T03:45:47Z"
+    },
+    {
+      "name": "AIproject",
+      "url": "https://github.com/Wang-Kuz/AIproject",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 13,
+      "updatedAt": "2026-10-21T07:39:27Z"
+    },
+    {
+      "name": "Automation-Toolkit",
+      "url": "https://github.com/Wang-Kuz/Automation-Toolkit",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 25,
+      "updatedAt": "2026-10-21T04:05:51Z"
+    },
+    {
+      "name": "AutoRecommend",
+      "url": "https://github.com/Wang-Kuz/AutoRecommend",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 52,
+      "updatedAt": "2026-10-21T06:08:56Z"
+    },
+    {
+      "name": "BMIcalculate",
+      "url": "https://github.com/Wang-Kuz/BMIcalculate",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 82,
+      "updatedAt": "2026-10-21T05:47:38Z"
+    },
+    {
+      "name": "CampusCloudDrive",
+      "url": "https://github.com/Wang-Kuz/CampusCloudDrive",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 1122,
+      "updatedAt": "2026-10-21T08:05:24Z"
+    },
+    {
+      "name": "CarParkingSystem",
+      "url": "https://github.com/Wang-Kuz/CarParkingSystem",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 4140,
+      "updatedAt": "2026-10-21T04:11:16Z"
+    },
+    {
+      "name": "CARSystem-2",
+      "url": "https://github.com/Wang-Kuz/CARSystem-2",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 2362,
+      "updatedAt": "2026-10-21T07:38:16Z"
+    },
+    {
+      "name": "CARVehicleManagementSystem",
+      "url": "https://github.com/Wang-Kuz/CARVehicleManagementSystem",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 27,
+      "updatedAt": "2026-10-21T06:11:32Z"
+    },
+    {
+      "name": "Complex-Strata-Multiphysics-Inversion-System",
+      "url": "https://github.com/Wang-Kuz/Complex-Strata-Multiphysics-Inversion-System",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 65,
+      "updatedAt": "2026-10-21T06:07:33Z"
+    },
+    {
+      "name": "CompressionTool",
+      "url": "https://github.com/Wang-Kuz/CompressionTool",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 28,
+      "updatedAt": "2026-10-21T06:19:58Z"
+    },
+    {
+      "name": "Data-Annotation-Tool",
+      "url": "https://github.com/Wang-Kuz/Data-Annotation-Tool",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 40,
+      "updatedAt": "2026-10-21T04:21:46Z"
+    },
+    {
+      "name": "DataAugYolo",
+      "url": "https://github.com/Wang-Kuz/DataAugYolo",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 41,
+      "updatedAt": "2026-10-21T05:18:14Z"
+    },
+    {
+      "name": "DatafactoryV2",
+      "url": "https://github.com/Wang-Kuz/DatafactoryV2",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 57116,
+      "updatedAt": "2026-10-30T07:04:14Z"
+    },
+    {
+      "name": "Deep-Multi-Source-Data-Fusion-and-Processing-System-Software",
+      "url": "https://github.com/Wang-Kuz/Deep-Multi-Source-Data-Fusion-and-Processing-System-Software",
+      "visibility": "private",
+      "defaultBranch": "master",
+      "size": 51,
+      "updatedAt": "2026-10-21T05:11:50Z"
+    },
+    {
+      "name": "DP-SVM-Remote",
+      "url": "https://github.com/Wang-Kuz/DP-SVM-Remote",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 649,
+      "updatedAt": "2026-10-21T05:17:54Z"
+    },
+    {
+      "name": "Explanatory-Robot",
+      "url": "https://github.com/Wang-Kuz/Explanatory-Robot",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 13732,
+      "updatedAt": "2026-10-30T07:11:27Z"
+    },
+    {
+      "name": "FacialFeature-with-AI",
+      "url": "https://github.com/Wang-Kuz/FacialFeature-with-AI",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 30,
+      "updatedAt": "2026-10-21T05:36:45Z"
+    },
+    {
+      "name": "FacialFeatureRecognition",
+      "url": "https://github.com/Wang-Kuz/FacialFeatureRecognition",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 213,
+      "updatedAt": "2026-10-21T05:25:26Z"
+    },
+    {
+      "name": "hr-management-system",
+      "url": "https://github.com/Wang-Kuz/hr-management-system",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 48500,
+      "updatedAt": "2026-10-21T04:37:01Z"
+    },
+    {
+      "name": "Individual-Consumption",
+      "url": "https://github.com/Wang-Kuz/Individual-Consumption",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 59,
+      "updatedAt": "2026-10-21T08:01:56Z"
+    },
+    {
+      "name": "Intelligent-Job-Recommendation-System-Job-Alerts",
+      "url": "https://github.com/Wang-Kuz/Intelligent-Job-Recommendation-System-Job-Alerts",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 0,
+      "updatedAt": "2026-10-30T08:02:00Z"
+    },
+    {
+      "name": "InventoryManagementSystem",
+      "url": "https://github.com/Wang-Kuz/InventoryManagementSystem",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 2367,
+      "updatedAt": "2026-10-21T05:27:38Z"
+    },
+    {
+      "name": "Kuz_PSCV_Web",
+      "url": "https://github.com/Wang-Kuz/Kuz_PSCV_Web",
+      "visibility": "public",
+      "defaultBranch": "main",
+      "size": 0,
+      "updatedAt": "2026-10-30T08:08:50Z"
+    },
+    {
+      "name": "Kuz-Personal-OS",
+      "url": "https://github.com/Wang-Kuz/Kuz-Personal-OS",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 7385,
+      "updatedAt": "2026-10-30T01:20:34Z"
+    },
+    {
+      "name": "KuzPlot-Studio",
+      "url": "https://github.com/Wang-Kuz/KuzPlot-Studio",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 40,
+      "updatedAt": "2026-10-21T06:01:26Z"
+    },
+    {
+      "name": "LabelX_Studio",
+      "url": "https://github.com/Wang-Kuz/LabelX_Studio",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 39,
+      "updatedAt": "2026-10-21T05:33:30Z"
+    },
+    {
+      "name": "Lawyersystem",
+      "url": "https://github.com/Wang-Kuz/Lawyersystem",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 7941,
+      "updatedAt": "2026-10-21T05:25:03Z"
+    },
+    {
+      "name": "Library-Management-System",
+      "url": "https://github.com/Wang-Kuz/Library-Management-System",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 24,
+      "updatedAt": "2026-10-21T08:35:25Z"
+    },
+    {
+      "name": "Lostfound",
+      "url": "https://github.com/Wang-Kuz/Lostfound",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 135,
+      "updatedAt": "2026-10-21T06:20:21Z"
+    },
+    {
+      "name": "LuoHanGuoJinGroup",
+      "url": "https://github.com/Wang-Kuz/LuoHanGuoJinGroup",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 120,
+      "updatedAt": "2026-10-21T08:10:00Z"
+    },
+    {
+      "name": "Multimodal-Intelligent-Interaction-Evaluation",
+      "url": "https://github.com/Wang-Kuz/Multimodal-Intelligent-Interaction-Evaluation",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 264,
+      "updatedAt": "2026-10-21T08:36:51Z"
+    },
+    {
+      "name": "Payment-Management-System",
+      "url": "https://github.com/Wang-Kuz/Payment-Management-System",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 5100,
+      "updatedAt": "2026-10-21T08:41:35Z"
+    },
+    {
+      "name": "Personal-Workstation",
+      "url": "https://github.com/Wang-Kuz/Personal-Workstation",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 5098,
+      "updatedAt": "2026-10-21T04:06:25Z"
+    },
+    {
+      "name": "remote-sensing",
+      "url": "https://github.com/Wang-Kuz/remote-sensing",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 116,
+      "updatedAt": "2026-10-21T08:12:18Z"
+    },
+    {
+      "name": "SafeUpload",
+      "url": "https://github.com/Wang-Kuz/SafeUpload",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 63,
+      "updatedAt": "2026-10-21T04:15:02Z"
+    },
+    {
+      "name": "Service-Oriented-Private-Domain-Operations-News-Push-Assistant",
+      "url": "https://github.com/Wang-Kuz/Service-Oriented-Private-Domain-Operations-News-Push-Assistant",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 0,
+      "updatedAt": "2026-10-30T07:53:36Z"
+    },
+    {
+      "name": "SLIC_GCN",
+      "url": "https://github.com/Wang-Kuz/SLIC_GCN",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 335,
+      "updatedAt": "2026-10-21T07:08:14Z"
+    },
+    {
+      "name": "Snake-Game",
+      "url": "https://github.com/Wang-Kuz/Snake-Game",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 20,
+      "updatedAt": "2026-10-21T05:42:16Z"
+    },
+    {
+      "name": "Test-FirstUseGithub",
+      "url": "https://github.com/Wang-Kuz/Test-FirstUseGithub",
+      "visibility": "private",
+      "defaultBranch": "test-1",
+      "size": 1279,
+      "updatedAt": "2026-08-10T17:46:31Z"
+    },
+    {
+      "name": "TIFproject",
+      "url": "https://github.com/Wang-Kuz/TIFproject",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 4399,
+      "updatedAt": "2026-10-21T05:53:02Z"
+    },
+    {
+      "name": "Workflow-Software-Copyright",
+      "url": "https://github.com/Wang-Kuz/Workflow-Software-Copyright",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 3698,
+      "updatedAt": "2026-10-21T05:39:43Z"
+    },
+    {
+      "name": "YLZ34-Project",
+      "url": "https://github.com/Wang-Kuz/YLZ34-Project",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 52,
+      "updatedAt": "2026-10-21T03:54:58Z"
+    },
+    {
+      "name": "YOLO-Training-Experiments",
+      "url": "https://github.com/Wang-Kuz/YOLO-Training-Experiments",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 36,
+      "updatedAt": "2026-10-21T08:42:45Z"
+    },
+    {
+      "name": "Zhizha-Monastery-Reader",
+      "url": "https://github.com/Wang-Kuz/Zhizha-Monastery-Reader",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 3960,
+      "updatedAt": "2026-10-30T07:11:27Z"
+    },
+    {
+      "name": "ZZC-T_Contact_System",
+      "url": "https://github.com/Wang-Kuz/ZZC-T_Contact_System",
+      "visibility": "private",
+      "defaultBranch": "main",
+      "size": 42,
+      "updatedAt": "2026-10-21T03:57:13Z"
+    }
+  ]
+}

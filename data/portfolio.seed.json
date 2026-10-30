@@ -1,0 +1,1358 @@
+{
+  "schemaVersion": 1,
+  "revision": 0,
+  "profile": {
+    "name": "Kuz",
+    "role": {
+      "zh": "全栈开发 / AGENT 开发 / 算法工程 / FDE",
+      "en": "Full-stack Developer / Agent Developer / Algorithm Engineer / FDE"
+    },
+    "headline": {
+      "zh": "把智能，\n带入现实。",
+      "en": "Intelligence.\nMade real."
+    },
+    "intro": {
+      "zh": "我是 Kuz，关注 AI 与真实业务之间的最后一公里。从全栈产品、Agent 工作流到算法实验，我把需求、数据、交互与交付连在一起。持续探索 RAG，让知识成为下一步行动的上下文。",
+      "en": "I'm Kuz. I focus on the last mile between AI and real-world work. From full-stack products and agent workflows to algorithm experiments, I connect requirements, data, interactions and delivery. I continue exploring RAG as a bridge from knowledge to action."
+    },
+    "availability": {
+      "zh": "构建中 · 持续迭代",
+      "en": "Building · Always evolving"
+    },
+    "github": "https://github.com/Wang-Kuz"
+  },
+  "copy": {},
+  "projects": [
+    {
+      "id": "datafactory",
+      "name": {
+        "zh": "数据工厂 V2",
+        "en": "Data Factory V2"
+      },
+      "tagline": {
+        "zh": "让内容流动，让结果可追溯。",
+        "en": "Content in motion. Outcomes in view."
+      },
+      "summary": {
+        "zh": "把新闻采集、AI 内容处理、筛选去重、栏目投递与异常核查接成一条可运营的生产流水线。",
+        "en": "A production workflow connecting news collection, AI-assisted processing, filtering, deduplication, channel delivery and incident review."
+      },
+      "role": {
+        "zh": "全栈开发 · 工作流工程 · 发布与运维",
+        "en": "Full-stack development · Workflow engineering · Release operations"
+      },
+      "problem": {
+        "zh": "多来源内容与多目标栏目之间，人工搬运、重复投递和模糊回执会放大运营成本。",
+        "en": "Multiple sources and destinations create manual work, duplicate delivery and ambiguous receipts."
+      },
+      "solution": {
+        "zh": "通过 FastAPI、Vue 3 和持久任务队列组织 API、调度与 Worker；把投递对象、重试记录和接收证据连成可核查链路。",
+        "en": "FastAPI, Vue 3 and a persistent task queue coordinate APIs, scheduling and workers. Delivery targets, attempts and receipt evidence stay traceable."
+      },
+      "outcome": {
+        "zh": "形成有正式部署记录的新闻生产平台，支持异常中心、受控数据浏览与可回退发布；接收与客户端展示分别核验。",
+        "en": "A documented production deployment with incident review, controlled data inspection and reversible releases. Receipt confirmation and client display are verified separately."
+      },
+      "status": {
+        "zh": "已部署 · 持续迭代",
+        "en": "Deployed · Iterating"
+      },
+      "categories": [
+        "ai",
+        "enterprise",
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "FastAPI",
+        "Vue 3",
+        "TypeScript",
+        "MySQL",
+        "Docker"
+      ],
+      "github": "https://github.com/Wang-Kuz/DatafactoryV2",
+      "featured": true,
+      "visible": true,
+      "delivered": true,
+      "evidence": {
+        "zh": "README 与 STATUS 记录正式部署、发布回退、测试及真实接收证据。本页未重新巡检生产；历史 UNKNOWN 与客户端展示验收仍单列。",
+        "en": "README and STATUS record deployment, rollback, tests and actual receipt evidence. This portfolio did not recheck production; historical unknown receipts and client-display acceptance remain separate."
+      },
+      "media": []
+    },
+    {
+      "id": "personal-os",
+      "name": {
+        "zh": "Personal OS · Agent 工作流",
+        "en": "Personal OS · Agent Workflows"
+      },
+      "tagline": {
+        "zh": "让 AI 拥有上下文，也拥有边界。",
+        "en": "Context for AI. Boundaries for trust."
+      },
+      "summary": {
+        "zh": "面向长期使用的个人知识与工作证据系统，把 Markdown 资产、Agent 工作流、持续归档与可审计回执组织起来。",
+        "en": "A long-lived knowledge and work-evidence system connecting Markdown assets, agent workflows, continuous archiving and auditable receipts."
+      },
+      "role": {
+        "zh": "Agent 工作流设计 · 知识治理 · Python 自动化",
+        "en": "Agent workflow design · Knowledge governance · Python automation"
+      },
+      "problem": {
+        "zh": "对话、任务与项目记录分散，AI 摘要容易失去来源，长期记忆也容易把推测当事实。",
+        "en": "Conversations, tasks and project records fragment context; summaries can lose sources and memory can confuse inference with fact."
+      },
+      "solution": {
+        "zh": "建立渐进式读取入口、来源与敏感级别、采集租约、原子写入、周期重建和人工内容保护，并用测试约束工具行为。",
+        "en": "Progressive context entry points, source and sensitivity metadata, execution leases, atomic writes, period rebuilding and protected human edits constrain the workflow."
+      },
+      "outcome": {
+        "zh": "形成可持续维护的 Agent 协作底座：事实、摘要、计划与完成证据各有归属，失败与部分覆盖可被追踪。",
+        "en": "A maintainable foundation for agent collaboration where facts, summaries, plans and completion evidence remain distinct, with traceable failures and partial coverage."
+      },
+      "status": {
+        "zh": "工具链已实现 · 持续维护",
+        "en": "Tooling implemented · Maintained"
+      },
+      "categories": [
+        "ai",
+        "agent",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "Markdown",
+        "Obsidian",
+        "Git",
+        "Agent workflows",
+        "JSON"
+      ],
+      "github": "https://github.com/Wang-Kuz/Kuz-Personal-OS",
+      "featured": true,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "已读取系统运行手册并核对 tools/os_pipeline.py、tools/archive_run.py。此案例是 Agent 协作与知识治理，不宣称已部署向量 RAG。",
+        "en": "Read the operating guide and inspected tools/os_pipeline.py and tools/archive_run.py. This is agent collaboration and knowledge governance, not a claim of deployed vector RAG."
+      },
+      "media": []
+    },
+    {
+      "id": "desktop-avatar",
+      "name": {
+        "zh": "桌面数字人 · 讲解与交互",
+        "en": "Desktop Avatar · Narration & Interaction"
+      },
+      "tagline": {
+        "zh": "把讲解变成可编排的体验。",
+        "en": "Turn narration into an orchestrated experience."
+      },
+      "summary": {
+        "zh": "将透明悬浮数字人、语音讲解、节点工作流和桌面/网页交互整合进 Windows 桌面应用。",
+        "en": "A Windows application combining an overlay avatar, speech narration, node-based workflows and desktop/web interaction."
+      },
+      "role": {
+        "zh": "桌面全栈开发 · 交互编排 · 现场适配",
+        "en": "Desktop full-stack development · Interaction orchestration · Field adaptation"
+      },
+      "problem": {
+        "zh": "大屏讲解不仅需要播放声音，还需要让节点、目标按钮、形象状态和讲解节奏同步。",
+        "en": "Display narration needs more than audio: nodes, target controls, avatar state and timing must work together."
+      },
+      "solution": {
+        "zh": "Electron 与本地 Node 服务承载透明窗口和管理端；SQLite 保存配置，TTS 支持缓存与回退，节点串联点击、高亮、讲解和等待。",
+        "en": "Electron and a local Node service host the overlay and management UI; SQLite persists configuration, cached TTS supports fallback, and nodes coordinate clicks, highlights, narration and waits."
+      },
+      "outcome": {
+        "zh": "已有版本化安装与归档材料，支持节点、节点组、方案及工作流管理；目标大屏、DPI 与声音设备仍按现场环境验证。",
+        "en": "Versioned installer and archive materials accompany node, group, plan and workflow management. Target displays, DPI and audio devices require environment-specific validation."
+      },
+      "status": {
+        "zh": "桌面软件 · 现场适配",
+        "en": "Desktop software · Field adaptation"
+      },
+      "categories": [
+        "ai",
+        "enterprise",
+        "software"
+      ],
+      "tech": [
+        "Electron",
+        "Node.js",
+        "SQLite",
+        "Canvas 2D",
+        "TTS",
+        "Win32"
+      ],
+      "github": "https://github.com/Wang-Kuz/Explanatory-Robot",
+      "featured": true,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据源码架构说明与 src/tts.cjs；AI 标签指神经语音服务集成，不表示自研语音模型、3D 数字人或 LLM/RAG 对话。",
+        "en": "Based on the architecture record and src/tts.cjs. The AI tag refers to neural TTS integration, not a custom speech model, 3D avatar or LLM/RAG conversation."
+      },
+      "media": []
+    },
+    {
+      "id": "legal-operations",
+      "name": {
+        "zh": "企业法务协同系统",
+        "en": "Enterprise Legal Operations"
+      },
+      "tagline": {
+        "zh": "让复杂业务，回到清晰流程。",
+        "en": "Bring complex operations into focus."
+      },
+      "summary": {
+        "zh": "围绕企业案件台账、诉讼阶段、附件、办理节点与权限申请，构建一套业务导向的内部法务工作区。",
+        "en": "An internal legal workspace for enterprise case records, litigation stages, attachments, milestones and access requests."
+      },
+      "role": {
+        "zh": "前后端开发 · 业务建模 · 数据台账",
+        "en": "Frontend & backend development · Domain modelling · Data records"
+      },
+      "problem": {
+        "zh": "不同企业、案件与阶段的资料分散在表格和附件中，检索、协作与过程追踪难以统一。",
+        "en": "Records distributed across entities, cases, spreadsheets and attachments make search, collaboration and progress tracking difficult."
+      },
+      "solution": {
+        "zh": "将企业、案件、阶段、附件和费用组织为业务模型，用 Vue 页面与 Flask API 承载检索筛选、台账导入导出和操作时间轴。",
+        "en": "Entity, case, stage, attachment and fee models drive Vue screens and Flask APIs for search, spreadsheet exchange and operation timelines."
+      },
+      "outcome": {
+        "zh": "把内部法务场景转化为可维护的管理系统源码与字段文档；生产版本、权限细节与线上验收以项目记录为准。",
+        "en": "Translates an internal legal workflow into maintainable management-system code and field documentation; production state, authorization details and acceptance follow project records."
+      },
+      "status": {
+        "zh": "企业内部场景 · 源码核对",
+        "en": "Enterprise context · Source reviewed"
+      },
+      "categories": [
+        "enterprise",
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Vue 3",
+        "Flask",
+        "MySQL",
+        "Pinia",
+        "Element Plus",
+        "XLSX"
+      ],
+      "github": "https://github.com/Wang-Kuz/Lawyersystem",
+      "featured": true,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的仓库说明整理；具体运行与验收范围见项目文档。",
+        "en": "Curated from repository documentation read on 30 Oct 2026; see project records for runtime and acceptance scope."
+      },
+      "media": []
+    },
+    {
+      "id": "spectral-graph",
+      "name": {
+        "zh": "高光谱 · 图平滑与波段选择",
+        "en": "Hyperspectral · Graphs & Band Selection"
+      },
+      "tagline": {
+        "zh": "从高维数据，找到有用信号。",
+        "en": "Find useful signals in high-dimensional data."
+      },
+      "summary": {
+        "zh": "围绕高光谱遥感分类，将超像素、空间邻接图、图传播、谱聚类选带与分类评估连接成实验工程。",
+        "en": "An experimental pipeline connecting superpixels, spatial graphs, propagation, spectral-clustering band selection and hyperspectral classification."
+      },
+      "role": {
+        "zh": "算法实验 · 数据处理 · 结果分析",
+        "en": "Algorithm experiments · Data processing · Result analysis"
+      },
+      "problem": {
+        "zh": "高光谱影像维度高且存在冗余，比较方法时还需要处理数据划分、参数、消融与结果口径。",
+        "en": "Hyperspectral imagery has high dimensionality and redundancy; fair comparisons also require clear splits, parameters, ablations and metric definitions."
+      },
+      "solution": {
+        "zh": "PCA 构造输入，SLIC 建立区域，再进行固定图传播与波段选择；通过 SVM/SAM、参数扫描和消融组织评估。",
+        "en": "PCA inputs feed SLIC regions, fixed graph propagation and band selection; SVM/SAM, parameter sweeps and ablations structure evaluation."
+      },
+      "outcome": {
+        "zh": "保留多组实验脚本与历史结果，为算法对照和复现提供清晰入口；固定传播并非可训练 GCN，历史指标不冒充新复现实绩。",
+        "en": "Experiment scripts and historical outputs support comparison and reproduction. Fixed propagation is not a trainable GCN, and archived metrics are not presented as fresh results."
+      },
+      "status": {
+        "zh": "科研实验 · 结果归档",
+        "en": "Research experiments · Archived results"
+      },
+      "categories": [
+        "ai",
+        "algorithm"
+      ],
+      "tech": [
+        "Python",
+        "NumPy",
+        "PCA",
+        "SLIC",
+        "Spectral clustering",
+        "SVM"
+      ],
+      "github": "https://github.com/Wang-Kuz/SLIC_GCN",
+      "featured": true,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的仓库说明整理；具体运行与验收范围见项目文档。",
+        "en": "Curated from repository documentation read on 30 Oct 2026; see project records for runtime and acceptance scope."
+      },
+      "media": []
+    },
+    {
+      "id": "agrotrade",
+      "name": {
+        "zh": "农产品交易平台",
+        "en": "Agricultural Marketplace"
+      },
+      "tagline": {
+        "zh": "从用户旅程，到完整业务模型。",
+        "en": "From user journeys to a complete domain model."
+      },
+      "summary": {
+        "zh": "本科软件工程毕业设计，围绕买家、商家和管理员三种角色，串联商品、溯源、购物车、订单与售后。",
+        "en": "An undergraduate software-engineering capstone connecting products, provenance, carts, orders and after-sales flows across buyers, merchants and administrators."
+      },
+      "role": {
+        "zh": "全栈开发 · 三端交互 · 业务建模",
+        "en": "Full-stack development · Three-role UX · Domain modelling"
+      },
+      "problem": {
+        "zh": "交易流程跨越多个角色，商品审核、订单状态和售后操作需要一致的数据与交互设计。",
+        "en": "Transactions span multiple roles, requiring consistent data and interaction design for product review, order states and after-sales actions."
+      },
+      "solution": {
+        "zh": "用 Spring Boot、MyBatis 与 MySQL 建立后端，以 Vue 3、Pinia 和 ECharts 实现买家前台、商家工作台和管理端。",
+        "en": "Spring Boot, MyBatis and MySQL support the backend; Vue 3, Pinia and ECharts implement the storefront, merchant workspace and admin console."
+      },
+      "outcome": {
+        "zh": "形成三角色交易工程及 17 张业务表的结构说明；支付为模拟流水，物流由商家手工登记。",
+        "en": "A three-role marketplace codebase with documentation for 17 business tables. Payments are simulated and shipping details are entered manually."
+      },
+      "status": {
+        "zh": "毕业设计 · 全栈工程",
+        "en": "Capstone · Full-stack project"
+      },
+      "categories": [
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Java",
+        "Spring Boot",
+        "Vue 3",
+        "MyBatis",
+        "MySQL",
+        "ECharts"
+      ],
+      "github": "https://github.com/Wang-Kuz/AgroTradePlatform",
+      "featured": true,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的仓库说明整理；具体运行与验收范围见项目文档。",
+        "en": "Curated from repository documentation read on 30 Oct 2026; see project records for runtime and acceptance scope."
+      },
+      "media": []
+    },
+    {
+      "id": "multimodal",
+      "name": {
+        "zh": "多模态特征融合实验",
+        "en": "Multimodal Feature Fusion"
+      },
+      "tagline": {
+        "zh": "探索图像、声音与文本的共同表达。",
+        "en": "Explore a shared representation of image, sound and text."
+      },
+      "summary": {
+        "zh": "通过网页接收图像、音频和文本，投影为特征向量，经注意力融合后展示统计、热力图与模态相似度。",
+        "en": "A web prototype projects image, audio and text inputs into feature vectors, then visualizes attention-based fusion, statistics and similarity."
+      },
+      "role": {
+        "zh": "算法实验与工具开发",
+        "en": "Algorithm experiments & tooling"
+      },
+      "problem": {
+        "zh": "多路输入的形状、预处理和融合结果需要可观察的实验界面。",
+        "en": "Different input shapes, preprocessing steps and fusion outputs need an observable experimental interface."
+      },
+      "solution": {
+        "zh": "Flask 承载输入与结果，PyTorch 实现四头注意力和 MLP，Canvas 展示热力图。",
+        "en": "Flask handles input and output, PyTorch implements four-head attention and an MLP, and Canvas renders heatmaps."
+      },
+      "outcome": {
+        "zh": "已形成端到端结构原型；网络没有训练权重，随机文本嵌入不能当作语义理解或有效评估结论。",
+        "en": "An end-to-end structural prototype; untrained networks and random text embeddings do not establish semantic understanding or valid evaluation."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "ai",
+        "algorithm",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "Flask",
+        "PyTorch",
+        "librosa",
+        "Canvas"
+      ],
+      "github": "https://github.com/Wang-Kuz/Multimodal-Intelligent-Interaction-Evaluation",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "dp-svm",
+      "name": {
+        "zh": "密度峰值选带 · SVM 研究",
+        "en": "Density Peaks · SVM Research"
+      },
+      "tagline": {
+        "zh": "把算法比较，变成可追溯实验。",
+        "en": "Make algorithm comparisons traceable."
+      },
+      "summary": {
+        "zh": "用于论文研究的高光谱波段选择与分类实验，整理数据准备、固定划分、方法对照和历史分类报告。",
+        "en": "Hyperspectral band-selection and classification experiments for paper research, covering data preparation, fixed splits, method comparisons and archived reports."
+      },
+      "role": {
+        "zh": "算法实验与工具开发",
+        "en": "Algorithm experiments & tooling"
+      },
+      "problem": {
+        "zh": "不同选带方法与波段数的实验容易混淆来源、参数与评价口径。",
+        "en": "Comparisons across selection methods and band counts can lose track of sources, parameters and metric definitions."
+      },
+      "solution": {
+        "zh": "组织密度峰值、信息量与聚类等方法，以固定参数 RBF-SVM 对照，保存波段索引、指标与混淆矩阵。",
+        "en": "Organizes density peaks, information-based methods and clustering with fixed-parameter RBF-SVM comparisons, band indices, metrics and confusion matrices."
+      },
+      "outcome": {
+        "zh": "建立算法与结果归档；DP 指密度峰值，已有结果不代表本轮重训，也不声称优于全波段基线。",
+        "en": "A traceable algorithm and result archive. DP means Density Peaks; archived outputs are not fresh training or proof of superiority to the full-band baseline."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "ai",
+        "algorithm"
+      ],
+      "tech": [
+        "Python",
+        "NumPy",
+        "scikit-learn",
+        "Density Peaks",
+        "RBF-SVM"
+      ],
+      "github": "https://github.com/Wang-Kuz/DP-SVM-Remote",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "reader",
+      "name": {
+        "zh": "局域网电子阅读系统",
+        "en": "Local-Network Digital Library"
+      },
+      "tagline": {
+        "zh": "把阅读体验，带到本地网络。",
+        "en": "Bring digital reading to the local network."
+      },
+      "summary": {
+        "zh": "面向 Windows 局域网与阅读终端，提供 PDF/EPUB 阅读、书库管理、读者资料和批注相关界面。",
+        "en": "A Windows LAN reading system with PDF/EPUB views, library management, reader profiles and annotation-related interfaces."
+      },
+      "role": {
+        "zh": "全栈开发与业务建模",
+        "en": "Full-stack development & domain modelling"
+      },
+      "problem": {
+        "zh": "本地阅读终端需要统一书库、管理入口与可恢复的安装资料。",
+        "en": "Local reading terminals need a shared library, management interface and recoverable installation materials."
+      },
+      "solution": {
+        "zh": "Vue 3 与 TypeScript 组织阅读端及管理端，Flask/SQLAlchemy 提供服务，SQLite 和本地文件保存内容。",
+        "en": "Vue 3 and TypeScript organize reader and admin interfaces; Flask/SQLAlchemy provide services, with SQLite and local files storing content."
+      },
+      "outcome": {
+        "zh": "现存多版安装材料与完整归档索引；当前源码确认不替代客户现场安装和阅读流程验收。",
+        "en": "Existing installer variants and archive indices support handoff; source review does not replace on-site installation and reading-flow acceptance."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "enterprise",
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Vue 3",
+        "TypeScript",
+        "Flask",
+        "SQLite",
+        "EPUB",
+        "PDF"
+      ],
+      "github": "https://github.com/Wang-Kuz/Zhizha-Monastery-Reader",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "autorecommend",
+      "name": {
+        "zh": "专题资讯自动工作流",
+        "en": "Topic Publishing Workflow"
+      },
+      "tagline": {
+        "zh": "把重复操作，变成确定性流程。",
+        "en": "Turn repetitive operations into deterministic workflows."
+      },
+      "summary": {
+        "zh": "读取新闻列表，按栏目与关键词筛选，经三层去重后调用发布接口，配套网页控制台、任务与回退记录。",
+        "en": "Reads news lists, matches channels and keywords, applies three layers of deduplication and calls publishing APIs, with a console, tasks and rollback history."
+      },
+      "role": {
+        "zh": "全栈开发与业务建模",
+        "en": "Full-stack development & domain modelling"
+      },
+      "problem": {
+        "zh": "重复筛选、跨来源重复内容和发布后追踪增加日常运营负担。",
+        "en": "Repetitive filtering, cross-source duplicates and post-publication tracking add operational work."
+      },
+      "solution": {
+        "zh": "Python/FastAPI 编排关键词匹配、来源 ID/正文哈希/标题去重、定时执行和最近一轮回退。",
+        "en": "Python/FastAPI orchestrate keyword matching, source-ID/body-hash/title deduplication, scheduling and latest-run rollback."
+      },
+      "outcome": {
+        "zh": "形成可在 Mock 模式演示的自动工作流；采用规则匹配，不是机器学习推荐或 RAG。",
+        "en": "A workflow demonstrable in Mock mode; uses rule matching rather than machine-learning recommendation or RAG."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "enterprise",
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "FastAPI",
+        "HTTP APIs",
+        "Scheduling",
+        "Hashing"
+      ],
+      "github": "https://github.com/Wang-Kuz/AutoRecommend",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "labelx",
+      "name": {
+        "zh": "LabelX Studio · 图像标注",
+        "en": "LabelX Studio · Image Annotation"
+      },
+      "tagline": {
+        "zh": "从数据开始，连接视觉模型。",
+        "en": "Start with data. Connect to vision."
+      },
+      "summary": {
+        "zh": "个人开发的桌面图像标注工具，支持矩形、多边形、类别管理、项目保存与多格式导出。",
+        "en": "A personal desktop annotation tool with rectangles, polygons, class management, project persistence and multi-format export."
+      },
+      "role": {
+        "zh": "应用开发与工程集成",
+        "en": "Application development & integration"
+      },
+      "problem": {
+        "zh": "视觉模型的数据准备需要一致的标注编辑和标签格式转换。",
+        "en": "Vision-data preparation needs consistent annotation editing and label-format conversion."
+      },
+      "solution": {
+        "zh": "基于 PySide6 提供画布、缩放和平移，使用项目 JSON 组织标注并导出 YOLO、COCO、VOC 和 LabelMe。",
+        "en": "PySide6 supplies the canvas, zoom and pan; project JSON stores annotations for YOLO, COCO, VOC and LabelMe export."
+      },
+      "outcome": {
+        "zh": "实现五类格式的导出逻辑与项目往返；属于 AI 数据工具，尚未完成全部 GUI 与训练工具兼容验收。",
+        "en": "Implements five export formats and project round trips. An AI data tool; full GUI and downstream training-tool acceptance remain separate."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "ai",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "PySide6",
+        "YOLO",
+        "COCO",
+        "VOC"
+      ],
+      "github": "https://github.com/Wang-Kuz/LabelX_Studio",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "yolo-training",
+      "name": {
+        "zh": "YOLO 训练工作流",
+        "en": "YOLO Training Workflow"
+      },
+      "tagline": {
+        "zh": "让训练入口更清晰。",
+        "en": "Make the training entry point clear."
+      },
+      "summary": {
+        "zh": "封装目标检测数据准备、train/val 切分、设备选择、训练参数与最佳权重归集。",
+        "en": "Wraps object-detection data preparation, train/validation splitting, device selection, training parameters and best-weight collection."
+      },
+      "role": {
+        "zh": "算法实验与工具开发",
+        "en": "Algorithm experiments & tooling"
+      },
+      "problem": {
+        "zh": "训练命令、目录约定和运行产物分散时，实验交接容易遗漏关键参数。",
+        "en": "Scattered commands, directory conventions and outputs make it easy to lose key experiment parameters."
+      },
+      "solution": {
+        "zh": "使用 Python CLI 调用 Ultralytics，生成 data.yaml，并将权重与运行说明归集到输出目录。",
+        "en": "A Python CLI calls Ultralytics, generates data.yaml and collects weights and run notes in an output directory."
+      },
+      "outcome": {
+        "zh": "已有训练编排脚本和隔离流程检查；仓库不含数据集、权重或可宣称的 mAP 成绩。",
+        "en": "Training orchestration and isolated flow checks exist; the repository supplies no dataset, weights or substantiated mAP result."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "ai",
+        "algorithm"
+      ],
+      "tech": [
+        "Python",
+        "Ultralytics",
+        "YOLOv8",
+        "PyTorch",
+        "CLI"
+      ],
+      "github": "https://github.com/Wang-Kuz/YOLO-Training-Experiments",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "data-augmentation",
+      "name": {
+        "zh": "YOLO 数据增强工具",
+        "en": "YOLO Data Augmentation"
+      },
+      "tagline": {
+        "zh": "连接图像处理与数据工程。",
+        "en": "Connect image processing with data engineering."
+      },
+      "summary": {
+        "zh": "提供 PyQt5 预览与 Python 批处理入口，对目标检测图片执行翻转、亮度、对比度和噪声等增强。",
+        "en": "PyQt5 preview and Python batch tools apply flips, brightness, contrast and noise transforms to object-detection images."
+      },
+      "role": {
+        "zh": "算法实验与工具开发",
+        "en": "Algorithm experiments & tooling"
+      },
+      "problem": {
+        "zh": "批量图片增强需要可观察的处理参数，并关注图像与标签的一致性。",
+        "en": "Batch augmentation needs visible parameters and attention to image-label consistency."
+      },
+      "solution": {
+        "zh": "以桌面预览、参数控制、目录配对和批量输出组织数据增强流程。",
+        "en": "Desktop preview, parameter controls, paired directories and batch outputs structure augmentation."
+      },
+      "outcome": {
+        "zh": "已有增强与框标签处理代码；中心裁剪标签未重算的限制已明确记录，不能直接当作合格训练集。",
+        "en": "Augmentation and box-label logic exist; the documented crop-coordinate issue means generated data cannot automatically be treated as training-ready."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "ai",
+        "algorithm",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "PyQt5",
+        "Pillow",
+        "NumPy",
+        "torchvision"
+      ],
+      "github": "https://github.com/Wang-Kuz/DataAugYolo",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "vision-preparation",
+      "name": {
+        "zh": "视觉数据准备与推理工具集",
+        "en": "Vision Data & Inference Toolkit"
+      },
+      "tagline": {
+        "zh": "把零散的数据步骤组织起来。",
+        "en": "Organize the steps around vision data."
+      },
+      "summary": {
+        "zh": "六个独立脚本覆盖图片重命名、缩放、压缩、方形填充，以及 PT/ONNX 模型推理可视化。",
+        "en": "Six scripts cover image renaming, resizing, compression, square padding and PT/ONNX inference visualization."
+      },
+      "role": {
+        "zh": "应用开发与工程集成",
+        "en": "Application development & integration"
+      },
+      "problem": {
+        "zh": "模型实验前后的文件整理与输入处理，往往占用大量重复操作时间。",
+        "en": "File organization and input preparation create repetitive work around model experiments."
+      },
+      "solution": {
+        "zh": "通过 Python、Pillow 与 ONNX Runtime 分开实现文件处理和推理检查入口。",
+        "en": "Python, Pillow and ONNX Runtime provide separate file-processing and inference-inspection entry points."
+      },
+      "outcome": {
+        "zh": "形成图像处理工具集；不包含人工标注器，原标注坐标也不会随所有图像变换自动同步。",
+        "en": "A set of image-processing tools, not an interactive annotation editor; existing label coordinates are not automatically synchronized with every transform."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "ai",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "Pillow",
+        "ONNX Runtime",
+        "OpenCV",
+        "Ultralytics"
+      ],
+      "github": "https://github.com/Wang-Kuz/Data-Annotation-Tool",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "face-detection",
+      "name": {
+        "zh": "实时人脸与眼睛检测",
+        "en": "Live Face & Eye Detection"
+      },
+      "tagline": {
+        "zh": "让视觉推理走进实时界面。",
+        "en": "Bring vision inference into a live interface."
+      },
+      "summary": {
+        "zh": "自主学习软件，将摄像头取流、人脸/眼睛检测与预训练属性模型集成到实时预览窗口。",
+        "en": "A self-directed learning application integrating camera input, face/eye detection and pretrained attribute models in a live preview."
+      },
+      "role": {
+        "zh": "应用开发与工程集成",
+        "en": "Application development & integration"
+      },
+      "problem": {
+        "zh": "视觉算法需要与摄像头、预处理和界面绘制共同工作。",
+        "en": "Vision methods must work with cameras, preprocessing and UI rendering."
+      },
+      "solution": {
+        "zh": "OpenCV Haar 检测返回区域，InsightFace 处理首张人脸，窗口叠加框与结果。",
+        "en": "OpenCV Haar detectors locate regions; InsightFace processes the first face, with boxes and outputs rendered in the window."
+      },
+      "outcome": {
+        "zh": "完成模型调用与视频界面集成练习；无身份库、自产模型或经验证的识别准确率。",
+        "en": "An exercise in model integration and video interfaces; no identity database, self-trained model or verified accuracy claim."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "ai",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "OpenCV",
+        "InsightFace",
+        "ONNX Runtime"
+      ],
+      "github": "https://github.com/Wang-Kuz/FacialFeatureRecognition",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "face-landmarks",
+      "name": {
+        "zh": "面部标志点实验",
+        "en": "Facial Landmark Experiment"
+      },
+      "tagline": {
+        "zh": "从像素到交互反馈。",
+        "en": "From pixels to interactive feedback."
+      },
+      "summary": {
+        "zh": "通过 dlib 标志点、OpenCV DNN 年龄区间推理和 Tkinter 摄像头窗口探索桌面视觉交互。",
+        "en": "Explores desktop vision interaction with dlib landmarks, OpenCV DNN age-range inference and a Tkinter camera view."
+      },
+      "role": {
+        "zh": "应用开发与工程集成",
+        "en": "Application development & integration"
+      },
+      "problem": {
+        "zh": "底层模型输出需要转化为可理解的桌面反馈。",
+        "en": "Low-level model outputs need understandable desktop feedback."
+      },
+      "solution": {
+        "zh": "连接摄像头、68 点预测器、Caffe 模型和伪彩图绘制，形成单窗口处理链路。",
+        "en": "Connects a camera, 68-point predictor, Caffe model and pseudo-color rendering in one interface."
+      },
+      "outcome": {
+        "zh": "保留视觉集成实验代码；模型未随库提供，颜色与像素规则不作为医学结论。",
+        "en": "Preserves vision-integration experiment code; models are not bundled and color/pixel rules do not support medical conclusions."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "ai",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "dlib",
+        "OpenCV",
+        "Tkinter",
+        "Caffe"
+      ],
+      "github": "https://github.com/Wang-Kuz/FacialFeature-with-AI",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "remote-sensing",
+      "name": {
+        "zh": "遥感影像分类桌面原型",
+        "en": "Remote-Sensing Classification Studio"
+      },
+      "tagline": {
+        "zh": "让算法流程，可以看见。",
+        "en": "Make algorithm workflows visible."
+      },
+      "summary": {
+        "zh": "将 TIFF 加载、波段选择、降维、多种分类器和指标可视化整合到桌面原型。",
+        "en": "A desktop prototype combining TIFF loading, band selection, dimensionality reduction, classifiers and metric visualization."
+      },
+      "role": {
+        "zh": "算法实验与工具开发",
+        "en": "Algorithm experiments & tooling"
+      },
+      "problem": {
+        "zh": "遥感实验中的图像、真值、算法参数与结果容易分散在多个脚本。",
+        "en": "Images, ground truth, algorithm settings and results are often scattered across scripts."
+      },
+      "solution": {
+        "zh": "使用 PyQt5 组织多页工作区，连接 rasterio、scikit-learn 和可选分类依赖。",
+        "en": "PyQt5 organizes a multi-page workspace connected to rasterio, scikit-learn and optional classifier dependencies."
+      },
+      "outcome": {
+        "zh": "形成算法工作台原型与 HTML 报告入口；界面指标不作为独立测试集成绩。",
+        "en": "An algorithm-workbench prototype with HTML reports; UI metrics are not treated as independent test-set results."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "ai",
+        "algorithm",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "PyQt5",
+        "rasterio",
+        "scikit-learn",
+        "PCA",
+        "SVM"
+      ],
+      "github": "https://github.com/Wang-Kuz/remote-sensing",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "kuzplot",
+      "name": {
+        "zh": "KuzPlot · 科研绘图",
+        "en": "KuzPlot · Research Plotting"
+      },
+      "tagline": {
+        "zh": "让实验数据，更容易表达。",
+        "en": "Give experiment data a clearer voice."
+      },
+      "summary": {
+        "zh": "将多 CSV、曲线、独立基线、画布预览和图像导出放进三栏桌面界面。",
+        "en": "A three-pane desktop interface for multiple CSV sources, series, independent baselines, previews and image export."
+      },
+      "role": {
+        "zh": "应用开发与工程集成",
+        "en": "Application development & integration"
+      },
+      "problem": {
+        "zh": "重复改脚本绘图不利于快速对照多个实验结果。",
+        "en": "Repeated script edits slow comparison across experiment outputs."
+      },
+      "solution": {
+        "zh": "PySide6 管理交互，pandas 读取数据，Matplotlib 承载线图、散点、柱图、热图与饼图。",
+        "en": "PySide6 manages interaction, pandas reads data and Matplotlib supports line, scatter, bar, heatmap and pie views."
+      },
+      "outcome": {
+        "zh": "实现 CSV 科研绘图原型；项目保存与完整样式管理仍有后续空间。",
+        "en": "Implements a CSV research-plotting prototype; project persistence and complete styling remain areas for further work."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "PySide6",
+        "pandas",
+        "Matplotlib"
+      ],
+      "github": "https://github.com/Wang-Kuz/KuzPlot-Studio",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "data-fusion",
+      "name": {
+        "zh": "深地多源数据融合",
+        "en": "Deep-Earth Data Fusion"
+      },
+      "tagline": {
+        "zh": "把多源表格，转化为共同视图。",
+        "en": "Turn multiple tables into a shared view."
+      },
+      "summary": {
+        "zh": "本地桌面工具用于两份井深相关数据的导入、清洗、标准化、公共字段融合与导出。",
+        "en": "A local desktop tool for importing, cleaning, normalizing, joining and exporting two depth-related datasets."
+      },
+      "role": {
+        "zh": "算法实验与工具开发",
+        "en": "Algorithm experiments & tooling"
+      },
+      "problem": {
+        "zh": "不同来源的地学表格需要清晰的清洗规则与共同连接字段。",
+        "en": "Geoscience tables from different sources need clear cleaning rules and shared join keys."
+      },
+      "solution": {
+        "zh": "PyQt5 页面串联 pandas 的缺失值处理、IQR 规则、归一化与精确键连接，并用 Matplotlib 对照曲线。",
+        "en": "PyQt5 connects pandas missing-value handling, IQR rules, normalization and exact-key joins with Matplotlib curve comparison."
+      },
+      "outcome": {
+        "zh": "形成科研成果展示软件及样例流程；字段连接不等同于空间配准，也不宣称软著已登记。",
+        "en": "A research-demonstration application and sample workflow; field joins are not spatial registration, and copyright registration is not claimed."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "algorithm",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "PyQt5",
+        "pandas",
+        "Matplotlib",
+        "XLSX"
+      ],
+      "github": "https://github.com/Wang-Kuz/Deep-Multi-Source-Data-Fusion-and-Processing-System-Software",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "inversion",
+      "name": {
+        "zh": "地层建模与参数反演",
+        "en": "Strata Modelling & Inversion"
+      },
+      "tagline": {
+        "zh": "把模型假设，变成可观察过程。",
+        "en": "Make modelling assumptions observable."
+      },
+      "summary": {
+        "zh": "一维分层地层桌面原型，提供简化物理剖面、参数反演、异常区间分析和结果导出。",
+        "en": "A one-dimensional layered-strata desktop prototype for simplified physical profiles, parameter inversion, anomaly intervals and export."
+      },
+      "role": {
+        "zh": "算法实验与工具开发",
+        "en": "Algorithm experiments & tooling"
+      },
+      "problem": {
+        "zh": "模型配置、观测拟合和结果图表需要放在同一可观察流程中。",
+        "en": "Model configuration, observation fitting and plots benefit from a shared observable workflow."
+      },
+      "solution": {
+        "zh": "使用显式经验公式和有界最小二乘，结合 PyQt5 与 Matplotlib 展示配置、模拟和反演。",
+        "en": "Explicit empirical formulas and bounded least squares combine with PyQt5 and Matplotlib for configuration, simulation and inversion."
+      },
+      "outcome": {
+        "zh": "形成方法演示原型；不是有限元、三维耦合求解器或经现场验证的工程产品。",
+        "en": "A method-demonstration prototype, not a finite-element solver, 3D coupled simulation or field-validated engineering product."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "algorithm",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "PyQt5",
+        "Matplotlib",
+        "Least squares"
+      ],
+      "github": "https://github.com/Wang-Kuz/Complex-Strata-Multiphysics-Inversion-System",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "hr-system",
+      "name": {
+        "zh": "人事管理 Web 工程",
+        "en": "HR Management Web App"
+      },
+      "tagline": {
+        "zh": "从业务表单，到统计视图。",
+        "en": "From business forms to analytical views."
+      },
+      "summary": {
+        "zh": "前后端分离的人事管理学习工程，覆盖员工、部门、手工考勤、薪资记录和统计页面。",
+        "en": "A decoupled HR learning project with employees, departments, manually entered attendance, salary records and analytics."
+      },
+      "role": {
+        "zh": "全栈开发与业务建模",
+        "en": "Full-stack development & domain modelling"
+      },
+      "problem": {
+        "zh": "管理页面需要统一处理 CRUD、筛选分页与图表统计。",
+        "en": "Management interfaces need consistent CRUD, filtering, pagination and charting."
+      },
+      "solution": {
+        "zh": "Spring Boot 与 MySQL 提供业务接口，Vue 3、Element Plus 和 ECharts 组织管理体验。",
+        "en": "Spring Boot and MySQL provide APIs; Vue 3, Element Plus and ECharts organize the management interface."
+      },
+      "outcome": {
+        "zh": "形成管理系统学习工程；登录权限含模拟逻辑，标记发薪不代表真实银行付款。",
+        "en": "A management-system learning project; authentication includes mocks and salary-state changes do not make bank payments."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Java",
+        "Spring Boot",
+        "Vue 3",
+        "MySQL",
+        "ECharts"
+      ],
+      "github": "https://github.com/Wang-Kuz/hr-management-system",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "payment-management",
+      "name": {
+        "zh": "人事与工资管理工程",
+        "en": "Personnel & Payroll Management"
+      },
+      "tagline": {
+        "zh": "把日常管理，组织为业务模块。",
+        "en": "Organize day-to-day management into modules."
+      },
+      "summary": {
+        "zh": "覆盖员工、部门、考勤、请假加班、工资记录与培训资料的 Web 工程。",
+        "en": "A web codebase covering employees, departments, attendance, leave, overtime, salary records and training materials."
+      },
+      "role": {
+        "zh": "全栈开发与业务建模",
+        "en": "Full-stack development & domain modelling"
+      },
+      "problem": {
+        "zh": "人事信息与工资相关记录需要关联展示和统一维护入口。",
+        "en": "Personnel and payroll-related records need linked views and consistent maintenance screens."
+      },
+      "solution": {
+        "zh": "以 Spring Boot、MyBatis-Plus 和 MySQL 保存记录，Vue 2/Element UI 提供角色菜单与业务表单。",
+        "en": "Spring Boot, MyBatis-Plus and MySQL persist records; Vue 2/Element UI provide role menus and business forms."
+      },
+      "outcome": {
+        "zh": "保留较完整的业务模块与字段说明；工资计算和权限边界待完善，不包含真实支付或转账。",
+        "en": "Preserves business modules and field documentation; payroll and authorization boundaries need further work, with no real payment or transfer integration."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Java",
+        "Spring Boot",
+        "MyBatis-Plus",
+        "Vue 2",
+        "MySQL"
+      ],
+      "github": "https://github.com/Wang-Kuz/Payment-Management-System",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "campus-cloud",
+      "name": {
+        "zh": "校园加密云盘",
+        "en": "Campus Encrypted Drive"
+      },
+      "tagline": {
+        "zh": "把加密机制，落到文件流程。",
+        "en": "Put cryptographic mechanisms into a file workflow."
+      },
+      "summary": {
+        "zh": "实践账号、服务端加密上传、拥有者解密下载、文件元数据和审计页面。",
+        "en": "A practical implementation of accounts, server-side encrypted uploads, owner downloads, metadata and audit views."
+      },
+      "role": {
+        "zh": "应用开发与工程集成",
+        "en": "Application development & integration"
+      },
+      "problem": {
+        "zh": "文件管理需要同时考虑数据存储、密钥包裹与拥有者关联。",
+        "en": "File management must consider storage, key wrapping and ownership together."
+      },
+      "solution": {
+        "zh": "Flask/SQLAlchemy 编排业务，AES-GCM 加密文件，PBKDF2 派生密钥并包裹文件密钥。",
+        "en": "Flask/SQLAlchemy orchestrate the workflow; AES-GCM encrypts files and PBKDF2-derived keys wrap file keys."
+      },
+      "outcome": {
+        "zh": "形成服务端加密存储实践；不具备端到端或零知识保证，完整权限与运行验收仍需完善。",
+        "en": "A server-side encryption practice project; it does not provide end-to-end or zero-knowledge guarantees, and authorization/runtime acceptance need further work."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "Flask",
+        "SQLAlchemy",
+        "AES-GCM",
+        "PBKDF2"
+      ],
+      "github": "https://github.com/Wang-Kuz/CampusCloudDrive",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    },
+    {
+      "id": "payslip-tool",
+      "name": {
+        "zh": "Excel 工资条图片工具",
+        "en": "Excel-to-Payslip Image Tool"
+      },
+      "tagline": {
+        "zh": "把一张表，拆成清晰交付物。",
+        "en": "Turn one worksheet into clear individual outputs."
+      },
+      "summary": {
+        "zh": "读取 Excel 工作表，将每条非空数据行排版为独立 JPEG，支持工作表、字体和图片质量选项。",
+        "en": "Reads an Excel worksheet and lays out each nonempty row as an individual JPEG, with sheet, font and quality options."
+      },
+      "role": {
+        "zh": "应用开发与工程集成",
+        "en": "Application development & integration"
+      },
+      "problem": {
+        "zh": "逐人制作工资条图片存在重复复制和排版工作。",
+        "en": "Creating individual payslip images involves repetitive copying and layout work."
+      },
+      "solution": {
+        "zh": "openpyxl 读取数据，Pillow 绘制表头、网格和文字，CLI 控制输入与输出。",
+        "en": "openpyxl reads the sheet, Pillow draws headers, grids and text, and a CLI controls input and output."
+      },
+      "outcome": {
+        "zh": "虚构工作簿导出检查已在项目记录中完成；只处理排版，不计算薪资或自动发送真实工资条。",
+        "en": "Project records document synthetic workbook export checks; the tool formats data, without calculating payroll or sending real payslips."
+      },
+      "status": {
+        "zh": "源码归档 · 实现范围见详情",
+        "en": "Source archive · Scope in details"
+      },
+      "categories": [
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "openpyxl",
+        "Pillow",
+        "CLI"
+      ],
+      "github": "https://github.com/Wang-Kuz/Automation-Toolkit",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "依据 2026-10-30 读取的 README 整理。保留项目原验证边界，未在本轮重新运行应用、模型或生产系统。",
+        "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
+      },
+      "media": []
+    }
+  ]
+}

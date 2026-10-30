@@ -1,0 +1,13 @@
+local-data/
+backups/
+changes/
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+coverage/
+.DS_Store
+Thumbs.db
+test-results/
+.playwright/
