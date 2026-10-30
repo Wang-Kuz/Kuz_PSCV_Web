@@ -4,8 +4,8 @@
 
 ## 两层数据
 
-- `data/repositories.json`：本次连接返回的 46 个仓库元数据，包含空仓库与本网站。仓库总数不等于已开发或已交付项目数。私有仓库链接需要访问者自身权限。
-- `data/portfolio.seed.json`：24 个已阅读资料并整理的展示案例，其中 6 个为首页长篇案例。不是所有仓库都适合作为能力证明；后续可以继续补充。
+- `data/repositories.json`：本次连接返回的 46 个仓库元数据，包含学习骨架、资料库与本网站。仓库总数不等于已开发或已交付项目数。私有仓库链接需要访问者自身权限。
+- `data/portfolio.seed.json`：46 个已阅读资料并整理的双语条目，与仓库清单一一对应，其中 6 个为首页长篇案例。学习骨架和资料库也展示真实状态，不作为交付能力证明。
 - 网站后台保存到本地运行数据，编辑不会自动改种子文件。同步 GitHub 元数据不能自动重写人工案例、升级验收状态或添加未经核对的分类。
 - 用户本次明确要求全栈、Agent 开发、算法工程、FDE 四类个人定位；这些属于个人定位，不表示全部项目由一人独立完成。未补造具体任职、年限、学历学校、联系方式、奖项、客户背书或性能成绩。
 
@@ -14,15 +14,15 @@
 | 口径 | 数量 | 定义 |
 | --- | ---: | --- |
 | 仓库清单 | 46 | 连接返回的自有仓库，本次快照 |
-| 展示案例 | 24 | `visible=true` 的案例 |
+| 展示案例 | 46 | `visible=true` 的案例 |
 | 主叙事案例 | 6 | `featured=true` 的案例 |
-| AI 相关 | 13 | 模型调用、机器学习实验、神经 TTS、Agent 或直接服务 AI 的数据工具 |
-| Agent 相关 | 1 | 已有 Agent 协作、工具编排、上下文/证据维护机制 |
+| AI 相关 | 18 | 模型调用、机器学习实验、神经 TTS、Agent 或直接服务 AI 的数据工具 |
+| Agent 相关 | 3 | 已有 Agent 协作、工具编排、上下文/证据维护机制 |
 | RAG 项目 | 0 | 本轮未找到足以支撑已实现检索增强生成的案例，不从“知识库”推断 |
-| 企业场景 | 5 | 已有内部业务、运营或组织现场用途；不是合规、安全或企业级成熟度认证 |
-| 管理系统 | 7 | 提供业务对象、流程或管理端；学习项目同样单独标注边界 |
-| 软件/应用 | 21 | 有应用或工具实现；不表示全部可安装成品或生产验收通过 |
-| 算法实验 | 8 | 包含分类、融合、数据处理或数值方法实验；不是八项原创算法 |
+| 企业场景 | 7 | 已有内部业务、运营或组织现场用途；不是合规、安全或企业级成熟度认证 |
+| 管理系统 | 18 | 提供业务对象、流程或管理端；学习项目同样单独标注边界 |
+| 软件/应用 | 39 | 有应用或工具实现；不表示全部可安装成品或生产验收通过 |
+| 算法实验 | 10 | 包含分类、融合、数据处理或数值方法实验；不是原创算法数量 |
 | 有部署记录的案例 | 1 | DatafactoryV2 的仓库记录支持正式部署；不代表本次重新巡检或全部业务验收 |
 
 分类允许交叉，不可相加成项目总数。AI 数据工具并不等于含有模型推理。算法分类明确包含对第三方方法的实现、集成或实验，不主张算法发明。RAG 只在个人方向中表述为“持续探索”，不能写成已完成的企业 RAG 平台。
@@ -73,11 +73,11 @@
 | Explanatory-Robot | [数字人桌面应用/src/tts.cjs](https://github.com/Wang-Kuz/Explanatory-Robot/blob/main/%E6%95%B0%E5%AD%97%E4%BA%BA%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/src/tts.cjs) | `a7d9d4d89d2e37e8529317acbd9cc1ab46a08bc3` | 核对在线/本地语音、缓存及回退代码。 |
 | Multimodal-Intelligent-Interaction-Evaluation | [fusion_model.py](https://github.com/Wang-Kuz/Multimodal-Intelligent-Interaction-Evaluation/blob/main/fusion_model.py) | `7993714ee9db997f85447622f881d95cc9a97ee6` | 核对 PyTorch 融合模块与损失类，未运行网络。 |
 
-## 未作为能力项目发布的例子
+## 全量收录后的事实边界
 
 - AIproject：当前为 Flask 的 Hello World 学习骨架，不能因名称含 AI 纳入 AI 项目数。
-- 两个本次元数据 size=0 的新业务仓库：未据名称创建“已落地”案例。
-- 其余未精选仓库保留 README 仓库清单链接，后续先核对实际功能、来源与边界再添加。
+- 岗位推荐与私域新闻推送仓库的旧元数据 size=0 已过时，本次读取到实际实现；按源码标注 AI/Agent 和企业运营场景，仍不标记部署验收。
+- 全部 46 个仓库现在均有介绍。Workflow-Software-Copyright 是模板资料库，YLZ34-Project 是数据资料库，均不计入软件、AI 或算法实现。
 - 页面中的抽象图形只表现工程概念，不冒充真实截图、客户画面、实验曲线或视频。
 - 初始 media 为空；必须由用户上传有权展示的实际素材后才展示，不自动从私有源码目录复制媒体。
 
@@ -91,3 +91,32 @@
 6. 保留一个仓库一个案例为默认口径；拆分多个案例时须说明去重规则，不能通过拆卡片放大项目数量。
 7. 新截图、照片与视频只上传至本地媒体目录，排除客户数据、账号、终端凭据与内部地址。Git 不包含用户媒体。
 8. 更改数据后检查统计、双语、所有项目 GitHub 链接、空媒体状态与前端显示。同步元数据不能静默覆盖人工描述。
+
+## 2026-10-30 补齐的 22 个条目
+
+下列为本次只读核对的路径和 blob SHA。所有新增条目均未标记生产部署，原型与学习边界见各条目 outcome/evidence。
+
+| 项目 | 读取路径与版本 |
+| --- | --- |
+| Flask 入门示例 | [README.md](https://github.com/Wang-Kuz/AIproject/blob/main/README.md) `013cdab6b557fed241e5fc89950b80fdc99ac979`；[app.py](https://github.com/Wang-Kuz/AIproject/blob/main/app.py) `5d20a01c8c95d62b4dc9fdaa266772e2365e933e` |
+| JavaFX BMI 计算练习 | [README.md](https://github.com/Wang-Kuz/BMIcalculate/blob/main/README.md) `daae8f7fb25c1496005dc9fb5283533a3bbb4739`；[src/main/java/org/example/demo/BMIController.java](https://github.com/Wang-Kuz/BMIcalculate/blob/main/src/main/java/org/example/demo/BMIController.java) `8e307e1e6326ba7f294937fd1db5df2df7386692` |
+| 停车场可视化与 OCR 演示 | [README.md](https://github.com/Wang-Kuz/CarParkingSystem/blob/main/README.md) `2f7006d8a0eab8b7cc654a86bbc43097111a62f1`；[backend/app.py](https://github.com/Wang-Kuz/CarParkingSystem/blob/main/backend/app.py) `6a0ca3c2b0cb74704a0c084c4a8d564484547139`；[backend/plate_recognition.py](https://github.com/Wang-Kuz/CarParkingSystem/blob/main/backend/plate_recognition.py) `ff81ab2df5a1d07d88cb2c3679267ba9871d32b5` |
+| 车辆库存与驾驶人登记 | [README.md](https://github.com/Wang-Kuz/CARSystem-2/blob/main/README.md) `d265bf900e3f4661222ad4954cba80859ad28fa2`；[src/VehicleManagement.java](https://github.com/Wang-Kuz/CARSystem-2/blob/main/src/VehicleManagement.java) `00bf64b0bbc5032fc07be47e3990ae0c3ba38460` |
+| 车库车辆管理练习 | [README.md](https://github.com/Wang-Kuz/CARVehicleManagementSystem/blob/main/README.md) `d5605e389cb1051c4780382f0a163f749fbf095e`；[src/main/java/com/example/vehiclemanagement/VehicleService.java](https://github.com/Wang-Kuz/CARVehicleManagementSystem/blob/main/src/main/java/com/example/vehiclemanagement/VehicleService.java) `31ac939f6496ff648dbb336d465f94d65643e956` |
+| Java ZIP 压缩与解压工具 | [README.md](https://github.com/Wang-Kuz/CompressionTool/blob/main/README.md) `5cf34eda71d3142f1431b8b45e8ef6f88cbb18bb`；[src/main/java/org/example/ZipCompressor.java](https://github.com/Wang-Kuz/CompressionTool/blob/main/src/main/java/org/example/ZipCompressor.java) `0268d73ca048f02a010085f06615b859966f86af`；[src/main/java/org/example/ZipDecompressor.java](https://github.com/Wang-Kuz/CompressionTool/blob/main/src/main/java/org/example/ZipDecompressor.java) `b3f176e20ecb2bfff0c68ab14030f3fe535bd9e8` |
+| 消费数据可视化演示 | [README.md](https://github.com/Wang-Kuz/Individual-Consumption/blob/main/README.md) `17f7b1cd024494f58e4fd35eea5d310401cbd684`；[personal/src/App.vue](https://github.com/Wang-Kuz/Individual-Consumption/blob/main/personal/src/App.vue) `2c6c3b8ca5602c19a48141bdf5a25817cda324d7` |
+| 物资出入库管理实践 | [README.md](https://github.com/Wang-Kuz/InventoryManagementSystem/blob/main/README.md) `a9e4dc62a942845e04b871e8743595de301d4110`；[src/main/java/InventoryManagementSystem.java](https://github.com/Wang-Kuz/InventoryManagementSystem/blob/main/src/main/java/InventoryManagementSystem.java) `5e00d1794a40adbbdd41f16814b408db063da6d9` |
+| 岗位推荐 · Hermes 智能体 | [README.md](https://github.com/Wang-Kuz/Intelligent-Job-Recommendation-System-Job-Alerts/blob/main/README.md) `316f152f8352b9754e72284e0b273182a1d15ac3`；[app/hermes_bridge.py](https://github.com/Wang-Kuz/Intelligent-Job-Recommendation-System-Job-Alerts/blob/main/app/hermes_bridge.py) `df19192609089c28a309bc4aef43965e00b58576`；[app/services/matching.py](https://github.com/Wang-Kuz/Intelligent-Job-Recommendation-System-Job-Alerts/blob/main/app/services/matching.py) `b6c12ccaf15111bc52c9ecfbfa847ddb36b89ca0`；[app/services/conversation_agent.py](https://github.com/Wang-Kuz/Intelligent-Job-Recommendation-System-Job-Alerts/blob/main/app/services/conversation_agent.py) `f239dce500c73ef373546a2d1108e5bc0745f9af`；[app/mcp_server.py](https://github.com/Wang-Kuz/Intelligent-Job-Recommendation-System-Job-Alerts/blob/main/app/mcp_server.py) `5abc4a5ca039c0eeb84424ab01529ed3504cf75d` |
+| 桌面图书管理实践 | [README.md](https://github.com/Wang-Kuz/Library-Management-System/blob/main/README.md) `3196c47e6f45cd5dd460197177715aabbe0e3291`；[src/BookManager.java](https://github.com/Wang-Kuz/Library-Management-System/blob/main/src/BookManager.java) `cb8788ee7c27c71cab81b95033c9423ddf2eef5a`；[src/TransactionManager.java](https://github.com/Wang-Kuz/Library-Management-System/blob/main/src/TransactionManager.java) `0e3eda8e0f08fd612c1bbc32f6a83f26a74cc49e` |
+| 校园失物招领平台 | [README.md](https://github.com/Wang-Kuz/Lostfound/blob/main/README.md) `97776d2584dfc6ed68a7a59a766d399711b68b36`；[backend/routes/item_routes.py](https://github.com/Wang-Kuz/Lostfound/blob/main/backend/routes/item_routes.py) `f352e6d2581ea8c015defc8de43ba12b2f101ebf` |
+| 三角色乐队管理系统 | [README.md](https://github.com/Wang-Kuz/LuoHanGuoJinGroup/blob/main/README.md) `1291d4537885e022bf2416eb00901d8ccd383475`；[pom.xml](https://github.com/Wang-Kuz/LuoHanGuoJinGroup/blob/main/pom.xml) `d34989f33687f710312938301e5ccf529e486cc2`；[src/main/java/com/example/servlet/LoginServlet.java](https://github.com/Wang-Kuz/LuoHanGuoJinGroup/blob/main/src/main/java/com/example/servlet/LoginServlet.java) `5080e65320f352dda03db20a9b56ed87764ba0f9`；[src/main/java/com/example/servlet/band/AlbumAddServlet.java](https://github.com/Wang-Kuz/LuoHanGuoJinGroup/blob/main/src/main/java/com/example/servlet/band/AlbumAddServlet.java) `c062322436074be906e5db9da6b820abab3b05ad` |
+| 个人工作站 · 网页与工具原型 | [README.md](https://github.com/Wang-Kuz/Personal-Workstation/blob/main/README.md) `faf92d126a32b23b5aaf9c095c6d2226a178454c`；[project/tools/algorithm-learn.html](https://github.com/Wang-Kuz/Personal-Workstation/blob/main/project/tools/algorithm-learn.html) `2b7b1f1341cd4ceae1e079c59b8fb3b72f847d2b`；[project/backend/api.py](https://github.com/Wang-Kuz/Personal-Workstation/blob/main/project/backend/api.py) `53eaa44652c0a1e59703c3710d6fd356f2b7f1a8` |
+| SafeUpload · 加密文件管理实验 | [README.md](https://github.com/Wang-Kuz/SafeUpload/blob/main/README.md) `86f2d5ff3598dc5d888375373eace4a8dd841b6b`；[app/utils/crypto.py](https://github.com/Wang-Kuz/SafeUpload/blob/main/app/utils/crypto.py) `bcab3c1cd3a8c89674ba094168b925c78d7231e4`；[app/routes/main.py](https://github.com/Wang-Kuz/SafeUpload/blob/main/app/routes/main.py) `db295b6c37031f2cb303a90130f0f563c7a20aec` |
+| 私域情报官 · 多 Agent 新闻工作流 | [README.md](https://github.com/Wang-Kuz/Service-Oriented-Private-Domain-Operations-News-Push-Assistant/blob/main/README.md) `a1424f034b52c7058702bc783e94d0ac1de33eeb`；[app/pipeline.py](https://github.com/Wang-Kuz/Service-Oriented-Private-Domain-Operations-News-Push-Assistant/blob/main/app/pipeline.py) `e00d7298d21038a5cf2940d92a4324b6f0726cfa`；[app/agents.py](https://github.com/Wang-Kuz/Service-Oriented-Private-Domain-Operations-News-Push-Assistant/blob/main/app/agents.py) `59adbf62fc030f4196ed86cd1086704f5daacf92`；[app/delivery_dispatcher.py](https://github.com/Wang-Kuz/Service-Oriented-Private-Domain-Operations-News-Push-Assistant/blob/main/app/delivery_dispatcher.py) `e28636712fef48a88091bfe2055fca71b808a004` |
+| Java 贪吃蛇小游戏 | [README.md](https://github.com/Wang-Kuz/Snake-Game/blob/main/README.md) `02b876b965b7fd7bd3cd903d0d2e340d386139ad`；[src/GamePanel.java](https://github.com/Wang-Kuz/Snake-Game/blob/main/src/GamePanel.java) `46f752641af129b1e1c631254f4749363dba0c08` |
+| Python 基础与遥感学习集 | [README.md](https://github.com/Wang-Kuz/Test-FirstUseGithub/blob/test-1/README.md) `819dfd157da6a7f152cad8a74c13511af85d0ea2`；[04_oop/01_classes_and_objects.py](https://github.com/Wang-Kuz/Test-FirstUseGithub/blob/test-1/04_oop/01_classes_and_objects.py) `ba2dac88777742f890a822741a7f3350df7d0167`；[remote_sensing/03_image_analysis/01_image_analysis.py](https://github.com/Wang-Kuz/Test-FirstUseGithub/blob/test-1/remote_sensing/03_image_analysis/01_image_analysis.py) `4a48f6ab9664c7e72415f41497535bccc1365f2a` |
+| 高光谱遥感算法实验工程 | [README.md](https://github.com/Wang-Kuz/TIFproject/blob/main/README.md) `f7ca8283e5ee480e56fd47776658ba886dfdc03e`；[band_selection/band_selection.py](https://github.com/Wang-Kuz/TIFproject/blob/main/band_selection/band_selection.py) `8fcbd5bbfa3b399affec62e6da45620b8bfac2f2`；[Algorithm/cnn_visualization.py](https://github.com/Wang-Kuz/TIFproject/blob/main/Algorithm/cnn_visualization.py) `7055128992608f2b4f73266a4213efac6a75e943` |
+| 软件著作权材料模板库 | [README.md](https://github.com/Wang-Kuz/Workflow-Software-Copyright/blob/main/README.md) `1b2a6730f2a249af891d875a08962db89f2936ad`；[docs/模板目录与用途.md](https://github.com/Wang-Kuz/Workflow-Software-Copyright/blob/main/docs/%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95%E4%B8%8E%E7%94%A8%E9%80%94.md) `508a1de7dd9fc194cf4a9149f3be0e59526aa2b0` |
+| Titanic 分类学习资料 | [README.md](https://github.com/Wang-Kuz/YLZ34-Project/blob/main/README.md) `e63bee477ff1d9550fc8a1bf7f21dda6a6b23083`；[docs/数据字典与质量.md](https://github.com/Wang-Kuz/YLZ34-Project/blob/main/docs/%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8%E4%B8%8E%E8%B4%A8%E9%87%8F.md) `5c9245a2b2a8c0b8a5218254292591a6b834fd9a` |
+| ZZC-T 桌面通讯录 | [README.md](https://github.com/Wang-Kuz/ZZC-T_Contact_System/blob/main/README.md) `7275803f5edfc2ff06bd12515e8e36e164b48ffc`；[src/main/java/com/contact/system/App.java](https://github.com/Wang-Kuz/ZZC-T_Contact_System/blob/main/src/main/java/com/contact/system/App.java) `698a9fe4e51935c062e3843cf1f181a612d63352`；[src/main/java/com/contact/system/dao/ContactDAO.java](https://github.com/Wang-Kuz/ZZC-T_Contact_System/blob/main/src/main/java/com/contact/system/dao/ContactDAO.java) `82420357ea15f783ab25e235963798bd73109c1a`；[pom.xml](https://github.com/Wang-Kuz/ZZC-T_Contact_System/blob/main/pom.xml) `14f3045ad6da0c1a8b0de3202adefb4ad2c8f895` |
+| Kuz 个人作品集与电子简历 | [README.md](https://github.com/Wang-Kuz/Kuz_PSCV_Web/blob/main/README.md) |

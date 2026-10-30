@@ -1353,6 +1353,1207 @@
         "en": "Curated from README read on 30 Oct 2026. Original verification boundaries are retained; applications, models and production systems were not rerun in this pass."
       },
       "media": []
+    },
+    {
+      "id": "aiproject",
+      "name": {
+        "zh": "Flask 入门示例",
+        "en": "Flask Starter Example"
+      },
+      "tagline": {
+        "zh": "从一个路由，理解 Web 应用。",
+        "en": "Understand a web app through one route."
+      },
+      "summary": {
+        "zh": "最小 Python Web 学习骨架：创建 Flask 应用，通过根路径返回 Hello World 固定文本。",
+        "en": "A minimal Python web-learning scaffold: creates a Flask application and returns fixed Hello World text at the root route."
+      },
+      "role": {
+        "zh": "Web 基础练习",
+        "en": "Web fundamentals practice"
+      },
+      "problem": {
+        "zh": "理解应用对象、HTTP 路由、视图函数与本地运行之间的基本关系。",
+        "en": "Understand the relationship between an application object, HTTP route, view function and local execution."
+      },
+      "solution": {
+        "zh": "使用 Flask 定义一个根路由和 hello_world 视图，并保留直接启动入口。",
+        "en": "Defines a root route and hello_world view in Flask, with a direct run entry point."
+      },
+      "outcome": {
+        "zh": "形成可阅读的入门示例；当前没有 AI 模型、Agent、RAG、业务界面、账号或数据库，不能因仓库名称纳入 AI 项目。",
+        "en": "Provides a readable starter example. It has no AI model, agent, RAG, business interface, accounts or database; its repository name is not evidence of AI functionality."
+      },
+      "status": {
+        "zh": "入门骨架 · 无 AI 实现",
+        "en": "Starter scaffold · No AI implementation"
+      },
+      "categories": [],
+      "tech": [
+        "Python",
+        "Flask"
+      ],
+      "github": "https://github.com/Wang-Kuz/AIproject",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。已读取 README 和完整 app.py；确认单路由固定返回，未启动 HTTP 服务。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README and the complete app.py; confirmed one fixed-response route, without starting an HTTP service."
+      },
+      "media": []
+    },
+    {
+      "id": "bmicalculate",
+      "name": {
+        "zh": "JavaFX BMI 计算练习",
+        "en": "JavaFX BMI Calculator"
+      },
+      "tagline": {
+        "zh": "让计算、事件与图表连起来。",
+        "en": "Connect calculation, events and charts."
+      },
+      "summary": {
+        "zh": "大学自主学习的 JavaFX 桌面小项目，接收身高、体重、年龄和日期，计算 BMI，并绘制当前会话中的趋势图。",
+        "en": "A self-directed university JavaFX project accepting height, weight, age and date, calculating BMI and charting records within the current session."
+      },
+      "role": {
+        "zh": "Java 桌面交互与基础计算",
+        "en": "Java desktop interaction & basic calculation"
+      },
+      "problem": {
+        "zh": "将表单输入、数值解析、条件分支与图表展示整合为一个桌面交互流程。",
+        "en": "Combine form inputs, number parsing, conditional branches and charts in a desktop flow."
+      },
+      "solution": {
+        "zh": "FXML 绑定控制器事件，计算体重除以身高平方，将记录写入内存 List，并用 JFreeChart 嵌入折线图。",
+        "en": "FXML binds controller events, computes weight divided by squared height, stores records in a List and embeds a JFreeChart line chart."
+      },
+      "outcome": {
+        "zh": "形成计算与图表集成练习；年龄未参与计算，退出不保存，输入与分类边界有已记录问题，文字提示不作为健康建议。",
+        "en": "A calculation-and-chart integration exercise. Age does not affect the calculation, records are not persisted, and documented input/classification issues mean text prompts are not health advice."
+      },
+      "status": {
+        "zh": "桌面学习项目 · 未实机复验",
+        "en": "Desktop learning project · Not rerun on device"
+      },
+      "categories": [
+        "software"
+      ],
+      "tech": [
+        "Java",
+        "JavaFX",
+        "FXML",
+        "JFreeChart",
+        "Maven"
+      ],
+      "github": "https://github.com/Wang-Kuz/BMIcalculate",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。已读取 README 与计算控制器，核对公式、内存记录和分类分支；没有运行 JavaFX、构建或提供医学判断。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README and the controller to inspect the formula, in-memory records and branches; no JavaFX execution, build or medical assessment."
+      },
+      "media": []
+    },
+    {
+      "id": "carparkingsystem",
+      "name": {
+        "zh": "停车场可视化与 OCR 演示",
+        "en": "Parking Visualization & OCR Demo"
+      },
+      "tagline": {
+        "zh": "把视觉输入接到业务界面。",
+        "en": "Connect visual input with a business interface."
+      },
+      "summary": {
+        "zh": "使用 Flask、MySQL 和原生前端构建停车场演示大屏，提供人工进出场操作、车位显示、费用统计及车牌 OCR 候选回填。",
+        "en": "A Flask/MySQL and native-frontend parking dashboard demo with manual entry/exit operations, occupancy displays, fee statistics and OCR candidate filling."
+      },
+      "role": {
+        "zh": "全栈演示开发 · OCR 集成",
+        "en": "Full-stack demo development · OCR integration"
+      },
+      "problem": {
+        "zh": "停车记录、车位状态与车牌图片输入需要在同一可视化流程中连接起来。",
+        "en": "Parking records, occupancy and plate-image input need a connected visual workflow."
+      },
+      "solution": {
+        "zh": "Flask 路由处理进出场及统计，Chart.js 展示数据；OpenCV 做预处理，EasyOCR 提取文字后交由人工确认。",
+        "en": "Flask routes handle entry/exit and analytics, Chart.js visualizes data, and OpenCV preprocessing feeds EasyOCR text extraction for human confirmation."
+      },
+      "outcome": {
+        "zh": "形成视觉模型与业务 API 的集成演示；没有闸机控制、支付收款或经验证识别率，已有启动和统计缺陷待完善。",
+        "en": "An integration demo linking a vision model with business APIs. It has no gate control, payment collection or verified recognition accuracy, and documented startup/analytics issues remain."
+      },
+      "status": {
+        "zh": "学习演示 · 非生产停车系统",
+        "en": "Learning demo · Not production parking"
+      },
+      "categories": [
+        "ai",
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "Flask",
+        "MySQL",
+        "JavaScript",
+        "Chart.js",
+        "OpenCV",
+        "EasyOCR"
+      ],
+      "github": "https://github.com/Wang-Kuz/CarParkingSystem",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。已读取 README、Flask 路由文件及车牌识别类，确认实际 EasyOCR 调用；没有连接数据库、下载模型、访问摄像头或运行演示。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README, Flask routes and the plate-recognition class to confirm EasyOCR integration; no database connection, model download, camera access or demo execution."
+      },
+      "media": []
+    },
+    {
+      "id": "carsystem-2",
+      "name": {
+        "zh": "车辆库存与驾驶人登记",
+        "en": "Vehicle Inventory & Driver Records"
+      },
+      "tagline": {
+        "zh": "用表单与 SQL，组织登记流程。",
+        "en": "Organize registration with forms and SQL."
+      },
+      "summary": {
+        "zh": "Java Swing 与 MySQL JDBC 桌面工程，提供车辆入库、出库记录、驾驶人登记和控制台库存查询。",
+        "en": "A Java Swing/MySQL JDBC desktop project for vehicle intake, outgoing records, driver registration and console inventory queries."
+      },
+      "role": {
+        "zh": "Java 桌面与数据库实践",
+        "en": "Java desktop & database practice"
+      },
+      "problem": {
+        "zh": "将车辆型号、车牌和登记信息映射到结构化数据库操作。",
+        "en": "Map vehicle models, plates and registration information into structured database operations."
+      },
+      "solution": {
+        "zh": "Swing 界面调用四个 JDBC 方法，通过 PreparedStatement 写入库存、出库与驾驶人记录，并查询当前库存。",
+        "en": "A Swing interface invokes four JDBC methods using PreparedStatement for inventory, outgoing and driver records, plus current-stock queries."
+      },
+      "outcome": {
+        "zh": "形成四项业务操作的源码实现；查询结果在控制台，原始建表文件缺失，尚无本轮连库或窗口验收。",
+        "en": "Source implements four business operations. Queries print to the console, original schema files are missing, and this pass did not verify database or window behavior."
+      },
+      "status": {
+        "zh": "桌面源码 · 数据库待配置验证",
+        "en": "Desktop source · Database setup unverified"
+      },
+      "categories": [
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Java",
+        "Swing",
+        "JDBC",
+        "MySQL"
+      ],
+      "github": "https://github.com/Wang-Kuz/CARSystem-2",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。已读取 README 和四项 JDBC 业务方法；未读取或复制连接凭据，未执行 SQL，不将名称中的 2 解释为已确认版本关系。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README and four JDBC business methods; no connection credentials were copied or SQL executed, and the name's 2 is not taken as proof of a version relationship."
+      },
+      "media": []
+    },
+    {
+      "id": "carvehiclemanagementsystem",
+      "name": {
+        "zh": "车库车辆管理练习",
+        "en": "Garage Vehicle Management"
+      },
+      "tagline": {
+        "zh": "从车牌输入，到车位状态。",
+        "en": "From plate input to parking-space state."
+      },
+      "summary": {
+        "zh": "Java Swing/控制台与 MySQL JDBC 工程，按车牌登记入库、选择空闲车位、办理出库并查询当前车辆位置。",
+        "en": "A Java Swing/console and MySQL JDBC project for plate-based intake, selecting a free spot, vehicle exit and current-location queries."
+      },
+      "role": {
+        "zh": "Java 业务逻辑与桌面交互",
+        "en": "Java business logic & desktop interaction"
+      },
+      "problem": {
+        "zh": "车辆记录与车位状态需要通过明确的入库、出库和查询操作联动。",
+        "en": "Vehicle records and space state must be connected through explicit entry, exit and query operations."
+      },
+      "solution": {
+        "zh": "VehicleService 使用参数化 SQL 查询一个空闲车位，更新占用状态并写入车辆记录；出库时删除当前记录并释放车位。",
+        "en": "VehicleService uses parameterized SQL to select a free spot, update occupancy and insert a vehicle record; exit deletes the current record and releases the spot."
+      },
+      "outcome": {
+        "zh": "已有窗口和控制台两类入口；车位选择为简单 SQL 查询，无 OCR、计费或历史出库保存，事务与并发仍需验证。",
+        "en": "Window and console entry points exist. Space selection is a simple SQL query; there is no OCR, billing or retained exit history, and transactions/concurrency still require validation."
+      },
+      "status": {
+        "zh": "Java 练习工程 · 未连库复验",
+        "en": "Java practice project · Database not rerun"
+      },
+      "categories": [
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Java",
+        "Swing",
+        "JDBC",
+        "MySQL"
+      ],
+      "github": "https://github.com/Wang-Kuz/CARVehicleManagementSystem",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。已读取 README 与 VehicleService，核对选位、入库、出库和查询 SQL；不将其描述为 Spring Boot、JavaFX 或智能优化分配。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README and VehicleService to inspect allocation, entry, exit and query SQL; not described as Spring Boot, JavaFX or intelligent allocation optimization."
+      },
+      "media": []
+    },
+    {
+      "id": "compressiontool",
+      "name": {
+        "zh": "Java ZIP 压缩与解压工具",
+        "en": "Java ZIP Utility"
+      },
+      "tagline": {
+        "zh": "从文件流，理解桌面工具。",
+        "en": "Understand desktop tooling through file streams."
+      },
+      "summary": {
+        "zh": "Java Swing 本地学习工具，以 FlatLaf 提供界面外观，使用 JDK ZIP 流处理文件压缩与解压。",
+        "en": "A local Java Swing learning tool using FlatLaf for appearance and JDK ZIP streams for compression and extraction."
+      },
+      "role": {
+        "zh": "桌面工具开发 · 文件 I/O",
+        "en": "Desktop tooling · File I/O"
+      },
+      "problem": {
+        "zh": "把文件选择、流式读写、ZIP 条目和错误反馈组合为可操作工具。",
+        "en": "Combine file selection, streaming I/O, ZIP entries and error feedback into a usable tool."
+      },
+      "solution": {
+        "zh": "压缩类支持单文件与递归目录，解压类遍历 ZIP 条目；Swing 提供选择路径和操作按钮。",
+        "en": "The compressor supports files and recursive directories, the extractor iterates ZIP entries, and Swing supplies path selection and buttons."
+      },
+      "outcome": {
+        "zh": "实现 ZIP 基础读写；GUI 未启用目录选择，进度是模拟且有阻塞问题，解压路径未做越界保护，不适用于不可信 ZIP。",
+        "en": "Implements basic ZIP I/O. Directory selection is not enabled in the GUI, simulated progress has a blocking issue, and extraction lacks path-containment protection, so untrusted ZIPs are unsuitable."
+      },
+      "status": {
+        "zh": "桌面工具原型 · 已知限制已记录",
+        "en": "Desktop tool prototype · Limits documented"
+      },
+      "categories": [
+        "software"
+      ],
+      "tech": [
+        "Java",
+        "Swing",
+        "FlatLaf",
+        "java.util.zip"
+      ],
+      "github": "https://github.com/Wang-Kuz/CompressionTool",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。已读取 README、压缩和解压类；确认仅 ZIP 与原生流式实现，未构建或操作文件，不主张多格式支持或安全解压保证。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README and compression/extraction classes; confirmed ZIP-only JDK streaming implementation without building or processing files, and no multi-format or safe-extraction guarantee."
+      },
+      "media": []
+    },
+    {
+      "id": "individual-consumption",
+      "name": {
+        "zh": "消费数据可视化演示",
+        "en": "Expense Visualization Demo"
+      },
+      "tagline": {
+        "zh": "让筛选与图表产生联系。",
+        "en": "Connect filtering with visual analysis."
+      },
+      "summary": {
+        "zh": "Vue 3、Vant 与 ECharts 前端学习项目，基于页面随机生成的数据展示消费分类、金额筛选、日周趋势与占比联动。",
+        "en": "A Vue 3, Vant and ECharts learning project using randomly generated page data for category/amount filters, daily/weekly trends and linked proportions."
+      },
+      "role": {
+        "zh": "前端开发 · 数据聚合与可视化",
+        "en": "Frontend development · Aggregation & visualization"
+      },
+      "problem": {
+        "zh": "将筛选条件、分组汇总与多图联动组合为清晰的移动界面交互。",
+        "en": "Combine filters, grouped aggregates and linked charts in a clear mobile-style interaction."
+      },
+      "solution": {
+        "zh": "Vue 响应式状态维护条件，按日或周汇总内存记录，ECharts 柱图与环图展示趋势及分类结构。",
+        "en": "Vue reactive state tracks filters, in-memory records are grouped by day or week, and ECharts bar/donut charts show trends and category structure."
+      },
+      "outcome": {
+        "zh": "形成前端统计交互演示；数据随机且刷新重建，没有真实账单录入、持久化、后端或财务分析结论。",
+        "en": "A frontend analytics-interaction demo. Data is random and regenerated on refresh, with no real transaction entry, persistence, backend or financial conclusions."
+      },
+      "status": {
+        "zh": "前端演示 · 使用模拟数据",
+        "en": "Frontend demo · Simulated data"
+      },
+      "categories": [
+        "software"
+      ],
+      "tech": [
+        "Vue 3",
+        "Vant",
+        "ECharts",
+        "JavaScript",
+        "Vite"
+      ],
+      "github": "https://github.com/Wang-Kuz/Individual-Consumption",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。已读取 README 和 App.vue，核对随机数据、筛选、日周聚合与图表状态；未安装依赖、构建或重新做浏览器验收。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README and App.vue to inspect random data, filtering, daily/weekly grouping and chart state; no dependency install, build or fresh browser acceptance."
+      },
+      "media": []
+    },
+    {
+      "id": "inventorymanagementsystem",
+      "name": {
+        "zh": "物资出入库管理实践",
+        "en": "Inventory Management Practice"
+      },
+      "tagline": {
+        "zh": "把数据库操作接到桌面表单。",
+        "en": "Connect database operations to desktop forms."
+      },
+      "summary": {
+        "zh": "大学实践中的 Java Swing、JDBC 和 MySQL 小型作业，覆盖物资入库、出库、当前库存查看与简单用户维护。",
+        "en": "A small university Java Swing/JDBC/MySQL exercise covering inbound/outbound materials, current stock and basic user maintenance."
+      },
+      "role": {
+        "zh": "Java 桌面开发 · SQL 业务实践",
+        "en": "Java desktop development · SQL practice"
+      },
+      "problem": {
+        "zh": "通过具体库存场景练习表单、事件监听和参数化数据库操作。",
+        "en": "Practice forms, event handlers and parameterized database operations through a stock-management scenario."
+      },
+      "solution": {
+        "zh": "按页签组织入库、出库、库存与用户功能；入库累加数量，出库扣减并写记录，库存查询读取当前量。",
+        "en": "Tabs organize inbound, outbound, stock and user actions; inbound adds quantity, outbound deducts and records it, and stock queries read current balances."
+      },
+      "outcome": {
+        "zh": "完成学习用桌面业务代码；未防负库存，出库两次写入无事务，登录可绕过，因此不作为完整企业仓储系统。",
+        "en": "Provides learning-oriented desktop business code. Negative stock is not prevented, outbound writes are not transactional and login can be bypassed, so it is not a complete enterprise warehouse system."
+      },
+      "status": {
+        "zh": "大学实践作业 · 非企业成品",
+        "en": "University exercise · Not enterprise-ready"
+      },
+      "categories": [
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Java",
+        "Swing",
+        "JDBC",
+        "MySQL"
+      ],
+      "github": "https://github.com/Wang-Kuz/InventoryManagementSystem",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。已读取 README 和主源码的表单及 SQL 逻辑；未连接数据库、执行 DDL/业务写入或复制配置凭据。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README and main-source form/SQL logic; no database connection, DDL/business writes or copied configuration credentials."
+      },
+      "media": []
+    },
+    {
+      "id": "job-alerts-agent",
+      "name": {
+        "zh": "岗位推荐 · Hermes 智能体",
+        "en": "Job Recommendations · Hermes Agent"
+      },
+      "tagline": {
+        "zh": "把岗位事实，带入独立客户会话。",
+        "en": "Bring verified job records into individual conversations."
+      },
+      "summary": {
+        "zh": "面向就业岗位私域服务的 Python 应用，结合官方公告采集、岗位审核、客户画像、Hermes 会话与企业微信岗位推送管理。",
+        "en": "A Python application for private-domain job services, connecting official-notice collection, job review, customer profiles, Hermes conversations and WeCom delivery management."
+      },
+      "role": {
+        "zh": "Agent 集成 · MCP 工具与业务流程",
+        "en": "Agent integration · MCP tools & business workflows"
+      },
+      "problem": {
+        "zh": "岗位更新、地区偏好和客户对话需要保持一致，同时避免跨会话信息混用和重复推荐。",
+        "en": "Job updates, regional preferences and customer conversations need consistent context without cross-conversation mixing or duplicate recommendations."
+      },
+      "solution": {
+        "zh": "Hermes CLI 承担模型与工具编排；FastMCP 提供单客户岗位查询和画像工具；SQLAlchemy 与规则匹配代码过滤审核状态、时效、地区及已推送岗位。",
+        "en": "Hermes CLI orchestrates models and tools; FastMCP exposes customer-scoped job/profile tools; SQLAlchemy and rule-based matching filter review status, freshness, region and previously sent jobs."
+      },
+      "outcome": {
+        "zh": "形成岗位数据、工具调用、会话摘要和运营后台的源码链路；推荐效果、真实消息交付与无人值守运行仍需独立验证。",
+        "en": "Provides a source-level workflow spanning job data, tool calls, conversation summaries and operations. Recommendation quality, actual delivery and unattended operation still require independent verification."
+      },
+      "status": {
+        "zh": "业务应用源码 · Agent 链路已实现",
+        "en": "Business application source · Agent integration implemented"
+      },
+      "categories": [
+        "ai",
+        "agent",
+        "enterprise",
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "FastAPI",
+        "SQLAlchemy",
+        "Hermes",
+        "FastMCP",
+        "WeCom"
+      ],
+      "github": "https://github.com/Wang-Kuz/Intelligent-Job-Recommendation-System-Job-Alerts",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。读取 Hermes 桥接、规则匹配完整源码，以及会话交接与 MCP 工具关键段；确认真实 Hermes 调用、单客户上下文和岗位检索。未运行模型、采集、OCR 或企微发送；企业标签表示业务场景，不代表生产验收，未认定向量 RAG。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read the complete Hermes bridge and matching code plus key conversation/MCP sections; confirmed Hermes invocation, customer-scoped context and job retrieval. No model, collection, OCR or WeCom-send execution. Enterprise denotes the business context, not production acceptance; no vector-RAG claim."
+      },
+      "media": []
+    },
+    {
+      "id": "library-management-system",
+      "name": {
+        "zh": "桌面图书管理实践",
+        "en": "Desktop Library Management"
+      },
+      "tagline": {
+        "zh": "用事务串起库存与借还记录。",
+        "en": "Connect inventory and lending records with transactions."
+      },
+      "summary": {
+        "zh": "Java Swing、JDBC 与 MySQL 桌面学习项目，提供图书增删改查、借书和还书六项操作，查询结果输出到控制台。",
+        "en": "A Java Swing/JDBC/MySQL desktop learning project with book CRUD, borrowing and returns; query results are printed to the console."
+      },
+      "role": {
+        "zh": "Java 桌面开发 · 数据库事务实践",
+        "en": "Java desktop development · Database transaction practice"
+      },
+      "problem": {
+        "zh": "通过图书业务练习桌面事件、参数化 SQL、库存变更与操作流水之间的关系。",
+        "en": "Practice desktop events, parameterized SQL, stock changes and transaction records through a library scenario."
+      },
+      "solution": {
+        "zh": "BookManager 封装书目操作，TransactionManager 在同连接中更新数量并记录借还；借书以库存大于零作为扣减条件。",
+        "en": "BookManager encapsulates book operations; TransactionManager updates quantity and records lending/returns on the same connection, with positive-stock checks for borrowing."
+      },
+      "outcome": {
+        "zh": "形成六项基础业务的桌面原型；没有账号权限、读者档案、借阅期限，重复还书及异常处理仍有边界。",
+        "en": "A desktop prototype covering six basic operations. Account permissions, reader profiles and loan periods are absent; repeated returns and exception handling have limitations."
+      },
+      "status": {
+        "zh": "桌面学习原型 · 未本轮连库运行",
+        "en": "Desktop learning prototype · Database not run this pass"
+      },
+      "categories": [
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Java",
+        "Swing",
+        "JDBC",
+        "MySQL"
+      ],
+      "github": "https://github.com/Wang-Kuz/Library-Management-System",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。读取 README、BookManager 与 TransactionManager 全文，核对参数绑定、库存条件和事务提交。未读取连接凭据、执行 SQL、打开 Swing 窗口或重新编译；README 的历史检查不作为本轮运行验收。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README, BookManager and TransactionManager in full to inspect parameter binding, stock conditions and commits. No connection credentials, SQL execution, Swing launch or fresh build; historical README checks are not this pass’s runtime acceptance."
+      },
+      "media": []
+    },
+    {
+      "id": "lostfound",
+      "name": {
+        "zh": "校园失物招领平台",
+        "en": "Campus Lost & Found"
+      },
+      "tagline": {
+        "zh": "把发布、检索和认领接成流程。",
+        "en": "Connect publishing, search and claims."
+      },
+      "summary": {
+        "zh": "Flask、MySQL 与原生前端的校园业务实践，提供 lost/found 发布、搜索筛选、详情、认领申请和留言，并配有管理接口。",
+        "en": "A campus workflow project using Flask, MySQL and native frontend code for lost/found posts, filtered search, details, claim requests and comments, with administrative APIs."
+      },
+      "role": {
+        "zh": "全栈业务开发 · 数据建模与接口",
+        "en": "Full-stack workflows · Data modeling & APIs"
+      },
+      "problem": {
+        "zh": "失物信息需要按类型和状态集中检索，认领行为需要与登录身份及待处理记录关联。",
+        "en": "Lost-item information needs centralized filtering by type and status, while claims must connect authenticated users with pending records."
+      },
+      "solution": {
+        "zh": "Flask Blueprint 按业务组织路由，JWT 保护发布与认领，SQLAlchemy 处理模型、分页和组合查询；待确认认领通过记录查询阻止重复提交。",
+        "en": "Flask Blueprints organize routes, JWT protects posting/claims, and SQLAlchemy handles models, pagination and compound queries; pending-record checks prevent duplicate claim submissions."
+      },
+      "outcome": {
+        "zh": "形成前后端与数据库相连的源码实践；管理页面仍存在占位操作，完整认领审核、浏览器交互和数据库联调未在本轮验收。",
+        "en": "Provides source connecting frontend, backend and database. Some admin-page actions remain placeholders; full claim review, browser interaction and database integration were not accepted in this pass."
+      },
+      "status": {
+        "zh": "全栈实践项目 · 流程仍待完善",
+        "en": "Full-stack practice · Workflow gaps remain"
+      },
+      "categories": [
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "Flask",
+        "SQLAlchemy",
+        "MySQL",
+        "JWT",
+        "HTML",
+        "JavaScript"
+      ],
+      "github": "https://github.com/Wang-Kuz/Lostfound",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。读取 README 与 item_routes.py 的发布、列表、详情、认领和搜索段，确认数据库持久化与 JWT 路由。未读取配置秘密、运行初始化脚本、启动应用或连接数据库；其余模块范围以 README 记录为限。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README and item_routes.py sections covering posting, listing, details, claims and search; confirmed database persistence and JWT routes. No secrets, initialization scripts, app execution or database connection; other module scope is limited to README documentation."
+      },
+      "media": []
+    },
+    {
+      "id": "luohanguojingroup",
+      "name": {
+        "zh": "三角色乐队管理系统",
+        "en": "Three-role Band Management"
+      },
+      "tagline": {
+        "zh": "用角色与内容，组织音乐业务。",
+        "en": "Organize music workflows through roles and content."
+      },
+      "summary": {
+        "zh": "Java Servlet/JSP 与 MySQL JDBC 的 Web 工程，围绕管理员、乐队、乐迷组织账户、专辑、歌曲、成员、演唱会及关注和购票记录。",
+        "en": "A Java Servlet/JSP and MySQL JDBC web project organizing accounts, albums, songs, members, concerts, follows and ticket records across admin, band and fan roles."
+      },
+      "role": {
+        "zh": "Java Web 开发 · 角色流程与内容管理",
+        "en": "Java web development · Role workflows & content management"
+      },
+      "problem": {
+        "zh": "不同角色需要各自的页面入口、资料维护能力和业务数据关联。",
+        "en": "Different roles need their own entry pages, maintenance capabilities and linked business records."
+      },
+      "solution": {
+        "zh": "Servlet 基于 Session 分流三类角色，DAO 承担持久化；专辑新增处理表单、日期、封面上传及乐队归属，Maven 将工程组织为 WAR。",
+        "en": "Servlets route three roles through sessions and DAOs handle persistence; album creation processes forms, dates, cover uploads and band ownership, with Maven WAR packaging."
+      },
+      "outcome": {
+        "zh": "形成多角色 Java Web 源码归档；已有文档记录缺失 JSP、字段差异与不完整操作，购票仅记录行为，不能视为支付或已交付平台。",
+        "en": "A multi-role Java web source archive. Documentation records missing JSPs, field mismatches and incomplete actions; ticketing records intent rather than payments or an accepted delivered platform."
+      },
+      "status": {
+        "zh": "源码归档 · 全工程构建与联调待验证",
+        "en": "Source archive · Full build & integration unverified"
+      },
+      "categories": [
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Java",
+        "Jakarta Servlet",
+        "JSP",
+        "JSTL",
+        "JDBC",
+        "MySQL",
+        "Maven"
+      ],
+      "github": "https://github.com/Wang-Kuz/LuoHanGuoJinGroup",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。读取 README、pom.xml、LoginServlet 与 AlbumAddServlet，核对 WAR、依赖、Session 分流和专辑新增处理。未读取历史 SQL 数据或凭据，未构建、启动容器、上传文件或连接数据库。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README, pom.xml, LoginServlet and AlbumAddServlet to verify WAR packaging, dependencies, session routing and album creation. No historical SQL data/credentials, build, container launch, upload or database connection."
+      },
+      "media": []
+    },
+    {
+      "id": "personal-workstation",
+      "name": {
+        "zh": "个人工作站 · 网页与工具原型",
+        "en": "Personal Workstation · Web & Tool Prototypes"
+      },
+      "tagline": {
+        "zh": "把个人展示与浏览器工具放在一起。",
+        "en": "Bring a personal profile and browser tools together."
+      },
+      "summary": {
+        "zh": "原生 HTML/CSS/JavaScript 个人展示站，包含介绍、成长时间轴、荣誉和 Studio 工具入口，并附冒泡排序、文本加解密、表格预览、绘图及格式转换练习。",
+        "en": "A native HTML/CSS/JavaScript personal showcase with an introduction, timeline, honors and Studio entries, plus exercises in bubble-sort visualization, text encryption, spreadsheet preview, charts and format conversion."
+      },
+      "role": {
+        "zh": "前端交互开发 · 浏览器工具实践",
+        "en": "Frontend interaction · Browser-tool practice"
+      },
+      "problem": {
+        "zh": "用可交互的小工具串联个人展示、可视化和浏览器端数据处理练习。",
+        "en": "Connect personal presentation, visualization and browser-side data handling through interactive small tools."
+      },
+      "solution": {
+        "zh": "静态页面与 JSON 组织展示内容；排序页以随机数组和异步延时展示相邻比较与交换，Flask 骨架提供静态页面及状态接口。",
+        "en": "Static pages and JSON organize showcase content; the sorting page uses random arrays and async delays to animate adjacent comparisons/swaps, while a Flask scaffold serves pages and status."
+      },
+      "outcome": {
+        "zh": "形成展示站与五类工具原型；Studio 部分按钮未接线，上传接口只是模拟成功，不作为 CMS、文件服务或算法研究成果。",
+        "en": "A showcase and five tool prototypes. Some Studio buttons are unconnected and the upload endpoint only simulates success; this is not a CMS, file service or algorithm-research result."
+      },
+      "status": {
+        "zh": "前端展示与工具原型",
+        "en": "Frontend showcase & tool prototypes"
+      },
+      "categories": [
+        "software"
+      ],
+      "tech": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Flask"
+      ],
+      "github": "https://github.com/Wang-Kuz/Personal-Workstation",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。读取 README、冒泡排序页面完整脚本及 Flask api.py，确认实际排序循环和模拟上传返回。未运行浏览器、CDN、工具或 Flask；页面履历与技能数值未作为已核验个人成就。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README, the full bubble-sort page script and Flask api.py; confirmed the sorting loop and mock upload response. No browser/CDN/tool/Flask execution; displayed biography and skill figures were not treated as verified achievements."
+      },
+      "media": []
+    },
+    {
+      "id": "safeupload",
+      "name": {
+        "zh": "SafeUpload · 加密文件管理实验",
+        "en": "SafeUpload · Encrypted File Management Lab"
+      },
+      "tagline": {
+        "zh": "理解文件、密钥与存储的关系。",
+        "en": "Understand files, keys and storage together."
+      },
+      "summary": {
+        "zh": "Flask 文件管理教学原型，上传时以 AES 加密文件并用 RSA 包装密钥，下载时输入密码解锁关联私钥，支持文件列表、软删除和操作日志。",
+        "en": "A Flask teaching prototype that encrypts uploads with AES and wraps file keys with RSA, unlocks the associated private key by password for downloads, and provides lists, soft deletion and operation logs."
+      },
+      "role": {
+        "zh": "Python Web 开发 · 密码库集成实践",
+        "en": "Python web development · Cryptographic-library integration"
+      },
+      "problem": {
+        "zh": "通过真实文件处理流程练习对称加密、非对称密钥包装、数据库元数据和网页交互。",
+        "en": "Practice symmetric encryption, asymmetric key wrapping, database metadata and web interaction through a concrete file workflow."
+      },
+      "solution": {
+        "zh": "PyCryptodome 生成每文件 AES-256 密钥及 IV，以 CBC 加密文件，再用 RSA-2048/OAEP 包装 AES 密钥；Flask 路由保存密文及元数据并执行解密下载。",
+        "en": "PyCryptodome generates per-file AES-256 keys and IVs, encrypts with CBC, and wraps AES keys with RSA-2048/OAEP; Flask routes persist ciphertext/metadata and decrypt downloads."
+      },
+      "outcome": {
+        "zh": "形成混合加密与 Web 文件操作的学习案例；没有账号隔离和内容认证，共享活跃 RSA 密钥对，不作为生产安全存储承诺。",
+        "en": "A learning case integrating hybrid encryption with web file operations. It lacks account isolation and content authentication and shares an active RSA key pair; it is not a production secure-storage guarantee."
+      },
+      "status": {
+        "zh": "单实例教学原型 · 非生产安全产品",
+        "en": "Single-instance teaching prototype · Not production security"
+      },
+      "categories": [
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "Flask",
+        "Jinja",
+        "SQLAlchemy",
+        "PyCryptodome",
+        "AES-CBC",
+        "RSA-OAEP"
+      ],
+      "github": "https://github.com/Wang-Kuz/SafeUpload",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。读取 README、crypto.py 与 main.py 路由，核对密钥生成、CBC/OAEP、共享密钥对、文件读写和软删除。未运行服务、加解密真实资料、读取凭据或执行数据库初始化；不是密码学安全审计。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README, crypto.py and main.py routes to inspect key generation, CBC/OAEP, shared keys, file I/O and soft deletion. No service execution, encryption of real data, credentials or database initialization; this is not a cryptographic security audit."
+      },
+      "media": []
+    },
+    {
+      "id": "news-push-agent",
+      "name": {
+        "zh": "私域情报官 · 多 Agent 新闻工作流",
+        "en": "Private-domain Intelligence · Multi-agent News Workflow"
+      },
+      "tagline": {
+        "zh": "让内容判断与发送执行各有边界。",
+        "en": "Give content judgment and delivery distinct responsibilities."
+      },
+      "summary": {
+        "zh": "面向私域资讯运营的 FastAPI 应用，将采集、分析、编辑、审核和用户匹配组织为五阶段 Agent 工作流，配套运营管理台和确定性发送程序。",
+        "en": "A FastAPI application for private-domain news operations, organizing collection, analysis, editing, review and audience matching into five agent stages, with an operations console and deterministic delivery worker."
+      },
+      "role": {
+        "zh": "多 Agent 编排 · 全栈运营工具",
+        "en": "Multi-agent orchestration · Full-stack operations tooling"
+      },
+      "problem": {
+        "zh": "自动内容生产需要保留阶段证据，并让最终消息发送受到同意状态、审核结果、渠道与任务状态约束。",
+        "en": "Automated content production needs stage evidence, while actual sends must respect consent, review results, channels and task state."
+      },
+      "solution": {
+        "zh": "PipelineOrchestrator 组织分批分析和单篇并发处理；AgentRunner 读取角色与 Skill 契约、调用模型并校验事件；Dispatcher 再检查演练模式、用户同意和门禁后提交企微消息。",
+        "en": "PipelineOrchestrator handles batched analysis and concurrent per-item processing; AgentRunner loads role/skill contracts, calls the model and validates events; Dispatcher checks dry-run mode, consent and gates before submitting WeCom messages."
+      },
+      "outcome": {
+        "zh": "形成可追踪的 Agent 事件链、运行状态和消息提交记录；真实消息效果、长期稳定性与生产部署未在本轮验证，提交回执也不等于客户收到。",
+        "en": "Provides traceable agent events, run states and message-submission records. Real-message outcomes, long-term stability and production deployment were not verified here; submission is not proof of recipient receipt."
+      },
+      "status": {
+        "zh": "多 Agent 业务源码 · 待运行环境核验",
+        "en": "Multi-agent business source · Runtime environment unverified"
+      },
+      "categories": [
+        "ai",
+        "agent",
+        "enterprise",
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "FastAPI",
+        "asyncio",
+        "Pydantic",
+        "LLM routing",
+        "WeCom"
+      ],
+      "github": "https://github.com/Wang-Kuz/Service-Oriented-Private-Domain-Operations-News-Push-Assistant",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与关键源码。读取 README、pipeline.py 主执行段、agents.py 的模型调用与事件校验段以及 delivery_dispatcher.py，确认五阶段编排与确定性发送边界。未调用模型、外部采集、企微接口或启动服务；企业标签只指运营场景，未归为 RAG 或已交付。",
+        "en": "Read-only review of README and key source through connected GitHub on 30 Oct 2026. Read README, the main pipeline execution, model invocation/event validation in agents.py, and delivery_dispatcher.py; confirmed five-stage orchestration and deterministic send boundaries. No model, collection, WeCom API or service execution; enterprise denotes the operations context, not RAG or completed delivery."
+      },
+      "media": []
+    },
+    {
+      "id": "snake-game",
+      "name": {
+        "zh": "Java 贪吃蛇小游戏",
+        "en": "Java Snake Game"
+      },
+      "tagline": {
+        "zh": "用事件与状态，驱动一场小游戏。",
+        "en": "A small game powered by events and state."
+      },
+      "summary": {
+        "zh": "大学编程阶段的 Swing/AWT 桌面练习，通过键盘输入、定时更新与绘图实现贪吃蛇移动、成长、计分和碰撞结束。",
+        "en": "A university-era Swing/AWT desktop exercise implementing movement, growth, scoring and collision-based game over through keyboard input, timed updates and drawing."
+      },
+      "role": {
+        "zh": "Java 桌面交互与游戏逻辑练习",
+        "en": "Java desktop interaction and game-logic practice"
+      },
+      "problem": {
+        "zh": "把数组坐标、方向输入和游戏状态组织成持续更新的交互画面。",
+        "en": "Turn coordinate arrays, direction input and game state into a continuously updated interactive display."
+      },
+      "solution": {
+        "zh": "使用 JPanel 绘制地图与蛇身，由 Swing Timer 调用移动、食物和碰撞检查，再根据运行状态绘制分数或结束画面。",
+        "en": "Draw the scene and snake in a JPanel; a Swing Timer calls movement, food and collision checks before rendering either the score or the game-over screen."
+      },
+      "outcome": {
+        "zh": "保存了可读的完整小游戏实现；没有暂停、重开菜单、难度或存档功能，边界判断和初始化仍有已知限制。",
+        "en": "Preserves a readable small-game implementation. Pause, restart menus, difficulty levels and saved scores are absent; boundary and initialization limitations remain."
+      },
+      "status": {
+        "zh": "学习作品 · 源码静态核对",
+        "en": "Learning project · Source reviewed"
+      },
+      "categories": [
+        "software"
+      ],
+      "tech": [
+        "Java",
+        "Swing",
+        "AWT"
+      ],
+      "github": "https://github.com/Wang-Kuz/Snake-Game",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与相关文件。已读取 README 与完整 GamePanel.java，确认移动、计分和事件流程；本轮未编译、未创建真实窗口或游玩。README 的既有离屏检查记录不等于本轮实机验收。",
+        "en": "Read-only review through connected GitHub on 30 Oct 2026. Read README and the complete GamePanel.java, confirming movement, scoring and event flow. No compilation, live window or gameplay was performed in this review; historical off-screen checks are not a current desktop acceptance test."
+      },
+      "media": []
+    },
+    {
+      "id": "test-firstusegithub",
+      "name": {
+        "zh": "Python 基础与遥感学习集",
+        "en": "Python & Remote-Sensing Learning Collection"
+      },
+      "tagline": {
+        "zh": "从语言基础，走到图像分析。",
+        "en": "From language fundamentals to image analysis."
+      },
+      "summary": {
+        "zh": "Python 阶段练习与示例归档，覆盖基础语法、数据结构、函数、面向对象，以及 K-means、随机森林等遥感图像分析方法。",
+        "en": "An archive of Python exercises and examples covering syntax, data structures, functions, object-oriented programming, and remote-sensing methods including K-means and random forests."
+      },
+      "role": {
+        "zh": "Python 与机器学习方法学习",
+        "en": "Python and machine-learning methods practice"
+      },
+      "problem": {
+        "zh": "连接基础编程概念与多波段图像处理，理解数据变形、分类与评估的基本步骤。",
+        "en": "Connect programming fundamentals with multiband imagery, including data reshaping, classification and evaluation."
+      },
+      "solution": {
+        "zh": "按主题保留独立示例；图像分析脚本将多波段像素展开后调用 scikit-learn 分类，并示例 NDVI、形态学和纹理处理。",
+        "en": "Keeps independent topic-based examples. The image-analysis script flattens multiband pixels for scikit-learn classification and demonstrates NDVI, morphology and texture operations."
+      },
+      "outcome": {
+        "zh": "形成学习型代码资产，遥感演示入口使用随机模拟数据；不是已部署遥感平台，未证明真实数据精度或生产适用性。",
+        "en": "Provides a learning code collection; the remote-sensing demonstration uses random synthetic input. It is not a deployed remote-sensing platform and does not establish real-data accuracy or production suitability."
+      },
+      "status": {
+        "zh": "学习示例归档 · test-1 分支",
+        "en": "Learning examples · test-1 branch"
+      },
+      "categories": [
+        "ai",
+        "algorithm"
+      ],
+      "tech": [
+        "Python",
+        "NumPy",
+        "scikit-learn",
+        "SciPy",
+        "Matplotlib"
+      ],
+      "github": "https://github.com/Wang-Kuz/Test-FirstUseGithub",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与相关文件。读取 test-1 README、完整树清单、面向对象示例及图像分析脚本，确认 KMeans/RandomForestClassifier 调用；未运行脚本、训练或验证真实遥感数据，不采用 README 未核实的全量功能宣传。",
+        "en": "Read-only review through connected GitHub on 30 Oct 2026. Read the test-1 README, complete tree, OOP example and image-analysis script, confirming KMeans and RandomForestClassifier calls. No scripts, training or real imagery were run; unverified broad README claims are not treated as delivered features."
+      },
+      "media": []
+    },
+    {
+      "id": "tifproject",
+      "name": {
+        "zh": "高光谱遥感算法实验工程",
+        "en": "Hyperspectral Algorithm Experiment Toolkit"
+      },
+      "tagline": {
+        "zh": "在波段之间，寻找分类线索。",
+        "en": "Finding classification signals across spectral bands."
+      },
+      "summary": {
+        "zh": "围绕多波段 TIF 影像组织 DP 密度峰值波段选择、LDA 变换、PyTorch CNN 分类及实验图表整理的多脚本研究练习。",
+        "en": "A multi-script research exercise for multiband TIF imagery, combining density-peaks band selection, LDA transformations, PyTorch CNN classification and experiment visualizations."
+      },
+      "role": {
+        "zh": "遥感算法实现与实验支撑",
+        "en": "Remote-sensing algorithms and experiment support"
+      },
+      "problem": {
+        "zh": "高维波段存在冗余，需要选择代表性输入并比较不同波段配置的分类表现。",
+        "en": "High-dimensional spectral bands contain redundancy; representative inputs and classification behavior across band configurations need comparison."
+      },
+      "solution": {
+        "zh": "DP 脚本以波段为样本计算密度与距离，按乘积分数选择波段；CNN 使用 5×5 图像块、卷积网络与训练/验证循环，导出曲线、指标和分类图。",
+        "en": "The DP script treats bands as samples and selects them using density-distance product scores. A CNN uses 5×5 patches, convolutional layers and training/validation loops, exporting curves, metrics and classification maps."
+      },
+      "outcome": {
+        "zh": "保留实验实现与历史材料，支持独立算法及辅助工具；本轮未复现实验，不将历史指标、论文发表或软著登记视为已验证成果。",
+        "en": "Preserves experiment implementations and historical materials with standalone algorithms and helper tools. This review did not reproduce experiments or verify historical metrics, publications or software-copyright registration."
+      },
+      "status": {
+        "zh": "算法实验工程 · 待数据复现",
+        "en": "Algorithm experiment code · Reproduction pending"
+      },
+      "categories": [
+        "ai",
+        "algorithm",
+        "software"
+      ],
+      "tech": [
+        "Python",
+        "PyTorch",
+        "NumPy",
+        "SciPy",
+        "scikit-learn",
+        "Rasterio",
+        "Matplotlib",
+        "Pandas"
+      ],
+      "github": "https://github.com/Wang-Kuz/TIFproject",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与相关文件。读取 README、完整 DP 脚本及 CNN 模型定义/训练与导出关键段。原始影像、真值与权重未在本轮准备；未启动训练、桌面工具或准确率复验，CNN 中间可视化方法未逐项执行。",
+        "en": "Read-only review through connected GitHub on 30 Oct 2026. Read README, the complete DP script, and CNN model, training and export sections. Source imagery, ground truth and weights were not prepared; no training, desktop tools or accuracy reproduction was performed, and intermediate plotting methods were not executed."
+      },
+      "media": []
+    },
+    {
+      "id": "workflow-software-copyright",
+      "name": {
+        "zh": "软件著作权材料模板库",
+        "en": "Software Documentation Template Library"
+      },
+      "tagline": {
+        "zh": "让材料整理，有结构可循。",
+        "en": "A structured starting point for documentation."
+      },
+      "summary": {
+        "zh": "整理软件说明书、源代码文档、合作开发参考与安装说明片段，共 8 份 Word 模板，用于人工复制、填写和核对。",
+        "en": "A collection of eight Word templates for software manuals, source-code documents, collaboration references and installation notes, intended for manual copying, completion and review."
+      },
+      "role": {
+        "zh": "文档模板整理与材料流程设计",
+        "en": "Documentation curation and preparation workflow design"
+      },
+      "problem": {
+        "zh": "软件材料常分散在不同文件中，项目事实、运行环境与说明书容易出现不一致。",
+        "en": "Documentation spread across separate files can create inconsistencies between project facts, runtime requirements and manuals."
+      },
+      "solution": {
+        "zh": "按说明书、源码文档和环境安装分类，提供填写资料表、人工操作流程与复核说明，指导使用者按实际项目替换示例。",
+        "en": "Organizes manuals, source documents and installation material, with intake, manual preparation and review guidance for replacing examples with real project facts."
+      },
+      "outcome": {
+        "zh": "形成可重复使用的文档起点；尚无自动写作、源码分析、截图排版或提交材料的程序，不计入已开发软件、AI 或 Agent 项目。",
+        "en": "Provides reusable documentation starting points. It has no implemented automatic writing, source analysis, screenshot-layout or submission program, and is not counted as developed software, AI or an agent."
+      },
+      "status": {
+        "zh": "模板资料库 · 人工填写",
+        "en": "Template collection · Manual preparation"
+      },
+      "categories": [],
+      "tech": [
+        "DOCX",
+        "Markdown"
+      ],
+      "github": "https://github.com/Wang-Kuz/Workflow-Software-Copyright",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与相关文件。读取 README 和逐项模板目录；8份数量来自现有目录说明，本轮未打开二进制 Word 正文或渲染版式，也未生成或提交任何软著材料。未复制模板中的人员资料。",
+        "en": "Read-only review through connected GitHub on 30 Oct 2026. Read README and the itemized template catalog. The eight-template count comes from that catalog; binary Word contents and rendered layouts were not reviewed, and no registration materials were generated or submitted. Personal details in templates were not copied."
+      },
+      "media": []
+    },
+    {
+      "id": "ylz34-project",
+      "name": {
+        "zh": "Titanic 分类学习资料",
+        "en": "Titanic Classification Study Data"
+      },
+      "tagline": {
+        "zh": "先理解数据，再开始建模。",
+        "en": "Understand the data before building a model."
+      },
+      "summary": {
+        "zh": "保存 Titanic 生存预测练习的训练与测试 CSV，以及字段、质量和使用说明；当前仓库是数据资料归档，没有收录分析代码或训练模型。",
+        "en": "An archive of training and test CSVs for a Titanic survival-prediction exercise, with field, quality and usage documentation. It contains study data, not analysis code or trained models."
+      },
+      "role": {
+        "zh": "数据资料归档与字段理解",
+        "en": "Dataset archiving and field understanding"
+      },
+      "problem": {
+        "zh": "开始二分类练习前，需要明确特征、目标标签、空值和训练/测试结构差异。",
+        "en": "Before a classification exercise, features, target labels, missing values and train/test structural differences must be understood."
+      },
+      "solution": {
+        "zh": "将带 Survived 标签的训练表与无标签测试表分开保留，并记录字段含义、缺失项和后续复核流程。",
+        "en": "Keeps the labeled training table separate from the unlabeled test table, with documentation for field meanings, missing values and future verification."
+      },
+      "outcome": {
+        "zh": "为后续学习实验提供输入资料；没有预测服务、模型准确率或已完成算法实现，不计入 AI、算法软件或企业交付。",
+        "en": "Provides input material for future learning experiments. It offers no prediction service, model accuracy result or completed algorithm implementation, and is not counted as AI software, an implemented algorithm or enterprise delivery."
+      },
+      "status": {
+        "zh": "数据资料归档 · 无训练实现",
+        "en": "Dataset archive · No training implementation"
+      },
+      "categories": [],
+      "tech": [
+        "CSV",
+        "Markdown"
+      ],
+      "github": "https://github.com/Wang-Kuz/YLZ34-Project",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与相关文件。读取 README、数据字典及完整仓库树，确认仅数据与说明、无分析/训练源码；未读取或复制乘客逐条数据，未重算统计。来源渠道、许可与官方文件逐字节一致性仍未确认。",
+        "en": "Read-only review through connected GitHub on 30 Oct 2026. Read README, the data dictionary and complete repository tree, confirming data and documentation without analysis/training source. Passenger records were not read or copied, and statistics were not recomputed. Download provenance, licensing and byte-for-byte equivalence to official data remain unverified."
+      },
+      "media": []
+    },
+    {
+      "id": "zzc-t-contact-system",
+      "name": {
+        "zh": "ZZC-T 桌面通讯录",
+        "en": "ZZC-T Desktop Contact Manager"
+      },
+      "tagline": {
+        "zh": "从一个联系人，练习完整的数据流。",
+        "en": "A contact record as an end-to-end data-flow exercise."
+      },
+      "summary": {
+        "zh": "Java Swing、JDBC 与 MySQL 构成的课程作业，围绕联系人新增、修改、删除、模糊搜索和姓名首字母分组练习桌面 CRUD。",
+        "en": "A coursework desktop CRUD application using Java Swing, JDBC and MySQL for contact creation, editing, deletion, fuzzy search and initial-letter grouping."
+      },
+      "role": {
+        "zh": "Java 桌面界面与数据访问实现",
+        "en": "Java desktop UI and data-access implementation"
+      },
+      "problem": {
+        "zh": "把表格选择、编辑对话框、姓名首字母与数据库记录保持一致，形成可理解的分层数据流。",
+        "en": "Keep table selection, edit dialogs, name initials and database records aligned through a clear layered data flow."
+      },
+      "solution": {
+        "zh": "在 Swing 事件线程启动界面，通过实体、服务与 DAO 分层传递联系人；JDBC 参数化语句执行增删改和姓名/电话搜索，pinyin4j 提供首字母处理依赖。",
+        "en": "Starts the UI on the Swing event thread and passes contacts through model, service and DAO layers. Parameterized JDBC statements handle mutations and name/phone searches, with pinyin4j supporting initial-letter processing."
+      },
+      "outcome": {
+        "zh": "保留课程级桌面管理系统实现；不具备账号权限、Web API 或导入导出，本轮未连接数据库，也未确认真实 GUI 与 CRUD 流程通过。",
+        "en": "Preserves a coursework-scale desktop management implementation. Authentication, web APIs and import/export are absent; this review did not connect to a database or verify a live GUI/CRUD workflow."
+      },
+      "status": {
+        "zh": "课程管理系统 · 运行验收待补",
+        "en": "Coursework management app · Runtime verification pending"
+      },
+      "categories": [
+        "management",
+        "software"
+      ],
+      "tech": [
+        "Java 17",
+        "Swing",
+        "JDBC",
+        "MySQL",
+        "Maven",
+        "pinyin4j"
+      ],
+      "github": "https://github.com/Wang-Kuz/ZZC-T_Contact_System",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "evidence": {
+        "zh": "2026-10-30 通过已连接 GitHub 只读核对 README 与相关文件。读取 README、App.java、完整 ContactDAO.java 与 pom.xml，核对 Swing 入口、参数化 CRUD 和依赖。未读取历史凭证文件、未执行 SQL、未编译或启动桌面/数据库。",
+        "en": "Read-only review through connected GitHub on 30 Oct 2026. Read README, App.java, the complete ContactDAO.java and pom.xml, verifying the Swing entry point, parameterized CRUD and dependencies. Historical credential files were not read; no SQL, compilation, desktop app or database connection was executed."
+      },
+      "media": []
+    },
+    {
+      "id": "kuz-pscv-web",
+      "name": {
+        "zh": "Kuz 个人作品集与电子简历",
+        "en": "Kuz Personal Portfolio & CV"
+      },
+      "tagline": {
+        "zh": "让工程经历，成为可维护的作品集。",
+        "en": "Turn engineering experience into a maintainable portfolio."
+      },
+      "summary": {
+        "zh": "本地运行的中英双语个人作品集，串联职业定位、分类统计、项目故事和完整仓库索引；后台可编辑文字并管理图片、视频与播放章节。",
+        "en": "A locally hosted bilingual portfolio connecting professional positioning, category statistics, project stories and a complete repository index, with editable content, images, videos and playback chapters."
+      },
+      "role": {
+        "zh": "全栈应用与交互设计",
+        "en": "Full-stack application & interaction design"
+      },
+      "problem": {
+        "zh": "项目资料分散在不同仓库，静态简历难以呈现工程细节，也难以持续更新演示素材。",
+        "en": "Project materials are scattered across repositories, while static resumes make engineering details and ongoing demo updates hard to maintain."
+      },
+      "solution": {
+        "zh": "以 Node 原生 HTTP 和 ES Modules 构建展示页与本地编辑后台；用 JSON 管理双语内容，提供 GitHub 清单同步、媒体上传、视频节点以及 WebGL 与 Canvas 动效。",
+        "en": "Uses native Node HTTP and ES modules for the site and local editor, JSON for bilingual content, GitHub inventory sync, media uploads, video chapters and WebGL/Canvas motion."
+      },
+      "outcome": {
+        "zh": "提供可双击启动的本地应用与维护文档；保存包含修订冲突检查和旧版本备份，未作为公网多用户服务发布。",
+        "en": "Provides a double-click local launcher and maintenance documentation. Saving includes revision checks and prior-version backups; it is not published as a public multi-user service."
+      },
+      "status": {
+        "zh": "本地应用 · 持续维护",
+        "en": "Local application · Maintained"
+      },
+      "tech": [
+        "Node.js",
+        "JavaScript",
+        "HTML / CSS",
+        "WebGL",
+        "Canvas",
+        "JSON"
+      ],
+      "categories": [
+        "software"
+      ],
+      "github": "https://github.com/Wang-Kuz/Kuz_PSCV_Web",
+      "featured": false,
+      "visible": true,
+      "delivered": false,
+      "media": [],
+      "evidence": {
+        "zh": "核对本仓库 README、backend/server.mjs、frontend/app.js 与 sculpture-gl.js；本地监听、内容保存、媒体 Range 和动效实现均有源码。",
+        "en": "Reviewed README, backend/server.mjs, frontend/app.js and sculpture-gl.js in this repository; source implements loopback serving, content persistence, media ranges and motion."
+      }
     }
   ]
 }
