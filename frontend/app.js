@@ -1,4 +1,6 @@
 import { COPY_DEFAULTS as defaultCopy } from './copy.js';
+import { mountFields } from './field.js';
+import { mountMotion } from './motion.js';
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const make = (tag, className, value) => {
@@ -17,7 +19,8 @@ let inventory;
 let language = (() => { try { return localStorage.getItem('kuz-language') === 'en' ? 'en' : 'zh'; } catch { return 'zh'; } })();
 let filter = 'all';
 let revealObserver;
-let heroCleanup;
+let fieldCleanup;
+let motionCleanup;
 let lastFocus;
 const localize = value => typeof value === 'string' ? value : value?.[language] ?? value?.zh ?? value?.en ?? '';
 const copy = key => localize(portfolio?.copy?.[key] || defaultCopy[key] || key);
@@ -48,28 +51,46 @@ function renderHeader() {
 }
 
 function renderHero() {
+  const stage = make('div', 'hero-stage');
   const hero = make('section', 'hero'); hero.id = 'home';
   const back = make('div', 'hero-backdrop'); back.setAttribute('aria-hidden', 'true');
-  append(back, make('div', 'hero-grid'), make('span', 'hero-watermark', 'KUZ'));
+  append(back, make('div', 'hero-grid'), make('div', 'hero-light'));
   const body = make('div', 'hero-content');
-  const status = make('div', 'hero-status'); append(status, make('span', 'status-dot'), make('span', '', localize(portfolio.profile.availability)));
-  append(body, status, eyebrow(copy('heroEyebrow')));
-  const title = make('h1', 'hero-title', localize(portfolio.profile.headline) || '把智能，\n带入现实。');
-  append(body, title, make('p', 'hero-intro', localize(portfolio.profile.intro)));
-  const actions = make('div', 'hero-actions');
-  append(actions, append(link(copy('heroAction'), '#work', 'button-primary'), arrow('↓')), append(externalLink(copy('heroSecondary'), portfolio.profile.github, 'text-link'), arrow()));
-  append(body, actions);
+  const status = append(make('div', 'hero-status'), make('span', 'status-dot'), make('span', '', localize(portfolio.profile.availability)));
+  const roles = make('p', 'hero-roles', localize(portfolio.profile.role));
+  const title = make('h1', 'hero-title');
+  const lines = localize(portfolio.profile.headline).split('\n');
+  lines.forEach(line => title.append(make('span', 'hero-line', line)));
+  append(body, status, roles, title, make('p', 'hero-intro', localize(portfolio.profile.intro)));
+  const actions = append(make('div', 'hero-actions'),
+    append(link(copy('heroAction'), '#work', 'button-primary'), arrow('↓')),
+    append(externalLink(copy('heroSecondary'), portfolio.profile.github, 'text-link'), arrow()));
+  body.append(actions);
   const art = make('div', 'hero-art'); art.setAttribute('aria-hidden', 'true');
-  const canvas = make('canvas', 'orb-canvas');
-  const orbit = make('div', 'orbit-system');
-  append(orbit, make('div', 'orbit-halo'), make('div', 'orbit-ring ring-one'), make('div', 'orbit-ring ring-two'), make('div', 'orbit-ring ring-three'), make('div', 'orbit-core'), make('div', 'orbit-reflection'));
-  const coordinates = append(make('div', 'orbit-coordinates'), make('span', '', copy('conceptSystem')), make('span', '', copy('conceptMotto')));
-  append(art, canvas, orbit, coordinates, make('div', 'orbit-label', copy('orbitLabel')), make('div', 'orbit-caption', copy('orbitCaption')));
-  const base = make('div', 'hero-base');
-  const roles = make('div', 'hero-roles', localize(portfolio.profile.role));
-  append(base, roles, append(link(copy('heroFootnote'), '#numbers', 'scroll-hint'), make('span', 'scroll-line')));
-  append(hero, back, body, art, base);
-  return hero;
+  const canvas = make('canvas', 'field-canvas'); canvas.dataset.field = 'sculpture';
+  append(art, make('div', 'field-glow'), canvas,
+    append(make('div', 'field-coordinate'), make('span', '', copy('fieldTitle')), make('span', '', copy(matchMedia('(hover: hover)').matches ? 'fieldInteraction' : 'fieldTouchInteraction'))));
+  const base = append(make('div', 'hero-base'), make('p', '', copy('heroEyebrow')),
+    append(link(copy('heroFootnote'), '#manifest', 'scroll-hint'), make('span', 'scroll-line')));
+  append(hero, back, body, art, base);stage.append(hero);
+  return stage;
+}
+
+function renderManifest() {
+  const section=make('section','manifest-section'); section.id='manifest';
+  const inner=make('div','manifest-inner');
+  const title=make('h2','manifest-title');
+  const value=copy('manifestTitle');
+  const segments=typeof Intl.Segmenter==='function'
+    ? [...new Intl.Segmenter(language,{granularity:'word'}).segment(value)].map(s=>s.segment)
+    : value.split(/(\s+)/);
+  segments.forEach(segment=>{
+    if(segment.includes('\n'))title.append(make('br'));
+    else if(segment.trim())title.append(make('span','manifest-word',segment));
+    else title.append(document.createTextNode(segment));
+  });
+  append(inner,eyebrow(copy('manifestEyebrow')),title,make('p','manifest-caption',copy('manifestCaption')));
+  section.append(inner);return section;
 }
 
 function renderStats() {
@@ -111,17 +132,12 @@ function renderExpertise() {
 }
 
 function projectVisual(project, index) {
-  const art = make('div', `project-art art-${index % 4}`); art.setAttribute('aria-hidden', 'true');
-  const window = make('div', 'concept-window');
-  const top = append(make('div', 'concept-toolbar'), make('span', 'window-dots', '● ● ●'), make('span', '', project.tech?.slice(0, 2).join(' / ') || copy('conceptDesign')), make('span', '', '↗'));
-  const graph = make('div', 'concept-graph');
-  const center = make('div', 'graph-center', project.categories?.includes('agent') ? copy('conceptAgent') : project.categories?.includes('algorithm') ? copy('conceptModel') : project.categories?.includes('ai') ? copy('conceptAI') : copy('conceptBuild'));
-  append(graph, make('div', 'graph-orbit graph-orbit-one'), make('div', 'graph-orbit graph-orbit-two'), make('div', 'graph-line line-a'), make('div', 'graph-line line-b'), make('div', 'graph-line line-c'), center);
-  const words = project.tech?.length ? project.tech.slice(0, 4) : [copy('conceptInput'), copy('conceptProcess'), copy('conceptOutput')];
-  words.forEach((word, i) => { const node = make('div', `graph-node graph-node-${i}`, word); append(node, make('span', 'node-light')); graph.append(node); });
-  const bottom = append(make('div', 'concept-bottom'), make('span', '', `0${index + 1} / ${copy('conceptConnections')}`), make('span', 'concept-bars', '▂▅▃▆▇▅▃'));
-  append(window, top, graph, bottom);
-  append(art, make('div', 'art-aura'), window, make('span', 'art-corner', copy('conceptEngineering')), make('p', 'concept-caption', copy('conceptLabel')));
+  const artByProject={datafactory:'data','personal-os':'agent','desktop-avatar':'voice','legal-operations':'enterprise','spectral-graph':'algorithm',agrotrade:'commerce'};
+  const kind=artByProject[project.id] || (project.categories.includes('agent')?'agent':project.categories.includes('algorithm')?'algorithm':project.categories.includes('enterprise')?'enterprise':'data');
+  const art=make('div',`project-art visual-${kind}`); art.setAttribute('aria-hidden','true');
+  const canvas=make('canvas','project-canvas');canvas.dataset.field=kind;
+  const label=append(make('div','art-label'),make('span','',String(index+1).padStart(2,'0')),make('span','',copy(`visual${kind[0].toUpperCase()+kind.slice(1)}`)));
+  append(art,make('div','art-aura'),canvas,label,make('p','concept-caption',copy('conceptLabel')));
   return art;
 }
 
@@ -131,7 +147,7 @@ function renderWork() {
   append(inner, append(make('div', 'work-intro reveal'), eyebrow(copy('workEyebrow')), heading(copy('workTitle')), make('p', 'section-description', copy('workIntro'))));
   const featured = visibleProjects().filter(p => p.featured);
   featured.forEach((project, i) => {
-    const story = make('article', `project-story story-${i % 4} reveal`); story.id = `project-${project.id}`;
+    const story = make('article', `project-story story-${i % 6} reveal`); story.id = `project-${project.id}`;
     const top = append(make('div', 'story-topline'), make('span', '', `${String(i + 1).padStart(2, '0')} / ${copy('conceptSelected')}`), make('span', '', project.categories.map(c => localize(categories[c] || c)).join(' · ')));
     const detail = make('div', 'story-copy');
     append(detail, eyebrow(localize(project.name)), make('h3', 'story-title', localize(project.tagline) || localize(project.name)), make('p', 'story-summary', localize(project.summary)));
@@ -261,55 +277,17 @@ function observeReveals() {
   $$('.reveal').forEach(element => revealObserver.observe(element));
 }
 
-function startOrb() {
-  heroCleanup?.();
-  const canvas = $('.orb-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let frame; let visible = true; let width; let height;
-  const points = Array.from({ length: 90 }, (_, i) => ({ angle: i * 2.399963, y: 1 - 2 * (i + .5) / 90, size: i % 5 === 0 ? 1.6 : .8 }));
-  const resize = () => { const box = canvas.getBoundingClientRect(); width = box.width; height = box.height; const scale = Math.min(devicePixelRatio || 1, 2); canvas.width = width * scale; canvas.height = height * scale; ctx.setTransform(scale, 0, 0, scale, 0, 0); };
-  const draw = time => {
-    if (visible) {
-      ctx.clearRect(0, 0, width, height);
-      const phase = reduced ? .6 : time * .00009; const radius = Math.min(width, height) * .37;
-      points.forEach(point => {
-        const r = Math.sqrt(1 - point.y * point.y); const x = Math.cos(point.angle + phase) * r; const z = Math.sin(point.angle + phase) * r;
-        const perspective = 1 + z * .15; const px = width / 2 + x * radius * perspective; const py = height / 2 + point.y * radius * perspective;
-        ctx.fillStyle = `rgba(204,255,138,${.15 + (z + 1) * .22})`; ctx.beginPath(); ctx.arc(px, py, point.size * perspective, 0, Math.PI * 2); ctx.fill();
-      });
-    }
-    if (!reduced && visible && !document.hidden) frame = requestAnimationFrame(draw);
-  };
-  const schedule = () => { cancelAnimationFrame(frame); if (visible && !document.hidden) frame = requestAnimationFrame(draw); };
-  const io = new IntersectionObserver(entries => { visible = entries[0].isIntersecting; schedule(); }); io.observe(canvas);
-  const ro = new ResizeObserver(() => { resize(); schedule(); }); ro.observe(canvas); resize(); schedule();
-  document.addEventListener('visibilitychange', schedule);
-  heroCleanup = () => { cancelAnimationFrame(frame); io.disconnect(); ro.disconnect(); document.removeEventListener('visibilitychange', schedule); };
-}
 
 function render() {
+  fieldCleanup?.(); motionCleanup?.();
   Object.entries(categoryKeys).forEach(([key, copyKey]) => { categories[key] = portfolio?.copy?.[copyKey] || defaultCopy[copyKey]; });
   document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
   document.title = `${portfolio.profile.name || 'KUZ'} — ${copy('documentTitle')}`;
   renderHeader();
-  $('#main').replaceChildren(renderHero(), renderStats(), renderExpertise(), renderWork(), renderArchive(), renderAbout());
-  renderFooter(); observeReveals(); startOrb();
+  $('#main').replaceChildren(renderHero(), renderManifest(), renderStats(), renderExpertise(), renderWork(), renderArchive(), renderAbout());
+  renderFooter(); observeReveals(); fieldCleanup = mountFields(); motionCleanup = mountMotion();
 }
 
-let scrollPending = false;
-addEventListener('scroll', () => {
-  if (scrollPending) return; scrollPending = true;
-  requestAnimationFrame(() => {
-    const progress = scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight);
-    $('.scroll-progress').style.transform = `scaleX(${progress})`;
-    $('#header').classList.toggle('scrolled', scrollY > 24);
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && scrollY < innerHeight * 1.2) $('.hero-art')?.style.setProperty('--scroll', String(scrollY / innerHeight));
-    scrollPending = false;
-  });
-}, { passive: true });
 
 try {
   const responses = await Promise.all([fetch('/api/portfolio'), fetch('/api/repositories')]);

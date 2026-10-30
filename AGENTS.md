@@ -2,7 +2,7 @@
 
 ## 先确认目标
 
-本项目是 Wang-Kuz 的本地个人作品集。唯一远端是 `https://github.com/Wang-Kuz/Kuz_PSCV_Web.git`，本地目录名 `Kuz-PSCV-web` 与远端不同是正常现象。开始修改前读 README、PROJECT、PLAN、STATUS、变更与发布日志和本文；改接口先读 `docs/CONTRACT.md`，改案例先读 `docs/CONTENT-EVIDENCE.md`。
+本项目是 Wang-Kuz 的本地个人作品集。唯一远端是 `https://github.com/Wang-Kuz/Kuz_PSCV_Web.git`，本地目录名 `Kuz-PSCV-web` 与远端不同是正常现象。开始修改前读 README、PROJECT、PLAN、STATUS、变更与发布日志和本文；改接口先读 `docs/CONTRACT.md`，改案例先读 `docs/CONTENT-EVIDENCE.md`，改视觉/动效先读 `docs/DESIGN.md`。
 
 ## 编辑边界
 

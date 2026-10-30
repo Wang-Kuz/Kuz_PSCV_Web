@@ -1,5 +1,17 @@
 const pair = (zh, en) => ({ zh, en });
 export const COPY_DEFAULTS = {
+  fieldTitle: pair('智能，正在形成。', 'INTELLIGENCE, TAKING SHAPE.'),
+  fieldInteraction: pair('移动鼠标，探索它的另一面', 'MOVE TO EXPLORE ANOTHER DIMENSION'),
+  fieldTouchInteraction: pair('向下滑动，探索下一幕', 'SCROLL INTO THE NEXT CHAPTER'),
+  manifestEyebrow: pair('从思考，到实现', 'THINK DEEPLY. BUILD COMPLETELY.'),
+  manifestTitle: pair('从真实问题出发。\n连接模型、数据与体验。\n让想法，成为可用的答案。', 'Start with a real problem.\nConnect models, data and experience.\nTurn ideas into working answers.'),
+  manifestCaption: pair('全栈的广度。算法的深度。交付的温度。', 'Full-stack breadth. Algorithmic depth. Human impact.'),
+  visualData: pair('信息流 · 连接与流动', 'INFORMATION / IN MOTION'),
+  visualAgent: pair('智能体 · 协作与编排', 'AGENTS / IN CONCERT'),
+  visualVoice: pair('语音 · 从信号到体验', 'VOICE / INTO EXPERIENCE'),
+  visualEnterprise: pair('企业 · 结构与秩序', 'ENTERPRISE / BY DESIGN'),
+  visualAlgorithm: pair('算法 · 发现数据形态', 'ALGORITHMS / FINDING FORM'),
+  visualCommerce: pair('业务 · 连接每个环节', 'BUSINESS / CONNECTED'),
   documentTitle: pair('让智能，走进现实。', 'Intelligence, engineered.'), githubLabel: pair('GitHub', 'GitHub'), mainNavigation: pair('主导航', 'Main navigation'), filterNavigation: pair('项目分类', 'Project categories'),
   conceptSystem: pair('系统 / KUZ', 'SYSTEM / KUZ'), conceptMotto: pair('构建 · 连接 · 演进', 'BUILD · CONNECT · EVOLVE'), conceptDesign: pair('系统设计', 'SYSTEM DESIGN'), conceptConnections: pair('工程化连接', 'ENGINEERED CONNECTIONS'), conceptEngineering: pair('KUZ / 工程实践', 'KUZ / ENGINEERING'), conceptCuriosity: pair('始于好奇', 'EST. IN CURIOSITY'), conceptSelected: pair('精选作品', 'SELECTED WORK'),
   conceptAgent: pair('AGENT', 'AGENT'), conceptModel: pair('模型', 'MODEL'), conceptAI: pair('AI', 'AI'), conceptBuild: pair('构建', 'BUILD'), conceptInput: pair('输入', 'INPUT'), conceptProcess: pair('处理', 'PROCESS'), conceptOutput: pair('输出', 'OUTPUT'),
