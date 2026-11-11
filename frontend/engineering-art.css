@@ -1,0 +1,18 @@
+.engineering-art{width:100%;height:auto;aspect-ratio:3/2;display:block;overflow:hidden}
+.engineering-art .art-flow{stroke-dasharray:7 5;animation:engineering-flow 8s linear infinite;animation-play-state:paused}
+.engineering-art .art-signal{animation:engineering-signal 4s ease-in-out infinite;animation-play-state:paused}
+.engineering-art.art-visible .art-flow,.engineering-art.art-visible .art-signal{animation-play-state:running}
+.engineering-slide:has(.engineering-art){align-self:start}
+.engineering-guide-art .engineering-art{max-height:470px}
+.engineering-zoom{width:min(1100px,calc(100vw - 36px));max-height:92dvh;padding:18px;border:1px solid #66809b66;border-radius:18px;background:#0e1724;color:#e0ebf5;overflow:auto}
+.engineering-zoom::backdrop{background:#050a13dc;backdrop-filter:blur(12px)}
+.engineering-zoom>button{display:block;margin:0 0 12px auto}
+.engineering-zoom .engineering-slide{width:100%}
+.engineering-zoom .engineering-art{min-width:660px;max-height:72dvh}
+.engineering-zoom .art-flow,.engineering-zoom .art-signal{animation:none}
+.engineering-zoom-content{overflow:auto;overscroll-behavior:contain}
+.engineering-zoom .engineering-slide figcaption{position:sticky;left:0}
+.engineering-zoom .engineering-image{height:auto;max-height:72dvh}
+@keyframes engineering-flow{to{stroke-dashoffset:-120}}
+@keyframes engineering-signal{50%{fill-opacity:.4}}
+@media(prefers-reduced-motion:reduce){.engineering-art .art-flow,.engineering-art .art-signal{animation:none}}

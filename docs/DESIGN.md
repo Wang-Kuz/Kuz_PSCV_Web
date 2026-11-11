@@ -30,6 +30,8 @@
 
 ## 性能与可访问性
 
+2026-11-11：AIGC工程的 14 项能力采用独立 SVG 技术流程与业务场景，共28张，不复用首页六类 Canvas。绘图与离屏/后台生命周期见 `engineering-art.js`，轮播及放大弹窗见 `engineering.js`；图中文字通过 Home 双语编辑。绘图清单见 [AIGC工程维护](AIGC-ENGINEERING.md)。
+
 Canvas 使用 IntersectionObserver，仅可见图形绘制，约 30 帧每秒、像素比上限 1.7；没有后台永久计算。使用浏览器帧时间驱动速度，不把速度绑定到屏幕刷新率。参考 [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame) 与 [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)。
 
 不监听并阻止 wheel/touchmove，不改变浏览器滚动惯性。保留 prefers-reduced-motion、键盘焦点、项目详情的 Escape/暂停视频/焦点返回。新增效果必须在减少动画设置动态变化时停止；关闭/切换语言应清理旧观察器与 RAF。
