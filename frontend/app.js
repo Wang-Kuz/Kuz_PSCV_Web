@@ -155,6 +155,17 @@ function renderWork() {
  section.append(inner);return section;
 }
 
+function renderGateway(kind){
+ const projects=kind==='projects',key=projects?'gatewayProjects':'gatewayWorkstation';
+ const section=make('section','gateway-section gateway-'+kind);section.id=projects?'projects-guide':'workstation-guide';
+ const content=make('div','gateway-copy');append(content,eyebrow(copy(key+'Eyebrow')),heading(copy(key+'Title')),make('p','section-description',copy(key+'Body')));
+ const action=append(link(copy(key+'Action'),projects?base+'/?page=projects':'/workstation/index.html','button-primary'),arrow('↗'));action.dataset.gatewayAction='';content.append(action);
+ const art=make('div','gateway-art');art.setAttribute('aria-hidden','true');
+ if(projects){['01 / AI & AGENTS','02 / ALGORITHMS','03 / SYSTEMS'].forEach((label,i)=>{const row=make('div','gateway-index');append(row,make('span','',label),make('span','gateway-index-line'),make('span','','↗'));art.append(row);});}
+ else{const orbit=make('div','gateway-orbit');orbit.append(make('span','gateway-core','K'));for(const word of ['BUILD','EXPLORE','CREATE'])orbit.append(make('span','gateway-node',word));art.append(orbit);}
+ append(section,append(make('div','section-inner gateway-grid reveal'),content,art));return section;
+}
+
 function renderArchive() {
   const section = make('section', 'archive-section light-section'); section.id = 'archive';
   const inner = make('div', 'section-inner');
@@ -285,7 +296,7 @@ function render() {
   const route=new URL(location.href).searchParams.get('page')||'home';
   if(route==='projects')$('#main').replaceChildren(renderArchive());
   else if(route.startsWith('project-')){const project=visibleProjects().find(p=>'project-'+p.id===route);if(project)openProject(project,true);else $('#main').replaceChildren(make('p','cms-page',language==='zh'?'项目暂未公开。':'Project unavailable.'));}
-  else $('#main').replaceChildren(renderHero(), renderManifest(), renderStats(), renderExpertise(), renderWork(), renderAbout());
+  else $('#main').replaceChildren(renderHero(), renderManifest(), renderStats(), renderExpertise(), renderWork(), renderGateway('projects'), renderGateway('workstation'), renderAbout());
   applySite(portfolio); renderFooter(); observeReveals(); fieldCleanup = mountFields(); motionCleanup = mountMotion();
 }
 

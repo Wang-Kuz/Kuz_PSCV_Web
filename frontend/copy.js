@@ -1,5 +1,14 @@
 const pair = (zh, en) => ({ zh, en });
 export const COPY_DEFAULTS = {
+gatewayProjectsEyebrow: pair("下一站 / 项目作品","NEXT / PROJECTS"),
+gatewayProjectsTitle: pair("能力如何落地，\n让作品来回答。","See the practice\nbehind the capabilities."),
+gatewayProjectsBody: pair("走进项目作品，从 AI 与智能体、算法实验到业务系统，了解每个想法如何被拆解、实现与持续完善。","Explore AI and agents, algorithm experiments and business systems \u2014 how ideas are broken down, built and refined."),
+gatewayProjectsAction: pair("探索项目作品","Explore projects"),
+gatewayWorkstationEyebrow: pair("继续探索 / 个人工作站","CONTINUE / PERSONAL WORKSTATION"),
+gatewayWorkstationTitle: pair("不止于展示。\n进入我的工作空间。","Beyond the showcase.\nStep into my workspace."),
+gatewayWorkstationBody: pair("这里记录成长与探索，也放着可以亲手使用的工具。进入个人工作站，继续了解我，或打开工具箱，开始一次实践。","Discover my journey and experiments alongside tools you can use. Enter the workstation to explore, then open the toolbox and try something yourself."),
+gatewayWorkstationAction: pair("进入个人工作站","Enter the workstation"),
+
   capabilityEyebrow: pair("能力精选 / ENGINEERING PRACTICE","SELECTED CAPABILITIES / ENGINEERING PRACTICE"),
   capabilityTitle: pair("从理解问题，到构建答案。","From understanding to building."),
   capabilityIntro: pair("以 FDE 的视角连接场景，以算法和 AI 拓展能力，以工程完成落地。","A field-first perspective, strengthened by algorithms and AI, grounded in engineering."),
