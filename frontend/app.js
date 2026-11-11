@@ -327,7 +327,7 @@ addEventListener('message',event=>{if(parent===window||event.source!==parent||ev
 
 if(parent!==window&&new URL(location.href).searchParams.has('preview'))parent.postMessage({type:'kuz-preview-ready'},location.origin);
 
-addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent||parent===window||!location.search.includes('preview'))return;if(e.data?.type==='kuz-focus'){const target=document.getElementById(e.data.block)||[...document.querySelectorAll('[data-edit-block]')].find(n=>n.dataset.editBlock===e.data.block);if(target){const rect=target.getBoundingClientRect();window.scrollTo({top:scrollY+rect.top-Math.max(0,(innerHeight-rect.height)/2),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});target.animate([{outline:'2px solid #aac8ef'},{outline:'2px solid transparent'}],{duration:1400});}}});
+addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent||parent===window||!location.search.includes('preview'))return;if(e.data?.type==='kuz-focus'){const target=document.getElementById(e.data.block)||[...document.querySelectorAll('[data-edit-block]')].find(n=>n.dataset.editBlock===e.data.block);if(target){dispatchEvent(new Event('kuz-scroll-reset'));const rect=target.getBoundingClientRect();window.scrollTo({top:scrollY+rect.top-Math.max(0,(innerHeight-rect.height)/2),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});target.animate([{outline:'2px solid #aac8ef'},{outline:'2px solid transparent'}],{duration:1400});}}});
 addEventListener('storage',e=>{if(e.key==='kuz-language'){language=e.newValue==='en'?'en':'zh';render();}});
 
 mountScrollFlow({damping:110});
@@ -335,6 +335,7 @@ mountScrollFlow({damping:110});
 function followLocationHash(event){
  let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}
  const target=document.getElementById(id);if(!target)return;
+ dispatchEvent(new Event('kuz-scroll-reset'));
  const top=scrollY+target.getBoundingClientRect().top-88;
  window.scrollTo({top:Math.max(0,top),behavior:event?.type==='hashchange'&&!matchMedia('(prefers-reduced-motion: reduce)').matches?'smooth':'instant'});
 }

@@ -10,5 +10,15 @@ export function organizeSite(site,projects=[]){
  if((s.layoutVersion||0)<3){const home=s.pages.find(p=>p.id==='home'),projectsPage=s.pages.find(p=>p.id==='projects');if(home&&['个人门户','个人品宣'].includes(home.name))home.name='个人品宣';if(projectsPage){projectsPage.parent='home';if(['项目展示','全部项目'].includes(projectsPage.name))projectsPage.name='项目作品';}for(const l of s.header.links||[]){if(l.href==='/?page=projects'&&l.label==='作品')l.label='项目作品';}s.layoutVersion=3;}
  if((s.layoutVersion||0)<4){const home=s.pages.find(p=>p.id==='home');if(home){let at=home.blocks.findIndex(b=>b.id==='work')+1;for(const id of ['projects-guide','workstation-guide'])if(!home.blocks.some(b=>b.id===id))home.blocks.splice(at++,0,{id,title:'',text:'',image:'',hidden:false});}s.layoutVersion=4;}
  if((s.layoutVersion||0)<5){const home=s.pages.find(p=>p.id==='home');if(home){const after=home.blocks.findIndex(b=>b.id==='work');if(!home.blocks.some(b=>b.id==='aigc-guide'))home.blocks.splice(after+1,0,{id:'aigc-guide',title:'',text:'',image:'',hidden:false});if(!home.blocks.some(b=>b.id==='contact'))home.blocks.push({id:'contact',title:'',text:'',image:'',hidden:false});}if(!s.pages.some(p=>p.id==='aigc'))s.pages.push({id:'aigc',name:'AIGC工程',parent:'home',blocks:['engineering-hero',...ENGINEERING_SERVICES.map(x=>'service-'+x.id),'contact'].map(id=>({id,title:'',text:'',image:'',hidden:false}))});if(!s.header.links.some(l=>l.href==='/?page=aigc'))s.header.links.unshift({label:'AIGC工程',href:'/?page=aigc'});s.contact??=structuredClone(CONTACT_DEFAULTS);s.layoutVersion=5;}
+ if((s.layoutVersion||0)<6){
+  const page=s.pages.find(p=>p.id==='ws-index'),source=WORKSTATION_PAGES.find(p=>p.id==='ws-index');
+  if(page){
+   if(!page.blocks.some(b=>b.id==='button-projects'))page.blocks.push(structuredClone(source.blocks.find(b=>b.id==='button-projects')));
+   for(const [id,field,old]of [['text-6','title','Project Alpha'],['text-7','text','An advanced AI vision system for industrial inspection.']]){
+    const block=page.blocks.find(b=>b.id===id);if(block?.[field]===old)block[field]=source.blocks.find(b=>b.id===id)[field];
+   }
+  }
+  s.layoutVersion=6;
+ }
  return s;
 }

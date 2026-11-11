@@ -1,4 +1,12 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {organizeSite} from '../frontend/page-structure.js';import {splitScroll} from '../frontend/scroll-flow.js';
+test('project guide replaces only untouched placeholders and preserves custom content and later removal',()=>{
+ const input={layoutVersion:5,header:{links:[]},pages:[{id:'home',blocks:[]},{id:'ws-index',blocks:[{id:'text-6',title:'Project Alpha'},{id:'text-7',text:'My custom description'}]}]};
+ const result=organizeSite(input),page=result.pages.find(p=>p.id==='ws-index');
+ assert.equal(page.blocks.find(b=>b.id==='text-6').title,'Project work');
+ assert.equal(page.blocks.find(b=>b.id==='text-7').text,'My custom description');
+ assert.equal(page.blocks.find(b=>b.id==='button-projects').href,'/?page=projects');
+ page.blocks=page.blocks.filter(b=>b.id!=='button-projects');assert.deepEqual(organizeSite(result),result);
+});
 test('scroll hands remaining distance back to the page at both rail ends',()=>{assert.deepEqual(splitScroll(950,1000,100),{next:1000,remaining:50});assert.deepEqual(splitScroll(20,1000,-80),{next:0,remaining:-60});assert.deepEqual(splitScroll(1000,1000,90),{next:1000,remaining:90});assert.deepEqual(splitScroll(0,1000,-90),{next:0,remaining:-90});});
 test('page migration is idempotent, separates workspaces and preserves custom blocks',()=>{const input={header:{links:[]},pages:[{id:'home',parent:'',blocks:[{id:'home'},{id:'archive'},{id:'custom',text:'keep'}]},{id:'workstation',parent:'home',blocks:[]}]};const p=[{id:'sample',name:{zh:'示例'}}];const a=organizeSite(input,p);assert(!a.pages.some(p=>p.id==='workstation'));assert.equal(a.pages.find(p=>p.id==='ws-index').parent,'');assert.equal(a.pages.find(p=>p.id==='ws-tools-format-tool').parent,'ws-studio');assert.equal(a.pages.find(p=>p.id==='project-sample').parent,'projects');assert.equal(a.pages.find(p=>p.id==='projects').parent,'home');assert(a.pages.find(p=>p.id==='home').blocks.some(b=>b.text==='keep'));assert.deepEqual(organizeSite(a,p),a);assert.equal(input.pages.length,2);});
 
