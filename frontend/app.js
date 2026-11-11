@@ -315,6 +315,7 @@ try {
   if (responses.some(response => !response.ok)) throw new Error('Unable to load portfolio');
   [portfolio, inventory] = await Promise.all(responses.map(response => response.json()));
   render();
+  if(location.hash)requestAnimationFrame(followLocationHash);
 } catch (error) {
   const errorView = make('div', 'loading-screen');
   append(errorView, make('span', 'brand-mark', 'K'), make('h1', '', copy('loadError')), button(copy('retry'), 'button-primary', () => location.reload()));
@@ -326,7 +327,15 @@ addEventListener('message',event=>{if(parent===window||event.source!==parent||ev
 
 if(parent!==window&&new URL(location.href).searchParams.has('preview'))parent.postMessage({type:'kuz-preview-ready'},location.origin);
 
-addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent||parent===window||!location.search.includes('preview'))return;if(e.data?.type==='kuz-focus'){const target=document.getElementById(e.data.block)||[...document.querySelectorAll('[data-edit-block]')].find(n=>n.dataset.editBlock===e.data.block);if(target){target.scrollIntoView({behavior:'smooth',block:'center'});target.animate([{outline:'2px solid #aac8ef'},{outline:'2px solid transparent'}],{duration:1400});}}});
+addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent||parent===window||!location.search.includes('preview'))return;if(e.data?.type==='kuz-focus'){const target=document.getElementById(e.data.block)||[...document.querySelectorAll('[data-edit-block]')].find(n=>n.dataset.editBlock===e.data.block);if(target){const rect=target.getBoundingClientRect();window.scrollTo({top:scrollY+rect.top-Math.max(0,(innerHeight-rect.height)/2),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});target.animate([{outline:'2px solid #aac8ef'},{outline:'2px solid transparent'}],{duration:1400});}}});
 addEventListener('storage',e=>{if(e.key==='kuz-language'){language=e.newValue==='en'?'en':'zh';render();}});
 
 mountScrollFlow({damping:110});
+
+function followLocationHash(event){
+ let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}
+ const target=document.getElementById(id);if(!target)return;
+ const top=scrollY+target.getBoundingClientRect().top-88;
+ window.scrollTo({top:Math.max(0,top),behavior:event?.type==='hashchange'&&!matchMedia('(prefers-reduced-motion: reduce)').matches?'smooth':'instant'});
+}
+addEventListener('hashchange',followLocationHash);

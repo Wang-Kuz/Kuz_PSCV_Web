@@ -89,6 +89,7 @@ export async function createApp({ root = projectRoot, dataDir = path.join(root, 
     // Only hydrate absent configuration; never erase an explicitly saved contact/media choice.
     value.site??={header:{visible:true,autoHide:true,brand:'KUZ',links:[]},pages:[{id:'home',name:'个人品宣',parent:'',blocks:['home','manifest','numbers','expertise','work','about'].map(id=>({id,title:'',text:'',image:'',hidden:false}))}]};
     if(!value.site.contact){value.site.contact=structuredClone(CONTACT_DEFAULTS);try{await access(path.join(uploads,CONTACT_DEFAULTS.qr.slice(7)));}catch(error){if(error.code!=='ENOENT')throw error;value.site.contact.qr='';}}
+    value.site=organizeSite(value.site,value.projects);
     return value;
   };
   const serialize = fn => { const operation = queue.then(fn); queue = operation.catch(() => {}); return operation; };

@@ -9,6 +9,15 @@ import { createApp } from '../backend/server.mjs';
 import { syncGithub } from '../scripts/sync-github.mjs';
 
 const bi = value => ({ zh: value, en: value });
+test('public configuration includes default workstation pages and preserves explicit visibility',async t=>{
+ const f=await fixture(t);const p=await fetch(f.base+'/api/portfolio').then(r=>r.json());
+ const excel=p.site.pages.find(page=>page.id==='ws-tools-excel-tool');
+ assert.ok(excel,'fresh public API must include the spreadsheet page');
+ assert.ok(p.site.pages.some(page=>page.id==='aigc'));
+ excel.hidden=true;assert.equal((await f.save(p)).status,200);
+ const saved=await fetch(f.base+'/api/portfolio').then(r=>r.json());
+ assert.equal(saved.site.pages.find(page=>page.id===excel.id).hidden,true);
+});
 test('engineering contact and dual images persist with revision and reject missing media',async t=>{
  const f=await fixture(t);const upload=await fetch(`${f.base}/api/upload`,{method:'POST',headers:{...f.headers,'Content-Type':'image/png','X-Filename':'concept.png'},body:Buffer.from([137,80,78,71,13,10,26,10,0,0])});
  assert.equal(upload.status,201);const media=await upload.json();const p=seed();
@@ -116,7 +125,7 @@ test('site configuration persists, hierarchy rejects cycles, analytics reports r
   const f=await fixture(t);const body=seed();
   body.site={header:{links:[{label:'首页',href:'/'}],logo:''},pages:[{id:'home',name:'首页',parent:'',blocks:[{id:'hero',title:'测试标题',text:'正文',image:'',hidden:true}]},{id:'child',name:'子页',parent:'home',blocks:[]}]};
   assert.equal((await f.save(body)).status,200);
-  const stored=await fetch(f.base+'/api/portfolio').then(r=>r.json());assert.equal(stored.site.pages[0].blocks[0].hidden,true);
+  const stored=await fetch(f.base+'/api/portfolio').then(r=>r.json());assert.equal(stored.site.pages[0].blocks.find(b=>b.id==='hero').hidden,true);
   stored.site.pages[0].parent='child';assert.equal((await f.save(stored)).status,400);
   stored.site.pages[0].parent='';stored.site.header.links[0].href='javascript:alert(1)';assert.equal((await f.save(stored)).status,400);
   assert.equal((await fetch(f.base+'/api/visit?page=child')).status,200);
