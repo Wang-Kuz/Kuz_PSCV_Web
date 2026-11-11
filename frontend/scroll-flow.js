@@ -1,8 +1,8 @@
 export function splitScroll(position,max,delta){const next=Math.max(0,Math.min(max,position+delta));return {next,remaining:delta-(next-position)};}
-export function mountScrollFlow(){
+export function mountScrollFlow({damping=68}={}){
  const reduced=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(pointer:fine)');let frame=0,targetY=scrollY,rail=null,targetX=0,last=0;
  const cancel=()=>{cancelAnimationFrame(frame);frame=0;rail=null;targetY=scrollY;};
- const tick=now=>{const alpha=1-Math.exp(-Math.min(40,now-last||16)/68);last=now;const y=scrollY+(targetY-scrollY)*alpha;window.scrollTo({top:y,behavior:'instant'});if(rail)rail.scrollLeft+=(targetX-rail.scrollLeft)*alpha;if(Math.abs(targetY-scrollY)>.8||(rail&&Math.abs(targetX-rail.scrollLeft)>.8)){frame=requestAnimationFrame(tick);}else{window.scrollTo({top:targetY,behavior:'instant'});if(rail)rail.scrollLeft=targetX;frame=0;}};
+ const tick=now=>{const alpha=1-Math.exp(-Math.min(40,now-last||16)/damping);last=now;const y=scrollY+(targetY-scrollY)*alpha;window.scrollTo({top:y,behavior:'instant'});if(rail)rail.scrollLeft+=(targetX-rail.scrollLeft)*alpha;if(Math.abs(targetY-scrollY)>.8||(rail&&Math.abs(targetX-rail.scrollLeft)>.8)){frame=requestAnimationFrame(tick);}else{window.scrollTo({top:targetY,behavior:'instant'});if(rail)rail.scrollLeft=targetX;frame=0;}};
  const wheel=e=>{if(e.ctrlKey||e.metaKey||e.defaultPrevented||reduced.matches||!fine.matches||document.querySelector('dialog[open]'))return;
   const el=e.target instanceof Element?e.target:null;if(el?.closest('input,textarea,select,[contenteditable=true]'))return;
   const wrapper=document.querySelector('#timeline-wrapper');let active=null;if(wrapper){const rect=wrapper.getBoundingClientRect();if(rect.top<innerHeight*.75&&rect.bottom>innerHeight*.35)active=wrapper;}

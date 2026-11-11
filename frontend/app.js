@@ -21,6 +21,7 @@ let inventory;
 let language = (() => { try { return localStorage.getItem('kuz-language') === 'en' ? 'en' : 'zh'; } catch { return 'zh'; } })();
 let filter = 'all';
 let revealObserver;
+let revealCleanup;
 let fieldCleanup;
 let motionCleanup;
 let lastFocus;
@@ -272,18 +273,20 @@ $('#project-dialog').addEventListener('click', event => { if (event.target === e
 document.addEventListener('keydown', event => { if (event.altKey && event.shiftKey && event.code === 'KeyE') location.href = '/Home/editor'; });
 
 function observeReveals() {
-  revealObserver?.disconnect();
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    entry.target.classList.add('is-visible'); revealObserver.unobserve(entry.target);
-    if (!reduced) $$('[data-count]', entry.target).forEach(element => {
-      const target = Number(element.dataset.count); const start = performance.now();
-      const tick = now => { const progress = Math.min(1, (now - start) / 1100); element.textContent = String(Math.round(target * (1 - (1 - progress) ** 3))); if (progress < 1) requestAnimationFrame(tick); };
-      requestAnimationFrame(tick);
-    });
-  }), { threshold: 0.08, rootMargin: '0px 0px 20px 0px' });
-  $$('.reveal').forEach(element => revealObserver.observe(element));
+ revealObserver?.disconnect();revealCleanup?.();
+ const preference=matchMedia('(prefers-reduced-motion: reduce)'),animations=new Set();
+ const finish=()=>{if(preference.matches)for(const animation of animations)animation.finish();};
+ preference.addEventListener('change',finish);
+ revealCleanup=()=>{preference.removeEventListener('change',finish);for(const animation of animations)animation.cancel();animations.clear();};
+ const enter=(element,delay=0)=>{if(preference.matches)return;const animation=element.animate([{opacity:0,translate:'0 32px'},{opacity:1,translate:'0 0'}],{duration:950,delay,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'});animations.add(animation);animation.onfinish=()=>animations.delete(animation);};
+ revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+  if(!entry.isIntersecting)return;const target=entry.target;target.classList.add('is-visible');revealObserver.unobserve(target);
+  // Individual layers avoid overriding the scene camera / pointer transforms.
+  const layers=target.matches('.project-story')?[...target.querySelectorAll('.story-topline,.story-copy,.project-art')]:target.matches('.gateway-grid')?[...target.children]:[];
+  if(layers.length)layers.forEach((layer,i)=>enter(layer,i*110));else enter(target);
+  if(!preference.matches)$$('[data-count]',target).forEach(element=>{const total=Number(element.dataset.count),start=performance.now();const tick=now=>{if(!element.isConnected)return;const p=Math.min(1,(now-start)/1100);element.textContent=String(Math.round(total*(1-(1-p)**3)));if(p<1)requestAnimationFrame(tick);};requestAnimationFrame(tick);});
+ }),{threshold:0,rootMargin:'0px 0px -48px 0px'});
+ $$('.reveal').forEach(element=>revealObserver.observe(element));
 }
 
 
@@ -320,4 +323,4 @@ if(parent!==window&&new URL(location.href).searchParams.has('preview'))parent.po
 addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent||parent===window||!location.search.includes('preview'))return;if(e.data?.type==='kuz-focus'){const target=document.getElementById(e.data.block)||[...document.querySelectorAll('[data-edit-block]')].find(n=>n.dataset.editBlock===e.data.block);if(target){target.scrollIntoView({behavior:'smooth',block:'center'});target.animate([{outline:'2px solid #aac8ef'},{outline:'2px solid transparent'}],{duration:1400});}}});
 addEventListener('storage',e=>{if(e.key==='kuz-language'){language=e.newValue==='en'?'en':'zh';render();}});
 
-mountScrollFlow();
+mountScrollFlow({damping:110});
