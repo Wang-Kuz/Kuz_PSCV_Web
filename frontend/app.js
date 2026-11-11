@@ -1,5 +1,7 @@
 import {mountScrollFlow} from './scroll-flow.js';
-import {base,applySite} from './site-config.js';
+import {renderEngineering,renderAigcGuide,renderContact,mountEngineeringCarousels} from './engineering.js';
+import {organizeSite} from './page-structure.js';
+import {base,applySite,defaults} from './site-config.js';
 import { COPY_DEFAULTS as defaultCopy } from './copy.js';
 import { mountFields } from './field.js';
 import { mountMotion } from './motion.js';
@@ -24,6 +26,7 @@ let revealObserver;
 let revealCleanup;
 let fieldCleanup;
 let motionCleanup;
+let engineeringCleanup;
 let lastFocus;
 const localize = value => typeof value === 'string' ? value : value?.[language] ?? value?.zh ?? value?.en ?? '';
 const copy = key => localize(portfolio?.copy?.[key] || defaultCopy[key] || key);
@@ -282,7 +285,7 @@ function observeReveals() {
  revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
   if(!entry.isIntersecting)return;const target=entry.target;target.classList.add('is-visible');revealObserver.unobserve(target);
   // Individual layers avoid overriding the scene camera / pointer transforms.
-  const layers=target.matches('.project-story')?[...target.querySelectorAll('.story-topline,.story-copy,.project-art')]:target.matches('.gateway-grid')?[...target.children]:[];
+  const layers=target.matches('.engineering-service')?[...target.children]:target.matches('.project-story')?[...target.querySelectorAll('.story-topline,.story-copy,.project-art')]:target.matches('.gateway-grid')?[...target.children]:[];
   if(layers.length)layers.forEach((layer,i)=>enter(layer,i*110));else enter(target);
   if(!preference.matches)$$('[data-count]',target).forEach(element=>{const total=Number(element.dataset.count),start=performance.now();const tick=now=>{if(!element.isConnected)return;const p=Math.min(1,(now-start)/1100);element.textContent=String(Math.round(total*(1-(1-p)**3)));if(p<1)requestAnimationFrame(tick);};requestAnimationFrame(tick);});
  }),{threshold:0,rootMargin:'0px 0px -48px 0px'});
@@ -291,16 +294,19 @@ function observeReveals() {
 
 
 function render() {
-  fieldCleanup?.(); motionCleanup?.();
+  fieldCleanup?.(); motionCleanup?.(); engineeringCleanup?.();
+  portfolio.site=organizeSite(portfolio.site||defaults(),portfolio.projects);
   Object.entries(categoryKeys).forEach(([key, copyKey]) => { categories[key] = portfolio?.copy?.[copyKey] || defaultCopy[copyKey]; });
   document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
   document.title = `${portfolio.profile.name || 'KUZ'} — ${copy('documentTitle')}`;
   renderHeader();
   const route=new URL(location.href).searchParams.get('page')||'home';
-  if(route==='projects')$('#main').replaceChildren(renderArchive());
+  if(route==='aigc')document.title=(language==='zh'?'AIGC工程':'AIGC Engineering')+' · '+(portfolio.profile.name||'KUZ');
+  if(route==='aigc')$('#main').replaceChildren(renderEngineering({copy,base,site:portfolio.site}),renderContact({copy,base,site:portfolio.site}));
+  else if(route==='projects')$('#main').replaceChildren(renderArchive());
   else if(route.startsWith('project-')){const project=visibleProjects().find(p=>'project-'+p.id===route);if(project)openProject(project,true);else $('#main').replaceChildren(make('p','cms-page',language==='zh'?'项目暂未公开。':'Project unavailable.'));}
-  else $('#main').replaceChildren(renderHero(), renderManifest(), renderStats(), renderExpertise(), renderWork(), renderGateway('projects'), renderGateway('workstation'), renderAbout());
-  applySite(portfolio); renderFooter(); observeReveals(); fieldCleanup = mountFields(); motionCleanup = mountMotion();
+  else $('#main').replaceChildren(renderHero(), renderManifest(), renderStats(), renderExpertise(), renderWork(), renderAigcGuide({copy,base}), renderGateway('projects'), renderGateway('workstation'), renderAbout(),renderContact({copy,base,site:portfolio.site}));
+  applySite(portfolio); renderFooter(); observeReveals(); fieldCleanup = mountFields(); motionCleanup = mountMotion(); engineeringCleanup=mountEngineeringCarousels();
 }
 
 

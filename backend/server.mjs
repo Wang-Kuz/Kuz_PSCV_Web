@@ -126,7 +126,7 @@ export async function createApp({ root = projectRoot, dataDir = path.join(root, 
           for (const project of body.projects) for (const media of project.media) {
             try { await access(path.join(uploads, media.url.slice(7))); } catch { throw new HttpError(400, `Media file missing: ${media.id}`); }
           }
-          if(body.site){const files=[body.site.header?.logo,...body.site.pages.flatMap(p=>[p.header?.logo,...p.blocks.map(b=>b.image)])].filter(Boolean);for(const url of files){try{await access(path.join(uploads,url.slice(7)));}catch{throw new HttpError(400,'Site image file missing');}}}
+          if(body.site){const files=[body.site.contact?.qr,body.site.header?.logo,...body.site.pages.flatMap(p=>[p.header?.logo,...p.blocks.flatMap(b=>[b.image,b.businessImage])])].filter(Boolean);for(const url of files){try{await access(path.join(uploads,url.slice(7)));}catch{throw new HttpError(400,'Site image file missing');}}}
           await atomicJson(path.join(backups, `portfolio-r${previous.revision}-${Date.now()}-${randomUUID()}.json`), previous);
           const next = { ...body, revision: previous.revision + 1 }; await atomicJson(runtime, next); return next;
         });

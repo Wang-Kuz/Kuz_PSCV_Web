@@ -1,7 +1,7 @@
 export function navigation(root,h,{base='',pageId='home',pages=[],languageButton}={}){
  const make=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls||'';if(text)n.textContent=text;return n;};
  const href=url=>url?.startsWith('/media/')||url?.startsWith('/?')||url==='/'?base+url:url?.startsWith('#')&&pageId!=='home'?base+'/'+url:url||'#';
- const en=document.documentElement.lang==='en';const labels={'作品':'Projects','关于':'About','工作站':'Workstation','返回个人品宣':'Portfolio','项目作品':'Projects','个人品宣':'Portfolio'};
+ const en=document.documentElement.lang==='en';const labels={'AIGC工程':'AIGC Engineering','作品':'Projects','关于':'About','工作站':'Workstation','返回个人品宣':'Portfolio','项目作品':'Projects','个人品宣':'Portfolio'};
  const anchor=(label,url,cls)=>{if(en)label=labels[label]||label;const a=make('a',cls,label);a.href=href(url);return a;};
  root.replaceChildren();root.classList.add('unified-header');root.hidden=h.visible===false;
  const brand=anchor(h.brand||'KUZ','/','unified-brand');if(h.logo){brand.textContent='';const img=make('img');img.src=href(h.logo);img.alt=h.brand||'KUZ';brand.append(img);}else brand.prepend(make('span','unified-mark','K'));

@@ -9,6 +9,13 @@ import { createApp } from '../backend/server.mjs';
 import { syncGithub } from '../scripts/sync-github.mjs';
 
 const bi = value => ({ zh: value, en: value });
+test('engineering contact and dual images persist with revision and reject missing media',async t=>{
+ const f=await fixture(t);const upload=await fetch(`${f.base}/api/upload`,{method:'POST',headers:{...f.headers,'Content-Type':'image/png','X-Filename':'concept.png'},body:Buffer.from([137,80,78,71,13,10,26,10,0,0])});
+ assert.equal(upload.status,201);const media=await upload.json();const p=seed();
+ p.site={header:{links:[]},contact:{email:'a@example.com',wechat:'test',qr:media.url},pages:[{id:'aigc',name:'AIGC',parent:'',blocks:[{id:'service-rag',title:'RAG',text:'Test',image:media.url,businessImage:media.url,autoplay:false,slideSeconds:10}]}]};
+ assert.equal((await f.save(p)).status,200);const saved=await fetch(`${f.base}/api/portfolio`).then(r=>r.json());assert.equal(saved.site.pages[0].blocks[0].businessImage,media.url);assert.equal(saved.site.contact.qr,media.url);
+ saved.site.pages[0].blocks[0].businessImage='/media/00000000-0000-4000-8000-000000000000.png';assert.equal((await f.save(saved)).status,400);
+});
 const seed = () => ({ schemaVersion: 1, revision: 0, profile: { name: 'Kuz', role: bi('Engineer'), headline: bi('Build'), intro: bi('Hello'), availability: bi('Open'), github: 'https://github.com/Wang-Kuz' }, copy: {}, projects: [{ id: 'demo', name: bi('Demo'), tagline: bi('Demo'), summary: bi('Demo'), role: bi('Dev'), problem: bi('Problem'), solution: bi('Solution'), outcome: bi('Observed'), status: bi('Prototype'), categories: ['software'], tech: ['Node'], github: 'https://github.com/Wang-Kuz/demo', featured: true, visible: true, delivered: false, evidence: bi('Source review'), media: [] }] });
 async function fixture(t) {
   const root = await mkdtemp(path.join(tmpdir(), 'pscv-test-'));
