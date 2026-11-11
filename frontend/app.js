@@ -65,7 +65,7 @@ function renderHero() {
   lines.forEach(line => title.append(make('span', 'hero-line', line)));
   append(body, status, roles, title, make('p', 'hero-intro', localize(portfolio.profile.intro)));
   const actions = append(make('div', 'hero-actions'),
-    append(link(copy('heroAction'), '#work', 'button-primary'), arrow('↓')),
+    append(link(copy('capabilitySelected'), '#work', 'button-primary'), arrow('↓')),
     append(externalLink(copy('heroSecondary'), portfolio.profile.github, 'text-link'), arrow()));
   body.append(actions);
   const art = make('div', 'hero-art'); art.setAttribute('aria-hidden', 'true');
@@ -144,21 +144,15 @@ function projectVisual(project, index) {
 }
 
 function renderWork() {
-  const section = make('section', 'work-section'); section.id = 'work';
-  const inner = make('div', 'section-inner');
-  append(inner, append(make('div', 'work-intro reveal'), eyebrow(copy('workEyebrow')), heading(copy('workTitle')), make('p', 'section-description', copy('workIntro'))));
-  const featured = visibleProjects().filter(p => p.featured);
-  featured.forEach((project, i) => {
-    const story = make('article', `project-story story-${i % 6} reveal`); story.id = `project-${project.id}`;
-    const top = append(make('div', 'story-topline'), make('span', '', `${String(i + 1).padStart(2, '0')} / ${copy('conceptSelected')}`), make('span', '', project.categories.map(c => localize(categories[c] || c)).join(' · ')));
-    const detail = make('div', 'story-copy');
-    append(detail, eyebrow(localize(project.name)), make('h3', 'story-title', localize(project.tagline) || localize(project.name)), make('p', 'story-summary', localize(project.summary)));
-    const tech = make('div', 'tech-list'); project.tech.forEach(t => tech.append(tag(t))); detail.append(tech);
-    append(detail, append(make('div', 'story-actions'), append(button(copy('projectExplore'), 'button-primary', () => openProject(project)), arrow('+')), append(externalLink(copy('githubLabel'), project.github, 'text-link'), arrow())));
-    append(story, top, append(make('div', 'story-main'), detail, projectVisual(project, i)));
-    inner.append(story);
-  });
-  section.append(inner); return section;
+ const section=make('section','work-section');section.id='work';const inner=make('div','section-inner');
+ append(inner,append(make('div','work-intro reveal'),eyebrow(copy('capabilityEyebrow')),heading(copy('capabilityTitle')),make('p','section-description',copy('capabilityIntro'))));
+ const capabilities=[['FDE','datafactory'],['Agent','personal-os'],['RAG','legal-operations'],['Algorithm','spectral-graph'],['Fullstack','agrotrade'],['Multimodal','desktop-avatar']];
+ capabilities.forEach(([key,visual],i)=>{const story=make('article',`project-story story-${i} reveal`);story.id='capability-'+key.toLowerCase();
+ const detail=make('div','story-copy');append(detail,eyebrow(copy('cap'+key+'Name')),make('h3','story-title',copy('cap'+key+'Title')),make('p','story-summary',copy('cap'+key+'Body')));
+ const tech=make('div','tech-list');copy('cap'+key+'Tags').split('·').forEach(t=>tech.append(tag(t.trim())));detail.append(tech);
+ append(detail,append(make('div','story-actions'),append(link(copy('capabilityProjects'),base+'/?page=projects','button-primary'),arrow('↗'))));
+ append(story,append(make('div','story-topline'),make('span','',String(i+1).padStart(2,'0')+' / '+copy('capabilitySelected'))),append(make('div','story-main'),detail,projectVisual({id:visual,categories:[]},i)));inner.append(story);});
+ section.append(inner);return section;
 }
 
 function renderArchive() {

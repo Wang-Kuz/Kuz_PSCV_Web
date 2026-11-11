@@ -6,5 +6,6 @@ export function organizeSite(site,projects=[]){
  if(!s.pages.some(p=>p.id==='projects'))s.pages.push({id:'projects',name:'项目展示',parent:'',blocks:[archive||{id:'archive',title:'',text:'',image:'',hidden:false}]});
  for(const project of projects){const id='project-'+project.id;if(!s.pages.some(p=>p.id===id))s.pages.push({id,name:project.name.zh||project.name.en,parent:'projects',blocks:[{id:'project-detail',title:'',text:'',image:'',hidden:false}]});}
  if(!s.layoutVersion){const home=s.pages.find(p=>p.id==='home');if(home)home.blocks=home.blocks.filter(b=>b.id!=='archive');s.header.links=[{label:'作品',href:'/?page=projects'},{label:'关于',href:'#about'},{label:'工作站',href:'/workstation/index.html'}];s.header.settings=false;s.header.home=false;s.layoutVersion=2;}
+ if((s.layoutVersion||0)<3){const home=s.pages.find(p=>p.id==='home'),projectsPage=s.pages.find(p=>p.id==='projects');if(home&&['个人门户','个人品宣'].includes(home.name))home.name='个人品宣';if(projectsPage){projectsPage.parent='home';if(['项目展示','全部项目'].includes(projectsPage.name))projectsPage.name='项目作品';}for(const l of s.header.links||[]){if(l.href==='/?page=projects'&&l.label==='作品')l.label='项目作品';}s.layoutVersion=3;}
  return s;
 }
