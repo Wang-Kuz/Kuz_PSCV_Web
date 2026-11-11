@@ -1,3 +1,5 @@
+import {mountScrollFlow} from './scroll-flow.js';
+import {base,applySite} from './site-config.js';
 import { COPY_DEFAULTS as defaultCopy } from './copy.js';
 import { mountFields } from './field.js';
 import { mountMotion } from './motion.js';
@@ -206,13 +208,14 @@ function renderFooter() {
   const inner = make('div', 'section-inner');
   append(inner, append(make('div', 'footer-cta reveal'), make('h2', '', copy('contactTitle')), append(externalLink(copy('contactAction'), portfolio.profile.github, 'button-primary'), arrow())));
   const base = make('div', 'footer-base');
-  const admin = link('◌', '/admin', 'admin-entry'); admin.title = copy('adminLabel'); admin.setAttribute('aria-label', copy('adminLabel'));
-  append(base, make('span', '', `© ${new Date().getFullYear()} ${portfolio.profile.name || 'KUZ'} · ${copy('footerNote')}`), append(make('div', 'footer-links'), admin, link(`${copy('backTop')} ↑`, '#home')));
+  const admin = link('◌', '/Home/editor', 'admin-entry'); admin.title = copy('adminLabel'); admin.setAttribute('aria-label', copy('adminLabel'));
+  append(base, make('span', '', `© ${new Date().getFullYear()} ${portfolio.profile.name || 'KUZ'} · ${copy('footerNote')}`), append(make('div', 'footer-links'), link(`${copy('backTop')} ↑`, '#main')));
   append(inner, base); footer.append(inner);
 }
 
-function openProject(project) {
-  const dialog = $('#project-dialog');
+function openProject(project,embedded=false) {
+  if(!embedded){location.href=base+'/?page=project-'+encodeURIComponent(project.id);return;}
+  const dialog = embedded?make('article','project-page'):$('#project-dialog');
   lastFocus = document.activeElement;
   dialog.replaceChildren();
   const close = button('×', 'dialog-close', () => dialog.close()); close.setAttribute('aria-label', copy('close'));
@@ -255,12 +258,13 @@ function openProject(project) {
   const evidence = make('div', 'project-evidence');
   append(evidence, make('h3', '', copy('statusLabel')), make('p', '', localize(project.status)), make('h3', '', copy('evidenceLabel')), make('p', '', localize(project.evidence)));
   append(dialog, close, head, intro, tech, details, gallery, evidence);
+  if(embedded){close.remove();dialog.id='project-detail';dialog.dataset.editBlock='project-detail';dialog.prepend(link(language==='zh'?'← 全部项目':'← All projects',base+'/?page=projects','text-link'));$('#main').replaceChildren(dialog);return;}
   dialog.showModal(); document.body.classList.add('dialog-open'); close.focus();
 }
 
 $('#project-dialog').addEventListener('close', () => { $$('#project-dialog video').forEach(v => v.pause()); document.body.classList.remove('dialog-open'); lastFocus?.focus(); });
 $('#project-dialog').addEventListener('click', event => { if (event.target === event.currentTarget) { const r = event.currentTarget.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) event.currentTarget.close(); } });
-document.addEventListener('keydown', event => { if (event.altKey && event.shiftKey && event.code === 'KeyE') location.href = '/admin'; });
+document.addEventListener('keydown', event => { if (event.altKey && event.shiftKey && event.code === 'KeyE') location.href = '/Home/editor'; });
 
 function observeReveals() {
   revealObserver?.disconnect();
@@ -284,8 +288,11 @@ function render() {
   document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
   document.title = `${portfolio.profile.name || 'KUZ'} — ${copy('documentTitle')}`;
   renderHeader();
-  $('#main').replaceChildren(renderHero(), renderManifest(), renderStats(), renderExpertise(), renderWork(), renderArchive(), renderAbout());
-  renderFooter(); observeReveals(); fieldCleanup = mountFields(); motionCleanup = mountMotion();
+  const route=new URL(location.href).searchParams.get('page')||'home';
+  if(route==='projects')$('#main').replaceChildren(renderArchive());
+  else if(route.startsWith('project-')){const project=visibleProjects().find(p=>'project-'+p.id===route);if(project)openProject(project,true);else $('#main').replaceChildren(make('p','cms-page',language==='zh'?'项目暂未公开。':'Project unavailable.'));}
+  else $('#main').replaceChildren(renderHero(), renderManifest(), renderStats(), renderExpertise(), renderWork(), renderAbout());
+  applySite(portfolio); renderFooter(); observeReveals(); fieldCleanup = mountFields(); motionCleanup = mountMotion();
 }
 
 
@@ -300,3 +307,12 @@ try {
   $('#main').replaceChildren(errorView);
   console.error(error);
 }
+
+addEventListener('message',event=>{if(parent===window||event.source!==parent||event.origin!==location.origin||!new URL(location.href).searchParams.has('preview'))return;if(event.data?.type==='kuz-preview'&&event.data.portfolio?.profile){portfolio=event.data.portfolio;render();}});
+
+if(parent!==window&&new URL(location.href).searchParams.has('preview'))parent.postMessage({type:'kuz-preview-ready'},location.origin);
+
+addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent||parent===window||!location.search.includes('preview'))return;if(e.data?.type==='kuz-focus'){const target=document.getElementById(e.data.block)||[...document.querySelectorAll('[data-edit-block]')].find(n=>n.dataset.editBlock===e.data.block);if(target){target.scrollIntoView({behavior:'smooth',block:'center'});target.animate([{outline:'2px solid #aac8ef'},{outline:'2px solid transparent'}],{duration:1400});}}});
+addEventListener('storage',e=>{if(e.key==='kuz-language'){language=e.newValue==='en'?'en':'zh';render();}});
+
+mountScrollFlow();

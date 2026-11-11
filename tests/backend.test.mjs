@@ -104,3 +104,22 @@ test('failed sync and malformed README markers preserve inventory', async t => {
   await assert.rejects(syncGithub({ root: f.root, loadAuthenticated: async () => [{ name: 'Demo', url: 'https://github.com/Wang-Kuz/Demo', visibility: 'private' }] }), /markers/);
   assert.equal(await readFile(file, 'utf8'), before);
 });
+
+test('site configuration persists, hierarchy rejects cycles, analytics reports real requests', async t => {
+  const f=await fixture(t);const body=seed();
+  body.site={header:{links:[{label:'首页',href:'/'}],logo:''},pages:[{id:'home',name:'首页',parent:'',blocks:[{id:'hero',title:'测试标题',text:'正文',image:'',hidden:true}]},{id:'child',name:'子页',parent:'home',blocks:[]}]};
+  assert.equal((await f.save(body)).status,200);
+  const stored=await fetch(f.base+'/api/portfolio').then(r=>r.json());assert.equal(stored.site.pages[0].blocks[0].hidden,true);
+  stored.site.pages[0].parent='child';assert.equal((await f.save(stored)).status,400);
+  stored.site.pages[0].parent='';stored.site.header.links[0].href='javascript:alert(1)';assert.equal((await f.save(stored)).status,400);
+  assert.equal((await fetch(f.base+'/api/visit?page=child')).status,200);
+  const a=await fetch(f.base+'/api/analytics').then(r=>r.json());assert.equal(Object.values(a.counts).reduce((x,y)=>x+y,0),1);assert.ok(Object.keys(a.counts)[0].endsWith('|child'));
+});
+
+ test('cross-site document navigation works while cross-site API access stays blocked',async t=>{
+ const f=await fixture(t);
+ const request=(route,mode)=>new Promise((resolve,reject)=>{http.get(f.base+route,{headers:{'sec-fetch-site':'cross-site','sec-fetch-mode':mode}},res=>{res.resume();resolve(res.statusCode);}).on('error',reject);});
+ assert.equal(await request('/','navigate'),200);
+ assert.equal(await request('/api/session','navigate'),403);
+ assert.equal(await request('/api/portfolio','cors'),403);
+ });

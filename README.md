@@ -20,8 +20,6 @@ npm start
 
 - 展示页：中英切换、动画、滚动渐进呈现、统计、精选案例、筛选、GitHub 链接、项目详情媒体库。
 - 1.1 视觉：大字与大数字层级、鼠标驱动金属曲面、滚动镜头推进、逐词亮起、六类项目动态图形与局部光影。支持减少动态效果，WebGL 不可用或运行中丢失时降级 Canvas；维护参见 [视觉与交互规范](docs/DESIGN.md)。
-- [内容工作室](http://127.0.0.1:4318/admin)：修改双语个人介绍、页面文案、项目、分类、排序和显示状态；上传视频/截图/照片；设置视频秒数节点；保存后刷新展示页。
-- 隐藏管理入口为页脚 `◌`，快捷键 `Alt + Shift + E`，直接访问 `/admin` 也可进入。仅绑定本机回环地址；隐藏按钮不是身份认证。
 - 本机内容位于 `local-data/portfolio.json`，上传位于 `local-data/uploads/`；每次保存前将旧内容备份到 `local-data/backups/`。这些目录不进入 Git。
 - [维护手册](docs/MAINTENANCE.md)说明添加案例、GitHub 同步、内容与媒体备份、故障恢复和 Agent 工作方式。
 - [内容证据](docs/CONTENT-EVIDENCE.md)说明每个案例的依据与边界。仓库数量、展示项目、交付数量是不同口径；分类可以重叠。
@@ -126,3 +124,14 @@ git diff --check
 | [ZZC-T_Contact_System](https://github.com/Wang-Kuz/ZZC-T_Contact_System) | Private · 需授权 |
 
 <!-- REPOSITORIES:END -->
+
+
+页面编辑统一位于 Home 的 `/Home/editor`；项目高级编辑位于 `/Home/projects`。公开品宣源码不包含后台 UI。详见 [页面架构](docs/PAGE-ARCHITECTURE.md)。
+
+
+## 2026-11-11 页面边界重构
+Home 管理所有编辑入口、页面树/板块栏、预览定位、配置、统计及 GitHub 同步。PSCV 负责品宣、独立项目列表与基础项目详情。Personal-Workstation/project 负责工作站介绍、工具箱与工具。三者独立仓库；工作站不再复制进 PSCV。
+
+全站使用 kuz-language 的 zh/en 选择；工作站上下滚轮推进时间线，到左右边界后释放页面滚动；首屏和介绍页底部均可进入工具箱。动态时间线/图表/成就可以从 Home 编辑结构化内容。原始静态个人数据仍待作者核验。
+
+验证：本地 PSCV 16 项、Home 6 项自动化测试及脚本检查通过；浏览器确认页面/板块预览定位、独立项目详情、时间线正反方向边界释放。线上发布与 GitHub SHA 以交付回读为准。

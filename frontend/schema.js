@@ -44,5 +44,15 @@ export function validatePortfolio(value) {
       }
     }
   }
+  if(value.site!==undefined){
+    const site=value.site;
+    if(!obj(site)||!Array.isArray(site.pages)||site.pages.length>100)fail('Invalid site pages');
+    const pageIds=new Set();
+    const safeUrl=u=>typeof u==='string'&&u.length<2048&&(!u||u.startsWith('#')||(/^\/(?!\/)/.test(u)&&!/[\\\x00-\x20]/.test(u)));
+    const header=h=>{if(!obj(h)||!Array.isArray(h.links)||h.links.length>30)fail('Invalid header');if(h.logo&&!/^\/media\/[a-f0-9-]{36}\.(png|jpg|jpeg|gif|webp)$/.test(h.logo))fail('Invalid logo');for(const l of h.links){str(l.label,'Header label',100);if(!safeUrl(l.href))fail('Invalid navigation target');}};
+    header(site.header);if(site.workstationData!==undefined){const d=site.workstationData;if(!obj(d)||!obj(d.progress)||!Array.isArray(d.progress.timeline)||d.progress.timeline.length>200||!obj(d.achievements)||JSON.stringify(d).length>200000)fail('Invalid workstation data');const textValue=v=>typeof v==='string'||(obj(v)&&typeof v.zh==='string'&&typeof v.en==='string');for(const item of d.progress.timeline)if(!obj(item)||!textValue(item.title)||!textValue(item.desc)||typeof item.year!=='string')fail('Invalid timeline item');for(const items of Object.values(d.achievements))if(!Array.isArray(items)||items.length>200||items.some(item=>!obj(item)||!textValue(item.title)))fail('Invalid achievements');for(const key of ['skills','soft_skills','fitness','coding_stats']){const chart=d.progress[key];if(!obj(chart)||!Array.isArray(chart.labels)||chart.labels.length>200||chart.labels.some(x=>typeof x!=='string'))fail('Invalid chart labels');for(const [field,values]of Object.entries(chart))if(field!=='labels'&&(!Array.isArray(values)||values.length!==chart.labels.length||values.some(n=>!Number.isFinite(n))))fail('Invalid chart values');}}
+    for(const p of site.pages){if(!obj(p)||!/^[-a-zA-Z0-9_]{1,100}$/.test(p.id)||pageIds.has(p.id))fail('Invalid page ID');pageIds.add(p.id);if(p.legacy&&!/^\/workstation\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+\.html$/.test(p.legacy))fail('Invalid legacy path');str(p.name,'Page name',160);if(p.header)header(p.header);if(!Array.isArray(p.blocks)||p.blocks.length>100)fail('Invalid blocks');const ids=new Set();for(const b of p.blocks){if(!obj(b)||!/^[-a-zA-Z0-9_]{1,100}$/.test(b.id)||ids.has(b.id))fail('Invalid block');ids.add(b.id);if(b.href!==undefined&&!safeUrl(b.href))fail('Invalid block target');if(b.buttonLabel!==undefined)str(b.buttonLabel,'Button label',100);str(b.title,'Block title');str(b.text,'Block text');if(b.image&&!/^\/media\/[a-f0-9-]{36}\.(png|jpg|jpeg|gif|webp)$/.test(b.image))fail('Invalid image');}}
+    for(const p of site.pages){let n=p;const seen=new Set([p.id]);while(n.parent){n=site.pages.find(x=>x.id===n.parent);if(!n||seen.has(n.id))fail('Invalid page hierarchy');seen.add(n.id);}}
+  }
   return value;
 }

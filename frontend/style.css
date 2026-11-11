@@ -2,11 +2,11 @@
    This file is not imported by the editing studio. */
 :root {
   color-scheme: dark;
-  --bg: #08090c;
+  --bg: #12151b;
   --surface: #111318;
   --ink: #f5f6f8;
   --muted: #a1a7b1;
-  --accent: #baf8d4;
+  --accent: #b5c6df;
   --line: rgb(225 233 247 / 13%);
   --sans: Inter, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
   --mono: "SFMono-Regular", Consolas, monospace;

@@ -1,3 +1,5 @@
+import {organizeSite} from '../frontend/page-structure.js';
+import {WORKSTATION_PAGES} from '../frontend/workstation-pages.js';
 import http from 'node:http';
 import { createReadStream } from 'node:fs';
 import { mkdir, readFile, writeFile, rename, stat, open, unlink, access } from 'node:fs/promises';
@@ -9,7 +11,7 @@ import { syncGithub } from '../scripts/sync-github.mjs';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MAX_UPLOAD = 250 * 1024 * 1024;
-const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif', '.mp4': 'video/mp4', '.webm': 'video/webm', '.mov': 'video/quicktime', '.woff2': 'font/woff2' };
+const TYPES = { '.json': 'application/json; charset=utf-8', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif', '.mp4': 'video/mp4', '.webm': 'video/webm', '.mov': 'video/quicktime', '.woff2': 'font/woff2' };
 const readJson = async file => JSON.parse(await readFile(file, 'utf8'));
 async function atomicJson(file, value) {
   const temp = `${file}.${randomUUID()}.tmp`;
@@ -80,19 +82,19 @@ async function sendFile(req, res, file, media = false) {
 export async function createApp({ root = projectRoot, dataDir = path.join(root, 'local-data'), sync = syncGithub } = {}) {
   const uploads = path.join(dataDir, 'uploads'); const backups = path.join(dataDir, 'backups'); const runtime = path.join(dataDir, 'portfolio.json');
   await Promise.all([mkdir(uploads, { recursive: true }), mkdir(backups, { recursive: true })]);
-  const token = randomBytes(32).toString('hex'); let queue = Promise.resolve(); let syncInProgress = false;
+  const token = randomBytes(32).toString('hex'); let queue = Promise.resolve(); let syncInProgress = false; const visits=new Map();
   const current = async () => { try { return await readJson(runtime); } catch (error) { if (error.code !== 'ENOENT') throw error; return readJson(path.join(root, 'data', 'portfolio.seed.json')); } };
   const serialize = fn => { const operation = queue.then(fn); queue = operation.catch(() => {}); return operation; };
   const server = http.createServer(async (req, res) => {
-    res.setHeader('X-Content-Type-Options', 'nosniff'); res.setHeader('Referrer-Policy', 'no-referrer'); res.setHeader('X-Frame-Options', 'DENY');
-    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' blob:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'");
+    res.setHeader('X-Content-Type-Options', 'nosniff'); res.setHeader('Referrer-Policy', 'no-referrer'); res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' blob:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'self'");
     try {
       const port = server.address()?.port;
       const allowedHosts = new Set([`127.0.0.1:${port}`, `localhost:${port}`]);
       if (!allowedHosts.has(req.headers.host)) throw new HttpError(403, 'Unexpected Host');
       const origin = req.headers.origin;
       if (origin && origin !== `http://${req.headers.host}`) throw new HttpError(403, 'Cross-origin requests are not allowed');
-      if (req.headers['sec-fetch-site'] === 'cross-site') throw new HttpError(403, 'Cross-site requests are not allowed');
+      if (req.headers['sec-fetch-site'] === 'cross-site' && !(req.method === 'GET' && req.headers['sec-fetch-mode'] === 'navigate' && !new URL(req.url, 'http://localhost').pathname.startsWith('/api/'))) throw new HttpError(403, 'Cross-site requests are not allowed');
       const mutation = !['GET', 'HEAD'].includes(req.method);
       if (mutation) {
         const supplied = Buffer.from(req.headers['x-csrf-token'] || ''); const expected = Buffer.from(token);
@@ -100,7 +102,20 @@ export async function createApp({ root = projectRoot, dataDir = path.join(root, 
       }
       const url = new URL(req.url, `http://${req.headers.host}`); let pathname;
       try { pathname = decodeURIComponent(url.pathname); } catch { throw new HttpError(400, 'Invalid URL encoding'); }
+      if(pathname.startsWith('/workstation/'))res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'");
       if (req.method === 'GET' && pathname === '/api/health') return json(res, 200, { ok: true, app: 'kuz-pscv' });
+      if (req.method === 'GET' && pathname === '/api/analytics') return json(res,200,await readJson(path.join(dataDir,'analytics.json')).catch(e=>{if(e.code==='ENOENT')return {startedAt:new Date().toISOString(),counts:{}};throw e;}));
+      if (req.method === 'GET' && pathname === '/api/visit') {
+        const page=url.searchParams.get('page')||'home';
+        if(!/^[a-zA-Z0-9_-]{1,100}$/.test(page))throw new HttpError(400,'Invalid page');
+        const configuration=await current();const known=organizeSite(configuration.site||{header:{links:[]},pages:[{id:'home',parent:'',blocks:[]},...WORKSTATION_PAGES]},configuration.projects).pages;if(!known.some(p=>p.id===page&&!p.hidden))throw new HttpError(404,'Page not found');
+        const visitor=String(req.headers['x-real-ip']||req.socket.remoteAddress),visitKey=visitor+'|'+page,now=Date.now();
+        if((visits.get(visitKey)||0)>now-30000)return json(res,200,{ok:true});
+        if(visits.size>10000)for(const[k,v]of visits)if(v<now-30000)visits.delete(k);
+        visits.set(visitKey,now);
+        await serialize(async()=>{const f=path.join(dataDir,'analytics.json');const a=await readJson(f).catch(e=>{if(e.code==='ENOENT')return {startedAt:new Date().toISOString(),counts:{}};throw e;});const hour=new Date(Date.now()+8*3600000).toISOString().slice(0,13);const k=hour+'|'+page;a.counts[k]=(a.counts[k]||0)+1;await atomicJson(f,a);});
+        return json(res,200,{ok:true});
+      }
       if (req.method === 'GET' && pathname === '/api/session') return json(res, 200, { token });
       if (req.method === 'GET' && pathname === '/api/portfolio') return json(res, 200, await current());
       if (req.method === 'GET' && pathname === '/api/repositories') return json(res, 200, await readJson(path.join(root, 'data', 'repositories.json')));
@@ -111,6 +126,7 @@ export async function createApp({ root = projectRoot, dataDir = path.join(root, 
           for (const project of body.projects) for (const media of project.media) {
             try { await access(path.join(uploads, media.url.slice(7))); } catch { throw new HttpError(400, `Media file missing: ${media.id}`); }
           }
+          if(body.site){const files=[body.site.header?.logo,...body.site.pages.flatMap(p=>[p.header?.logo,...p.blocks.map(b=>b.image)])].filter(Boolean);for(const url of files){try{await access(path.join(uploads,url.slice(7)));}catch{throw new HttpError(400,'Site image file missing');}}}
           await atomicJson(path.join(backups, `portfolio-r${previous.revision}-${Date.now()}-${randomUUID()}.json`), previous);
           const next = { ...body, revision: previous.revision + 1 }; await atomicJson(runtime, next); return next;
         });
@@ -126,10 +142,12 @@ export async function createApp({ root = projectRoot, dataDir = path.join(root, 
         const name = pathname.slice(7); if (!mediaNamePattern.test(name)) throw new HttpError(404, 'Media not found');
         return await sendFile(req, res, path.join(uploads, name), true);
       }
+      if(['/admin','/admin/'].includes(pathname)){res.writeHead(302,{Location:'/Home/editor'});return res.end();}
       if (['GET', 'HEAD'].includes(req.method) && !pathname.startsWith('/api/')) {
         const relative = pathname === '/' ? 'index.html' : ['/admin', '/admin/'].includes(pathname) ? 'admin.html' : pathname.slice(1);
         if (!/^[a-zA-Z0-9_./-]+$/.test(relative) || relative.split('/').some(p => p.startsWith('.')) || !Object.hasOwn(TYPES, path.extname(relative))) throw new HttpError(404, 'Not found');
-        const frontend = path.join(root, 'frontend'); const file = path.resolve(frontend, relative);
+        const isWorkstation=relative.startsWith('workstation/');
+        const frontend = isWorkstation ? path.resolve(process.env.WORKSTATION_ROOT || path.join(projectRoot,'../Personal-Workstation/project')) : path.join(root, 'frontend'); const file = path.resolve(frontend, isWorkstation?relative.slice(12):relative);
         if (!file.startsWith(`${frontend}${path.sep}`)) throw new HttpError(404, 'Not found');
         return await sendFile(req, res, file);
       }
