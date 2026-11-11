@@ -130,3 +130,18 @@ test('site configuration persists, hierarchy rejects cycles, analytics reports r
  assert.equal(await request('/api/session','navigate'),403);
  assert.equal(await request('/api/portfolio','cors'),403);
  });
+
+test('fresh install can save the complete editor draft without a preinstalled QR media file',async t=>{
+ const f=await fixture(t);const p=await fetch(f.base+'/api/portfolio').then(r=>r.json());
+ const {organizeSite}=await import('../frontend/page-structure.js');
+ p.site=organizeSite(p.site||{header:{links:[]},pages:[{id:'home',name:'个人品宣',parent:'',blocks:[]}]},p.projects);
+ const response=await f.save(p);assert.equal(response.status,200,await response.text());
+});
+
+test('web GitHub sync writes runtime inventory without modifying read-only release source',async t=>{
+ const f=await fixture(t),seedPath=path.join(f.root,'data','repositories.json');const before=await readFile(seedPath,'utf8');
+ const result=await syncGithub({root:f.root,runtimeDir:path.join(f.root,'local-data'),loadAuthenticated:async()=>[{name:'demo',url:'https://github.com/Wang-Kuz/demo',visibility:'public'}]});
+ assert.equal(result.repositories.length,1);assert.equal(await readFile(seedPath,'utf8'),before);
+ assert.equal(JSON.parse(await readFile(path.join(f.root,'local-data','repositories.json'),'utf8')).repositories.length,1);
+ assert.equal((await fetch(f.base+'/api/repositories').then(r=>r.json())).repositories.length,1);
+});

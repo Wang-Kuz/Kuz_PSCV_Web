@@ -1,3 +1,4 @@
+import {CONTACT_DEFAULTS} from '../frontend/engineering-content.js';
 import {organizeSite} from '../frontend/page-structure.js';
 import {WORKSTATION_PAGES} from '../frontend/workstation-pages.js';
 import http from 'node:http';
@@ -83,7 +84,13 @@ export async function createApp({ root = projectRoot, dataDir = path.join(root, 
   const uploads = path.join(dataDir, 'uploads'); const backups = path.join(dataDir, 'backups'); const runtime = path.join(dataDir, 'portfolio.json');
   await Promise.all([mkdir(uploads, { recursive: true }), mkdir(backups, { recursive: true })]);
   const token = randomBytes(32).toString('hex'); let queue = Promise.resolve(); let syncInProgress = false; const visits=new Map();
-  const current = async () => { try { return await readJson(runtime); } catch (error) { if (error.code !== 'ENOENT') throw error; return readJson(path.join(root, 'data', 'portfolio.seed.json')); } };
+  const current = async () => {
+    let value;try { value=await readJson(runtime); } catch(error){if(error.code!=='ENOENT')throw error;value=await readJson(path.join(root,'data','portfolio.seed.json'));}
+    // Only hydrate absent configuration; never erase an explicitly saved contact/media choice.
+    value.site??={header:{visible:true,autoHide:true,brand:'KUZ',links:[]},pages:[{id:'home',name:'个人品宣',parent:'',blocks:['home','manifest','numbers','expertise','work','about'].map(id=>({id,title:'',text:'',image:'',hidden:false}))}]};
+    if(!value.site.contact){value.site.contact=structuredClone(CONTACT_DEFAULTS);try{await access(path.join(uploads,CONTACT_DEFAULTS.qr.slice(7)));}catch(error){if(error.code!=='ENOENT')throw error;value.site.contact.qr='';}}
+    return value;
+  };
   const serialize = fn => { const operation = queue.then(fn); queue = operation.catch(() => {}); return operation; };
   const server = http.createServer(async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff'); res.setHeader('Referrer-Policy', 'no-referrer'); res.setHeader('X-Frame-Options', 'SAMEORIGIN');
@@ -118,7 +125,7 @@ export async function createApp({ root = projectRoot, dataDir = path.join(root, 
       }
       if (req.method === 'GET' && pathname === '/api/session') return json(res, 200, { token });
       if (req.method === 'GET' && pathname === '/api/portfolio') return json(res, 200, await current());
-      if (req.method === 'GET' && pathname === '/api/repositories') return json(res, 200, await readJson(path.join(root, 'data', 'repositories.json')));
+      if (req.method === 'GET' && pathname === '/api/repositories') return json(res, 200, await readJson(path.join(dataDir,'repositories.json')).catch(e=>{if(e.code!=='ENOENT')throw e;return readJson(path.join(root,'data','repositories.json'));}));
       if (req.method === 'PUT' && pathname === '/api/portfolio') {
         const body = validatePortfolio(await requestJson(req));
         const saved = await serialize(async () => {
@@ -136,7 +143,7 @@ export async function createApp({ root = projectRoot, dataDir = path.join(root, 
       if (req.method === 'POST' && pathname === '/api/github/sync') {
         if (syncInProgress) throw new HttpError(409, 'GitHub sync is already running');
         syncInProgress = true;
-        try { return json(res, 200, await sync({ root })); } finally { syncInProgress = false; }
+        try { return json(res, 200, await sync({ root,runtimeDir:dataDir })); } finally { syncInProgress = false; }
       }
       if (['GET', 'HEAD'].includes(req.method) && pathname.startsWith('/media/')) {
         const name = pathname.slice(7); if (!mediaNamePattern.test(name)) throw new HttpError(404, 'Media not found');

@@ -4,6 +4,8 @@
 
 A bilingual, locally hosted portfolio for full-stack development, Agent engineering, algorithms and forward-deployed engineering. Curated project stories, editable content, and a local media library.
 
+当前需求与验证以 [PROJECT.md](PROJECT.md)、[PLAN.md](PLAN.md)、[STATUS.md](STATUS.md) 为准。所有编辑管理归独立 Home；公开页面只承担品宣、项目与 AIGC 展示。
+
 ## 本地启动
 
 需要 **Node.js 22 或更新版本**；无需安装 npm 依赖。Windows 双击根目录 **`启动网页.cmd`**，自动打开 [展示页](http://127.0.0.1:4318)。双击 `停止网页.cmd` 可停止由启动脚本创建的服务。已运行时重复启动会复用服务。
@@ -14,7 +16,7 @@ A bilingual, locally hosted portfolio for full-stack development, Agent engineer
 npm start
 ```
 
-在终端运行时用 Ctrl+C 停止。网页需要本地 HTTP 服务，不能直接双击 HTML 来使用上传与编辑功能。没有部署到云端。
+在终端运行时用 Ctrl+C 停止。网页需要本地 HTTP 服务，不能直接双击 HTML 来使用上传与编辑功能。当前已有同域 /kuzpscv/ 生产部署；上述命令是本地开发入口。
 
 ## 使用与维护
 
@@ -24,7 +26,7 @@ npm start
 - [维护手册](docs/MAINTENANCE.md)说明添加案例、GitHub 同步、内容与媒体备份、故障恢复和 Agent 工作方式。
 - [内容证据](docs/CONTENT-EVIDENCE.md)说明每个案例的依据与边界。仓库数量、展示项目、交付数量是不同口径；分类可以重叠。
 
-视频可直接播放并跳到指定章节；推荐 H.264 MP4 或 WebM。上传 MOV 不保证当前浏览器支持其内部编码。单文件限 250 MiB。未提供的视频与截图保持为空，不使用伪造演示。
+视频可直接播放并跳到指定章节；推荐 H.264 MP4 或 WebM。上传 MOV 不保证当前浏览器支持其内部编码。经 Home 管理入口上传单文件限 20 MiB；回环 API 上限 250 MiB。未提供的视频与截图保持为空，不使用伪造演示。
 
 ## 宣传资料
 
@@ -32,7 +34,7 @@ npm start
 
 ## GitHub 更新
 
-双击 `同步GitHub.cmd`、在后台点击同步，或运行：
+后台同步写入 local-data/repositories.json 运行索引；不会修改只读发布源码或自动提交 Git。开发机更新源码 README 索引可双击 `同步GitHub.cmd`，或运行：
 
 ```powershell
 npm run sync:github

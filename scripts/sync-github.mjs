@@ -37,10 +37,10 @@ async function publicInventory() {
 export function repositoryTable(inventory) {
   return [START, '', `仓库索引更新：${inventory.fetchedAt} · ${inventory.repositories.length} 个仓库 · ${inventory.coverage === 'partial' ? '部分刷新（公开仓库；保留先前记录）' : '账号仓库清单'}。私有仓库需要访问权限；仓库数量不等于已交付项目数量。`, '', '| 仓库 / Repository | 访问 / Visibility |', '| --- | --- |', ...inventory.repositories.map(repo => `| [${repo.name}](${repo.url}) | ${repo.visibility === 'private' ? 'Private · 需授权' : 'Public'} |`), '', END].join('\n');
 }
-export async function syncGithub({ root = projectRoot, loadAuthenticated = authenticatedInventory, loadPublic = publicInventory } = {}) {
-  const inventoryPath = path.join(root, 'data', 'repositories.json');
+export async function syncGithub({ root = projectRoot, runtimeDir, loadAuthenticated = authenticatedInventory, loadPublic = publicInventory } = {}) {
+  const inventoryPath = path.join(runtimeDir||path.join(root,'data'), 'repositories.json');
   let previous = { repositories: [] };
-  try { previous = JSON.parse(await readFile(inventoryPath, 'utf8')); } catch (error) { if (error.code !== 'ENOENT') throw error; }
+  try { previous = JSON.parse(await readFile(inventoryPath, 'utf8')); } catch (error) { if (error.code !== 'ENOENT') throw error;if(runtimeDir)previous=JSON.parse(await readFile(path.join(root,'data','repositories.json'),'utf8')); }
   let repositories; let coverage = 'complete'; let source = 'gh-authenticated'; let warning;
   try { repositories = await loadAuthenticated(); }
   catch {
@@ -53,6 +53,7 @@ export async function syncGithub({ root = projectRoot, loadAuthenticated = authe
   if (!repositories.length && previous.repositories.length) throw new Error('GitHub returned no owned repositories; retained existing inventory');
   repositories.sort((a, b) => a.name.localeCompare(b.name, 'en'));
   const inventory = { fetchedAt: new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()), owner: OWNER, coverage, source, repositories, ...(warning ? { warning } : {}) };
+  if(runtimeDir){await atomicWrite(inventoryPath,JSON.stringify(inventory,null,2)+'\n');return inventory;}
   const readmePath = path.join(root, 'README.md'); let readme;
   try { readme = await readFile(readmePath, 'utf8'); } catch (error) { if (error.code !== 'ENOENT') throw error; }
   let nextReadme;
