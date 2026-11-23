@@ -146,10 +146,19 @@ function mountOrbit(art, reduced, onChange) {
   art.setAttribute('aria-label',[artworkLabel,label].filter(Boolean).join(' · '));
   art.setAttribute('aria-valuemin','-180');
   art.setAttribute('aria-valuemax','180');
+  const angle=document.createElement('span');
+  angle.className='orbit-angle';
+  angle.setAttribute('aria-hidden','true');
+  art.append(angle);
   let degrees=0, drag=null;
   const set=value=>{
     degrees=clamp(value,-180,180);
-    art.setAttribute('aria-valuenow',String(Math.round(degrees)));
+    const rounded=Math.round(degrees);
+    if(art.getAttribute('aria-valuenow')!==String(rounded)){
+      art.setAttribute('aria-valuenow',String(rounded));
+      angle.textContent=(rounded>0?'+':'')+rounded+'°';
+    }
+    art.style.setProperty('--orbit-angle',degrees+'deg');
     onChange(degrees*Math.PI/180,reduced.matches);
   };
   const down=e=>{

@@ -1,3 +1,4 @@
+import {guideProjects} from './lib.js';
 import {mountScrollFlow} from './scroll-flow.js';
 import {renderEngineering,renderAigcGuide,renderContact,mountEngineeringCarousels} from './engineering.js';
 import {organizeSite} from './page-structure.js';
@@ -172,10 +173,17 @@ function renderWork() {
  append(inner,append(make('div','work-intro reveal'),eyebrow(copy('capabilityEyebrow')),heading(copy('capabilityTitle')),make('p','section-description',copy('capabilityIntro'))));
  const capabilities=[['FDE','datafactory'],['Agent','personal-os'],['RAG','legal-operations'],['Algorithm','spectral-graph'],['Fullstack','agrotrade'],['Multimodal','desktop-avatar']];
  capabilities.forEach(([key,visual],i)=>{const story=make('article',`project-story story-${i} reveal`);story.id='capability-'+key.toLowerCase();
- const detail=make('div','story-copy');append(detail,eyebrow(copy('cap'+key+'Name')),make('h3','story-title',copy('cap'+key+'Title')),make('p','story-summary',copy('cap'+key+'Body')));
+ const detail=make('div','story-copy');const value=copy('cap'+key+'Title');
+ const title=make('h3','story-title',value);
+ // Preserve editor line breaks; give a Chinese two-clause heading a natural reading break.
+ const comma=value.indexOf('，');
+ if(language==='zh' && comma>0 && comma<value.length-1 && !value.includes('\n')){
+   title.replaceChildren(value.slice(0,comma+1),make('br'),value.slice(comma+1));
+ }
+ append(detail,eyebrow(copy('cap'+key+'Name')),title,make('p','story-summary',copy('cap'+key+'Body')));
  const tech=make('div','tech-list');copy('cap'+key+'Tags').split('·').forEach(t=>tech.append(tag(t.trim())));detail.append(tech);
  append(detail,append(make('div','story-actions'),append(link(copy('capabilityProjects'),base+'/?page=projects','button-primary'),arrow())));
- append(story,append(make('div','story-topline'),make('span','',String(i+1).padStart(2,'0')+' / '+copy('capabilitySelected'))),append(make('div','story-main'),detail,projectVisual({id:visual,categories:[]},i)));inner.append(story);});
+ append(story,append(make('div','story-main'),detail,projectVisual({id:visual,categories:[]},i)));inner.append(story);});
  section.append(inner);return section;
 }
 
@@ -185,7 +193,15 @@ function renderGateway(kind){
  const content=make('div','gateway-copy');append(content,eyebrow(copy(key+'Eyebrow')),heading(copy(key+'Title')),make('p','section-description',copy(key+'Body')));
  const action=append(link(copy(key+'Action'),projects?base+'/?page=projects':'/workstation/index.html','button-primary'),arrow());action.dataset.gatewayAction='';content.append(action);
  const art=make('div','gateway-art');art.setAttribute('aria-hidden','true');
- if(projects){['01 / AI & AGENTS','02 / ALGORITHMS','03 / SYSTEMS'].forEach((label,i)=>{const row=make('div','gateway-index');append(row,make('span','',label),make('span','gateway-index-line'),arrow());art.append(row);});}
+ if(projects){
+   art.removeAttribute('aria-hidden');
+   for(const project of guideProjects(portfolio)){
+     const row=link('','./?page=project-'+encodeURIComponent(project.id),'guide-project');
+     const text=make('span','guide-project-copy');
+     append(text,make('strong','',localize(project.name)),make('span','',localize(project.tagline)));
+     append(row,text,arrow());art.append(row);
+   }
+ }
  else{const orbit=make('div','gateway-orbit');orbit.append(make('span','gateway-core','K'));for(const word of ['BUILD','EXPLORE','CREATE'])orbit.append(make('span','gateway-node',word));art.append(orbit);}
  append(section,append(make('div','section-inner gateway-grid reveal'),content,art));return section;
 }

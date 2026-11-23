@@ -50,13 +50,15 @@ vec3 studio(vec3 ray) {
   vec3 environment = mix(vec3(.008, .014, .026), vec3(.12, .16, .20), upper);
   environment += vec3(.11, .17, .22) * pow(max(0.0, dot(ray, normalize(vec3(-.2, -.5, 1.0)))), 3.0);
   // Tall left key, a broad top silk, and restrained cool fill.
-  environment += vec3(2.55, 2.70, 2.67) * panel(ray, vec3(-1.0, -.55, 1.1), vec3(0., 1., 0.), vec2(.20, .95), .13);
+  environment += vec3(2.55, 2.70, 2.67) * panel(ray, vec3(-1.0, -.55, 1.1), vec3(0., 1., 0.), vec2(.17, .95), .19);
   environment += vec3(1.55, 1.67, 1.79) * panel(ray, vec3(.1, -1.2, .6), vec3(0., 0., 1.), vec2(.85, .18), .15);
   environment += vec3(.55, .76, 1.30) * panel(ray, vec3(1.0, .1, .65), vec3(0., 1., 0.), vec2(.24, .75), .28);
   // Small mint and violet cards reflect around the polished perimeter.
-  environment += vec3(.32, 1.05, .84) * panel(ray, vec3(-.95, .40, -.15), vec3(0., 1., 0.), vec2(.18, .85), .22);
-  environment += vec3(.65, .30, 1.05) * panel(ray, vec3(.65, .95, -.35), vec3(0., 0., 1.), vec2(.65, .23), .27);
+  environment += vec3(.45, .93, .82) * panel(ray, vec3(-.95, .40, -.15), vec3(0., 1., 0.), vec2(.18, .85), .22);
+  environment += vec3(.72, .53, .91) * panel(ray, vec3(.65, .95, -.35), vec3(0., 0., 1.), vec2(.65, .23), .27);
   environment += vec3(1.35, 1.48, 1.60) * panel(ray, vec3(.65, -.25, -.85), vec3(0., 1., 0.), vec2(.10, .80), .08);
+  // A narrow strip beside a broad softbox traces the bevel as the ring turns.
+  environment += vec3(.85, .93, 1.06) * panel(ray, vec3(-.56, .21, 1.1), vec3(.12, 1., 0.), vec2(.022, .78), .045);
   return environment;
 }
 

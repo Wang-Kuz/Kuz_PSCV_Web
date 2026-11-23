@@ -42,3 +42,16 @@ export function getStats(portfolio, inventory) {
     management:count('management'), software:count('software'), algorithm:count('algorithm'),
     aiAgent:projects.filter(p => p.categories.includes('ai') || p.categories.includes('agent')).length };
 }
+
+// The guide follows Home's published order, with featured projects first.
+export function guideProjects(portfolio) {
+  const pages=new Map(portfolio.site.pages.map(page=>[page.id,page]));
+  const guide=pages.get('home')?.blocks.find(b=>b.id==='projects-guide');
+  const archive=pages.get('projects');
+  if(!guide || guide.hidden || guide.image || guide.buttonHidden || !archive || archive.hidden || !archive.blocks.some(b=>b.id==='archive'&&!b.hidden)) return [];
+  const candidates=portfolio.projects.filter(p=>{
+    const detail=pages.get('project-'+p.id);
+    return p.visible!==false && detail && !detail.hidden && detail.blocks.some(b=>b.id==='project-detail'&&!b.hidden);
+  });
+  return [...candidates.filter(p=>p.featured),...candidates.filter(p=>!p.featured)].slice(0,3);
+}

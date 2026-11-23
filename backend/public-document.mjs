@@ -1,3 +1,4 @@
+import {guideProjects} from '../frontend/lib.js';
 import {COPY_DEFAULTS} from '../frontend/copy.js';
 import {ENGINEERING_SERVICES} from '../frontend/engineering-content.js';
 
@@ -69,6 +70,10 @@ export function publicDocument(template, data, id) {
         const [target,label]=gateways[key],dest=pages.get(target);
         if(dest&&!dest.hidden)extra+=anchor(copy(label),dest.legacy||pageUrl(target));
       }
+    }
+    if(key==='projects-guide'){
+      const selected=guideProjects(data);
+      if(selected.length)extra+='<ul>'+selected.map(p=>'<li>'+anchor(zh(p.name),pageUrl('project-'+p.id))+'</li>').join('')+'</ul>';
     }
     title=block.title||title;body=block.text||body;
     if(!title&&!body&&!extra)return '';
