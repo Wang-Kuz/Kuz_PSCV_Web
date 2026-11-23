@@ -10,11 +10,11 @@ function rotate(x, y, z, ax, ay) {
   return [rx, y * cx - rz * sx, y * sx + rz * cx];
 }
 
-function drawSculpture(ctx, w, h, time, pointer, scroll) {
-  const scale = Math.min(w, h) * (.24 + scroll * .05);
-  const ax = -.65 + pointer.y * .24 + scroll * .3;
-  const ay = -.32 + time * .075 + pointer.x * .42;
-  const rows = 112, columns = 48, mesh = [];
+function drawSculpture(ctx, w, h, time, pointer, scroll, orbit) {
+  const scale = Math.min(w, h) * (.24 + scroll * .095);
+  const ax = -.65 + pointer.y * .24 + scroll * .58;
+  const ay = -.32 + time * .075 + pointer.x * .42 + orbit + scroll * .68;
+  const rows = w < 600 ? 54 : 72, columns = 28, mesh = [];
   const cx = w * .51, cy = h * .49;
   const glow = ctx.createRadialGradient(cx, cy, scale * .3, cx, cy, scale * 2.4);
   glow.addColorStop(0, 'rgba(93,139,183,.15)');
@@ -63,7 +63,7 @@ function drawSculpture(ctx, w, h, time, pointer, scroll) {
 function stroke(ctx, points, color, width=1){ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();}
 function dot(ctx,x,y,r,color){ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fillStyle=color;ctx.fill();}
 
-function drawProject(ctx,w,h,time,pointer,kind){
+function drawProject(ctx,w,h,time,pointer,kind,arrival){
   const unit=Math.min(w,h), cx=w/2+pointer.x*12, cy=h/2+pointer.y*10;
   const palette={data:'158,246,207',agent:'168,174,255',voice:'247,196,167',enterprise:'170,212,240',algorithm:'170,229,225',commerce:'225,231,169'};
   const color=palette[kind]||palette.data;
@@ -81,7 +81,11 @@ function drawProject(ctx,w,h,time,pointer,kind){
     }
     for(const x of [w*.15,w*.5,w*.85]){ctx.strokeStyle=`rgba(${color},.23)`;ctx.strokeRect(x-22,cy-26,44,52);dot(ctx,x,cy,5,`rgb(${color})`);}
   }else if(kind==='agent'){
-    const nodes=Array.from({length:7},(_,i)=>{const a=i/7*TAU+time*.045;return[cx+Math.cos(a)*unit*.31,cy+Math.sin(a)*unit*.27];});
+    const nodes=Array.from({length:7},(_,i)=>{
+      const a=i/7*TAU+time*.045, spread=(1-arrival)**2;
+      return [cx+Math.cos(a)*unit*.31+Math.sin(i*7+1)*unit*.33*spread,
+              cy+Math.sin(a)*unit*.27+Math.cos(i*3+2)*unit*.29*spread];
+    });
     nodes.forEach((p,i)=>{
       stroke(ctx,[[cx,cy],p],`rgba(${color},.25)`);
       stroke(ctx,[p,nodes[(i+2)%7]],`rgba(${color},.10)`);
@@ -114,7 +118,9 @@ function drawProject(ctx,w,h,time,pointer,kind){
       const xx=(x/33-.5)*2, zz=(z/33-.5)*2;
       const yy=Math.sin(xx*3+time*.4)*Math.cos(zz*3-time*.2)*.24;
       const [rx,ry,rz]=rotate(xx,yy,zz,.74+pointer.y*.09,.35+pointer.x*.1);
-      points.push({x:cx+rx*unit*.34,y:cy+ry*unit*.34,z:rz});
+      const scatter=(1-arrival)**2*unit*.32;
+      const seed=x*13+z*47;
+      points.push({x:cx+rx*unit*.34+Math.cos(seed)*scatter,y:cy+ry*unit*.34+Math.sin(seed)*scatter,z:rz});
     }
     points.sort((a,b)=>a.z-b.z).forEach(p=>dot(ctx,p.x,p.y,1.2+(p.z+1)*.6,`rgba(${color},${clamp(.32+p.z*.25,.1,.8)})`));
   }else{
@@ -127,6 +133,40 @@ function drawProject(ctx,w,h,time,pointer,kind){
     }
     dot(ctx,cx,cy,13,`rgba(${color},.9)`);
   }
+}
+
+// Use a persistent host so a WebGL context replacement preserves the interaction.
+function mountOrbit(art, reduced, onChange) {
+  const label=art.querySelector('.field-coordinate span:last-child')?.textContent;
+  const artworkLabel=art.querySelector('.field-coordinate span')?.textContent;
+  art.removeAttribute('aria-hidden');
+  art.classList.add('orbit-control');
+  art.tabIndex=0;
+  art.setAttribute('role','slider');
+  art.setAttribute('aria-label',[artworkLabel,label].filter(Boolean).join(' · '));
+  art.setAttribute('aria-valuemin','-180');
+  art.setAttribute('aria-valuemax','180');
+  let degrees=0, drag=null;
+  const set=value=>{
+    degrees=clamp(value,-180,180);
+    art.setAttribute('aria-valuenow',String(Math.round(degrees)));
+    onChange(degrees*Math.PI/180,reduced.matches);
+  };
+  const down=e=>{
+    if(!e.isPrimary||e.button!==0)return;
+    drag={id:e.pointerId,x:e.clientX,start:degrees};
+    art.setPointerCapture(e.pointerId);
+  };
+  const move=e=>{if(drag?.id===e.pointerId)set(drag.start+(e.clientX-drag.x)*250/Math.max(200,art.clientWidth));};
+  const up=e=>{if(drag?.id===e.pointerId)drag=null;};
+  const key=e=>{
+    const values={ArrowRight:degrees+15,ArrowLeft:degrees-15,ArrowUp:degrees+15,ArrowDown:degrees-15,Home:-180,End:180};
+    if(Object.hasOwn(values,e.key)){e.preventDefault();set(values[e.key]);}
+  };
+  set(0);
+  const events={pointerdown:down,pointermove:move,lostpointercapture:up,pointercancel:up,pointerup:up,keydown:key};
+  for(const [type,handler] of Object.entries(events))art.addEventListener(type,handler);
+  return ()=>{for(const [type,handler] of Object.entries(events))art.removeEventListener(type,handler);};
 }
 
 export function mountFields(root=document){
@@ -146,8 +186,9 @@ export function mountFields(root=document){
     canvas.dataset.renderer=renderer?'webgl':'canvas2d';
     const host=canvas.closest('.hero')||canvas.parentElement;
     let w=1,h=1,frame=0,visible=false,last=0,elapsed=0,lastClock=0;
+    let orbit=0,targetOrbit=0,travel=0;
     const target={x:0,y:0},pointer={x:0,y:0};
-    const resize=()=>{const rect=canvas.getBoundingClientRect();w=rect.width;h=rect.height;const dpr=Math.min(devicePixelRatio||1,1.7);if(renderer)renderer.resize(w,h,dpr);else{canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);}};
+    const resize=()=>{w=canvas.clientWidth;h=canvas.clientHeight;const dpr=Math.min(devicePixelRatio||1,1.7);if(renderer)renderer.resize(w,h,dpr);else{canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);}};
     const draw=(clock)=>{
       frame=0;if(!visible||document.hidden)return;
       const delta=lastClock?Math.min(.06,(clock-lastClock)/1000):0;lastClock=clock;
@@ -157,14 +198,27 @@ export function mountFields(root=document){
         ctx?.clearRect(0,0,w,h);
         const time=reduced.matches?7:elapsed;
         if(canvas.dataset.field==='sculpture'){
-          const stage=canvas.closest('.hero-stage');const progress=stage?clamp(-stage.getBoundingClientRect().top/Math.max(1,stage.offsetHeight-innerHeight),0,1):0;
-          if(renderer)renderer.draw({time,pointer,scroll:progress,width:w,height:h});
-          else drawSculpture(ctx,w,h,time,pointer,progress);
-        }else drawProject(ctx,w,h,time,pointer,canvas.dataset.field);
+          const stage=canvas.closest('.hero-stage');
+          const position=stage?clamp(-stage.getBoundingClientRect().top/Math.max(innerHeight*.65,stage.offsetHeight-innerHeight),0,1):0;
+          const ease=1-Math.exp(-Math.min(.12,delta||.032)*19);
+          travel=reduced.matches?0:travel+(position-travel)*ease;
+          orbit=reduced.matches?targetOrbit:orbit+(targetOrbit-orbit)*ease;
+          const progress=travel;
+          if(renderer)renderer.draw({time,pointer,scroll:progress,orbit,width:w,height:h});
+          else drawSculpture(ctx,w,h,time,pointer,progress,orbit);
+        }else{
+          const rect=canvas.getBoundingClientRect();
+          const arrival=reduced.matches?1:clamp((innerHeight-rect.top)/Math.max(1,Math.min(rect.height*.8,innerHeight*.48)),0,1);
+          drawProject(ctx,w,h,time,pointer,canvas.dataset.field,arrival);
+        }
       }
       if(!reduced.matches)frame=requestAnimationFrame(draw);
     };
     const schedule=()=>{cancelAnimationFrame(frame);lastClock=0;if(visible&&!document.hidden)frame=requestAnimationFrame(draw);};
+    const art=canvas.closest('.hero-art');
+    if(art && !new URL(location.href).searchParams.has('preview')){
+      disposers.push(mountOrbit(art,reduced,(angle,immediate)=>{targetOrbit=angle;if(immediate)schedule();}));
+    }
     const move=e=>{if(!fine.matches||reduced.matches)return;const r=host.getBoundingClientRect();target.x=clamp((e.clientX-r.left)/r.width*2-1,-1,1);target.y=clamp((e.clientY-r.top)/r.height*2-1,-1,1);};
     const leave=()=>{target.x=target.y=0;};
     host.addEventListener('pointermove',move,{passive:true});host.addEventListener('pointerleave',leave);

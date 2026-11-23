@@ -9,7 +9,8 @@ export function mountScrollFlow({damping=68}={}){
   const wrapper=document.querySelector('#timeline-wrapper');let active=null;if(wrapper){const rect=wrapper.getBoundingClientRect();if(rect.top<innerHeight*.75&&rect.bottom>innerHeight*.35)active=wrapper;}
   for(let n=el;n&&n!==document.body;n=n.parentElement){if(n===active)break;const style=getComputedStyle(n);if(/auto|scroll/.test(style.overflowY)&&n.scrollHeight>n.clientHeight+2)return;}
   let delta=e.deltaY*(e.deltaMode===1?24:e.deltaMode===2?innerHeight:1);if(!delta)return;
-  if(!frame)targetY=scrollY;
+  // Reverse immediately when the wheel changes direction, even while the last impulse is settling.
+  if(!frame||(delta*(targetY-scrollY)<0))targetY=scrollY;
   if(active&&active.scrollWidth>active.clientWidth+2){if(rail!==active||!frame){rail=active;targetX=rail.scrollLeft;}const step=splitScroll(targetX,rail.scrollWidth-rail.clientWidth,delta);targetX=step.next;delta=step.remaining;}
   const max=document.documentElement.scrollHeight-innerHeight;targetY=Math.max(0,Math.min(max,targetY+delta));e.preventDefault();if(!frame){last=performance.now();frame=requestAnimationFrame(tick);}
  };

@@ -2134,3 +2134,15 @@ html[lang="en"] .expertise-item h3 {
 
 /* Independent routes after the capability narrative. */
 .gateway-section{padding:clamp(90px,12vw,190px) 0;border-top:1px solid #ffffff12;background:#101418}.gateway-workstation{background:radial-gradient(ellipse at 75% 50%,#202a3d 0,transparent 55%),#0b0e14}.gateway-grid{display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:clamp(40px,7vw,120px)}.gateway-copy .section-title{font-size:clamp(36px,4.8vw,76px);white-space:pre-line;line-height:1.15}.gateway-copy .section-description{margin:28px 0 36px;max-width:38em}.gateway-art{min-width:0}.gateway-art .cms-image{max-width:100%;max-height:480px}.gateway-index{display:flex;align-items:center;gap:20px;padding:35px 0;border-bottom:1px solid #a6b9d130;color:#bdcce0;font:clamp(12px,1.2vw,18px) monospace}.gateway-index-line{flex:1;height:1px;background:linear-gradient(90deg,#adc3e8,transparent)}.gateway-orbit{position:relative;aspect-ratio:1;max-width:420px;margin:auto;border:1px solid #a6b9d130;border-radius:50%;display:grid;place-items:center;box-shadow:0 0 90px #799bc414 inset}.gateway-orbit:before{content:'';position:absolute;inset:16%;border:1px solid #a6b9d130;border-radius:50%}.gateway-core{font-size:100px;color:#c8d8ef}.gateway-node{position:absolute;padding:12px 18px;background:#141b27;border:1px solid #a6b9d130;border-radius:30px;color:#a7bad7;font:12px monospace;letter-spacing:.15em}.gateway-node:nth-child(2){top:0;left:25%}.gateway-node:nth-child(3){right:-2%;top:55%}.gateway-node:nth-child(4){bottom:6%;left:0}@media(max-width:760px){.gateway-grid{grid-template-columns:1fr}.gateway-orbit{max-width:280px}.gateway-index{padding:24px 0}}
+
+.assembling-title { position: relative; isolation: isolate; }
+.ink-particles { position: absolute; z-index: 1; max-width: none; pointer-events: none; }
+.hero-art.orbit-control { touch-action: pan-y pinch-zoom; cursor: grab; user-select: none; }
+.hero-art.orbit-control:active { cursor: grabbing; }
+.hero-art.orbit-control:focus-visible .field-coordinate { outline: 2px solid #aac9ed; outline-offset: 6px; }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-stage ~ section :is(.gateway-art,.project-art,.about-visual) {
+    scale: var(--arrival-scale,1);
+    transition: scale .38s cubic-bezier(.18,.68,.24,1);
+  }
+}

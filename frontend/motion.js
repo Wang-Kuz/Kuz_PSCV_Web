@@ -1,4 +1,5 @@
 // One event-driven camera controller. Natural browser scrolling remains untouched.
+import {mountTitleParticles} from './title-particles.js';
 const clamp = n => Math.max(0, Math.min(1,n));
 export function mountMotion(root=document){
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
@@ -7,6 +8,8 @@ export function mountMotion(root=document){
   const listen=(target,event,fn,options)=>{target.addEventListener(event,fn,options);listeners.push(()=>target.removeEventListener(event,fn,options));};
   let frame=0;
   const stage=root.querySelector('.hero-stage');
+  const disposeInk=mountTitleParticles(root,reduced);
+  const layers=[...root.querySelectorAll('.hero-stage ~ section .gateway-art,.hero-stage ~ section .project-art,.hero-stage ~ section .about-visual')];
   const stories=[...root.querySelectorAll('.project-story')];
   const manifest=root.querySelector('.manifest-section');
   const words=[...root.querySelectorAll('.manifest-word')];
@@ -22,6 +25,12 @@ export function mountMotion(root=document){
       const p=clamp((innerHeight-r.top)/(innerHeight+r.height));
       story.style.setProperty('--scene-progress',reduced.matches ? .5 : p);
     });
+    for(const layer of layers){
+      const rect=layer.parentElement.getBoundingClientRect();
+      if(rect.bottom<0 || rect.top>innerHeight)continue;
+      const arrival=clamp((innerHeight-rect.top)/(innerHeight*.72));
+      layer.style.setProperty('--arrival-scale',reduced.matches?1:1+(1-arrival)*.075);
+    }
     if(manifest){
       const r=manifest.getBoundingClientRect();
       const p=clamp((innerHeight*.82-r.top)/Math.max(1,r.height*.65));
@@ -50,5 +59,5 @@ export function mountMotion(root=document){
     listen(element,'pointerleave',reset);listen(reduced,'change',reset);
   });
   update();
-  return()=>{cancelAnimationFrame(frame);listeners.forEach(fn=>fn());};
+  return()=>{cancelAnimationFrame(frame);disposeInk();listeners.forEach(fn=>fn());};
 }

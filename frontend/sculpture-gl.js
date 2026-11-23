@@ -165,16 +165,16 @@ export function createSculptureRenderer(canvas) {
         if (canvas.height !== pixelHeight) canvas.height = pixelHeight;
         gl.viewport(0, 0, canvas.width, canvas.height);
       },
-      draw({ time = 0, pointer = { x: 0, y: 0 }, scroll = 0, width: w = width, height: h = height } = {}) {
+      draw({ time = 0, pointer = { x: 0, y: 0 }, scroll = 0, orbit = 0, width: w = width, height: h = height } = {}) {
         if (destroyed || gl.isContextLost()) return;
         const progress = Math.max(0, Math.min(1, scroll));
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); gl.useProgram(program);
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.enableVertexAttribArray(position); gl.vertexAttribPointer(position, 3, gl.FLOAT, false, 24, 0);
         gl.enableVertexAttribArray(normal); gl.vertexAttribPointer(normal, 3, gl.FLOAT, false, 24, 12);
-        gl.uniform2f(rotation, -.65 + (pointer.y || 0) * .24 + progress * .3, -.32 + time * .075 + (pointer.x || 0) * .42);
+        gl.uniform2f(rotation, -.65 + (pointer.y || 0) * .24 + progress * .58, -.32 + time * .075 + (pointer.x || 0) * .42 + orbit + progress * .68);
         gl.uniform2f(viewport, Math.max(1, w), Math.max(1, h));
-        gl.uniform1f(scale, Math.min(w, h) * (.24 + progress * .05));
+        gl.uniform1f(scale, Math.min(w, h) * (.24 + progress * .095));
         gl.drawElements(gl.TRIANGLES, mesh.indices.length, gl.UNSIGNED_SHORT, 0);
       },
       destroy() { if (!destroyed) { destroyed = true; cleanup(); } }

@@ -317,7 +317,9 @@ function observeReveals() {
  const finish=()=>{if(preference.matches)for(const animation of animations)animation.finish();};
  preference.addEventListener('change',finish);
  revealCleanup=()=>{preference.removeEventListener('change',finish);for(const animation of animations)animation.cancel();animations.clear();};
- const enter=(element,delay=0)=>{if(preference.matches)return;const animation=element.animate([{opacity:0,translate:'0 32px'},{opacity:1,translate:'0 0'}],{duration:950,delay,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'});animations.add(animation);animation.onfinish=()=>animations.delete(animation);};
+ const preview=new URL(location.href).searchParams.has('preview');
+ const home=!!document.querySelector('.hero-stage');
+ const enter=(element,delay=0)=>{if(preference.matches||preview)return;const frames=home?[{opacity:.20,translate:'0 38px'},{opacity:.92,translate:'0 4px',offset:.68},{opacity:1,translate:'0 0'}]:[{opacity:0,translate:'0 32px'},{opacity:1,translate:'0 0'}];const animation=element.animate(frames,{duration:home?880:950,delay,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'});animations.add(animation);animation.onfinish=()=>animations.delete(animation);};
  revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
   if(!entry.isIntersecting)return;const target=entry.target;target.classList.add('is-visible');revealObserver.unobserve(target);
   // Individual layers avoid overriding the scene camera / pointer transforms.
