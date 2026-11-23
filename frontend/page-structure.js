@@ -33,5 +33,11 @@ export function organizeSite(site,projects=[]){
   }
   s.layoutVersion=7;
  }
+ if((s.layoutVersion||0)<8){
+  if(s.pages.some(p=>p.id==='aigc') && !s.pages.some(p=>p.id==='rag-lab')){
+   s.pages.push({id:'rag-lab',name:'工程实验室',parent:'aigc',blocks:['lab-demo','lab-practice','contact'].map(id=>({id,title:'',text:'',image:'',hidden:false}))});
+  }
+  s.layoutVersion=8;
+ }
  return s;
 }

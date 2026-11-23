@@ -179,3 +179,17 @@ test('initial public HTML follows published blocks and excludes hidden details w
   const hidden=await fetch(f.base+'/?page=project-demo');assert.equal(hidden.status,404);assert.doesNotMatch(await hidden.text(),/Observed/);
   const head=await fetch(f.base+'/',{method:'HEAD'});assert.equal(head.status,200);assert.equal(await head.text(),'');
 });
+
+test('lab migration, public reading and journey counts respect published configuration',async t=>{
+ const f=await fixture(t),get=url=>fetch(f.base+url);
+ const p=await (await get('/api/portfolio')).json();
+ assert.equal(p.site.pages.find(p=>p.id==='rag-lab').parent,'aigc');
+ assert.match(await (await get('/?page=rag-lab&format=text')).text(),/500 元/);
+ for(let i=0;i<2;i++)assert.equal((await get('/api/visit?page=rag-lab&stage=demo&topic=rag')).status,200);
+ assert.equal((await get('/api/visit?page=rag-lab&topic=arbitrary')).status,400);
+ const stats=await(await get('/api/analytics')).json();assert.deepEqual(Object.values(stats.events),[1]);assert.deepEqual(stats.counts,{});
+ p.site.pages.find(p=>p.id==='rag-lab').hidden=true;
+ assert.equal((await f.save(p)).status,200);
+ assert.equal((await get('/?page=rag-lab')).status,404);
+ assert.doesNotMatch(await(await get('/?page=aigc')).text(),/href=['"][^'"]*page=rag-lab/);
+});

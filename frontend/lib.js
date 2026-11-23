@@ -55,3 +55,12 @@ export function guideProjects(portfolio) {
   });
   return [...candidates.filter(p=>p.featured),...candidates.filter(p=>!p.featured)].slice(0,3);
 }
+
+export function linkedCases(portfolio, topic, defaults) {
+  const ids=portfolio.site.caseLinks?.[topic] ?? defaults[topic] ?? [];
+  return [...new Set(ids)].flatMap(id=>{
+    const p=portfolio.projects.find(p=>p.id===id && p.visible!==false);
+    const page=portfolio.site.pages.find(page=>page.id==='project-'+id && !page.hidden);
+    return p && page?.blocks.some(b=>b.id==='project-detail' && !b.hidden) ? [p] : [];
+  });
+}

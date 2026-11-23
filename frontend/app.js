@@ -1,3 +1,4 @@
+import {caseActions,renderLab,mountJourney} from './journey.js';
 import {guideProjects} from './lib.js';
 import {mountScrollFlow} from './scroll-flow.js';
 import {renderEngineering,renderAigcGuide,renderContact,mountEngineeringCarousels} from './engineering.js';
@@ -28,7 +29,7 @@ let revealObserver;
 let revealCleanup;
 let fieldCleanup;
 let motionCleanup;
-let engineeringCleanup;
+let engineeringCleanup,journeyCleanup;
 let lastFocus;
 const localize = value => typeof value === 'string' ? value : value?.[language] ?? value?.zh ?? value?.en ?? '';
 const copy = key => localize(portfolio?.copy?.[key] || defaultCopy[key] || key);
@@ -182,7 +183,12 @@ function renderWork() {
  }
  append(detail,eyebrow(copy('cap'+key+'Name')),title,make('p','story-summary',copy('cap'+key+'Body')));
  const tech=make('div','tech-list');copy('cap'+key+'Tags').split('·').forEach(t=>tech.append(tag(t.trim())));detail.append(tech);
- append(detail,append(make('div','story-actions'),append(link(copy('capabilityProjects'),base+'/?page=projects','button-primary'),arrow())));
+ const actions=make('div','story-actions');const topic=key.toLowerCase();
+ const cases=caseActions(portfolio,topic,base,localize);
+ if(topic==='rag' && portfolio.site.pages.some(p=>p.id==='rag-lab'&&!p.hidden&&p.blocks.some(b=>b.id==='lab-demo'&&!b.hidden)))actions.append(link(copy('labTry'),base+'/?page=rag-lab&topic=rag','button-primary'));
+ const workBlock=portfolio.site.pages.find(p=>p.id==='home')?.blocks.find(b=>b.id==='work');
+ if(workBlock?.buttonHidden)actions.replaceChildren();
+ if(cases.length&&!workBlock?.buttonHidden){const list=make('div','case-references');list.append(make('small','',topic==='rag'?copy('labRelated'):copy('capabilityProjects')),...cases);actions.append(list);}detail.append(actions);
  append(story,append(make('div','story-main'),detail,projectVisual({id:visual,categories:[]},i)));inner.append(story);});
  section.append(inner);return section;
 }
@@ -239,6 +245,8 @@ function renderArchiveRows(rows) {
   rows.replaceChildren();
   const query = projectQuery.trim().toLocaleLowerCase();
   const projects = visibleProjects().filter(project => {
+    const detail=portfolio.site.pages.find(p=>p.id==='project-'+project.id);
+    if(!detail||detail.hidden||!detail.blocks.some(b=>b.id==='project-detail'&&!b.hidden))return false;
     const matchesCategory = filter === 'all' || project.categories.includes(filter);
     const searchable = [localize(project.name), localize(project.summary), ...project.tech].join(' ');
     return matchesCategory && searchable.toLocaleLowerCase().includes(query);
@@ -348,7 +356,7 @@ function observeReveals() {
 
 
 function render() {
-  fieldCleanup?.(); motionCleanup?.(); engineeringCleanup?.();
+  fieldCleanup?.(); motionCleanup?.(); engineeringCleanup?.(); journeyCleanup?.();
   portfolio.site=organizeSite(portfolio.site||defaults(),portfolio.projects);
   Object.entries(categoryKeys).forEach(([key, copyKey]) => { categories[key] = portfolio?.copy?.[copyKey] || defaultCopy[copyKey]; });
   document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
@@ -357,10 +365,14 @@ function render() {
   const route=new URL(location.href).searchParams.get('page')||'home';
   if(route==='aigc')document.title=(language==='zh'?'AIGC工程':'AIGC Engineering')+' · '+(portfolio.profile.name||'KUZ');
   if(route==='aigc')$('#main').replaceChildren(renderEngineering({copy,base,site:portfolio.site}),renderContact({copy,base,site:portfolio.site}));
+  else if(route==='rag-lab'){
+    document.title=(language==='zh'?'工程实验室':'Engineering Lab')+' · KUZ';
+    $('#main').replaceChildren(renderLab({copy,base,portfolio,localize}),renderContact({copy,base,site:portfolio.site}));
+  }
   else if(route==='projects')$('#main').replaceChildren(renderArchive());
   else if(route.startsWith('project-')){const project=visibleProjects().find(p=>'project-'+p.id===route);if(project)openProject(project,true);else $('#main').replaceChildren(make('p','cms-page',language==='zh'?'项目暂未公开。':'Project unavailable.'));}
   else $('#main').replaceChildren(renderHero(), renderManifest(), renderStats(), renderExpertise(), renderWork(), renderAigcGuide({copy,base}), renderGateway('projects'), renderGateway('workstation'), renderAbout(),renderContact({copy,base,site:portfolio.site}));
-  applySite(portfolio); renderFooter(); observeReveals(); fieldCleanup = mountFields(); motionCleanup = mountMotion(); engineeringCleanup=mountEngineeringCarousels();
+  applySite(portfolio); journeyCleanup=mountJourney({base,route,portfolio,copy,localize}); renderFooter(); observeReveals(); fieldCleanup = mountFields(); motionCleanup = mountMotion(); engineeringCleanup=mountEngineeringCarousels();
 }
 
 

@@ -1,6 +1,6 @@
 import {publicDocument} from './public-document.mjs';
 import {isIP,BlockList} from 'node:net';
-import {CONTACT_DEFAULTS} from '../frontend/engineering-content.js';
+import {CONTACT_DEFAULTS,JOURNEY_TOPICS} from '../frontend/engineering-content.js';
 import {organizeSite} from '../frontend/page-structure.js';
 import {WORKSTATION_PAGES} from '../frontend/workstation-pages.js';
 import http from 'node:http';
@@ -140,11 +140,13 @@ export async function createApp({ root = projectRoot, dataDir = path.join(root, 
         const page=url.searchParams.get('page')||'home';
         if(!/^[a-zA-Z0-9_-]{1,100}$/.test(page))throw new HttpError(400,'Invalid page');
         const configuration=await current();const known=organizeSite(configuration.site||{header:{links:[]},pages:[{id:'home',parent:'',blocks:[]},...WORKSTATION_PAGES]},configuration.projects).pages;if(!known.some(p=>p.id===page&&!p.hidden))throw new HttpError(404,'Page not found');
-        const visitor=String(req.headers['x-real-ip']||req.socket.remoteAddress),visitKey=visitor+'|'+page,now=Date.now();
+        const stage=url.searchParams.get('stage'),topic=url.searchParams.get('topic');
+        if((stage!==null||topic!==null) && (!['view','demo','case','contact'].includes(stage)||!JOURNEY_TOPICS.includes(topic)))throw new HttpError(400,'Unknown interaction');
+        const visitor=String(req.headers['x-real-ip']||req.socket.remoteAddress),visitKey=[visitor,page,stage,topic].join('|'),now=Date.now();
         if((visits.get(visitKey)||0)>now-30000)return json(res,200,{ok:true});
         if(visits.size>10000)for(const[k,v]of visits)if(v<now-30000)visits.delete(k);
         visits.set(visitKey,now);
-        await serialize(async()=>{const f=path.join(dataDir,'analytics.json');const a=await readJson(f).catch(e=>{if(e.code==='ENOENT')return {startedAt:new Date().toISOString(),counts:{}};throw e;});const hour=new Date(Date.now()+8*3600000).toISOString().slice(0,13);const k=hour+'|'+page;a.counts[k]=(a.counts[k]||0)+1;await atomicJson(f,a);});
+        await serialize(async()=>{const f=path.join(dataDir,'analytics.json');const a=await readJson(f).catch(e=>{if(e.code==='ENOENT')return {startedAt:new Date().toISOString(),counts:{}};throw e;});const hour=new Date(Date.now()+8*3600000).toISOString().slice(0,13);const k=hour+'|'+page;if(stage){const event=[hour,page,topic,stage].join('|');a.events??={};a.events[event]=(a.events[event]||0)+1;}else{a.counts[k]=(a.counts[k]||0)+1;}await atomicJson(f,a);});
         return json(res,200,{ok:true});
       }
       if (req.method === 'GET' && pathname === '/api/session') return json(res, 200, { token });

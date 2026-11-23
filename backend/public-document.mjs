@@ -1,6 +1,6 @@
-import {guideProjects} from '../frontend/lib.js';
+import {guideProjects,linkedCases} from '../frontend/lib.js';
 import {COPY_DEFAULTS} from '../frontend/copy.js';
-import {ENGINEERING_SERVICES} from '../frontend/engineering-content.js';
+import {ENGINEERING_SERVICES,CASE_DEFAULTS} from '../frontend/engineering-content.js';
 
 const zh = value => typeof value === 'string' ? value : value?.zh ?? value?.en ?? '';
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -31,12 +31,20 @@ export function publicDocument(template, data, id) {
   const project=id.startsWith('project-') ? projects.find(p=>'project-'+p.id===id && p.visible!==false) : null;
   const unavailable=!page || page.hidden || (id.startsWith('project-') && !project);
   const sections=[];
+  const canRead=(id,block)=>pages.has(id)&&!pages.get(id).hidden&&pages.get(id).blocks.some(b=>b.id===block&&!b.hidden);
+  const related=topic=>linkedCases(data,topic,CASE_DEFAULTS).map(p=>anchor(zh(p.name),pageUrl('project-'+p.id)+'&topic='+topic)).join(' ');
   function renderBlock(block) {
     const key=block.id, [titleKey,bodyKey]=summaries[key] || [];
     let title=copy(titleKey),body=copy(bodyKey),extra='';
     if(key==='home'){
       title=zh(profile.headline);body=zh(profile.intro);
       extra=paragraph(zh(profile.role))+anchor(profile.name,profile.github);
+    } else if(id==='rag-lab'&&key==='lab-demo'){
+      title=copy('labTitle');body=copy('labIntro');
+      for(const v of [1,2]){extra+=subheading('差旅制度示例 V'+v);for(const [i,k] of ['a','b','c'].entries())extra+=paragraph('§ '+['3.1','4.2','5.3'][i]+' '+copy('labV'+v+k));}
+    } else if(id==='rag-lab'&&key==='lab-practice'){
+      title=copy('labPractice');body=copy('labRelated');extra=block.buttonHidden?'':related('rag');
+      if(!block.buttonHidden&&canRead('home','contact'))extra+=anchor('聊聊类似需求','./?topic=rag#contact');
     } else if(key==='expertise'){
       for(const skill of ['Full','Agent','Algorithm','FDE']){
         extra+=subheading(copy('skill'+skill+'Title'))+paragraph(copy('skill'+skill+'Body'));
@@ -44,6 +52,7 @@ export function publicDocument(template, data, id) {
     } else if(key==='work'){
       for(const capability of ['FDE','Agent','RAG','Algorithm','Fullstack','Multimodal']){
         extra+=subheading(copy('cap'+capability+'Name'))+paragraph(copy('cap'+capability+'Body'));
+        if(!block.buttonHidden){if(capability==='RAG'&&canRead('rag-lab','lab-demo'))extra+=anchor(copy('labTry'),pageUrl('rag-lab'));extra+=related(capability.toLowerCase());}
       }
     } else if(key==='contact'){
       const {email,wechat}=site.contact || {};
@@ -53,8 +62,13 @@ export function publicDocument(template, data, id) {
       const prefix='eng_'+key.slice(8)+'_';
       title=copy(prefix+'promise');body=copy(prefix+'pain');
       extra=subheading(copy(prefix+'title'))+paragraph(copy(prefix+'approach'));
+      if(!block.buttonHidden){
+       const topic=key.slice(8);
+       if(topic==='rag'&&canRead('rag-lab','lab-demo'))extra+=anchor(copy('labTry'),pageUrl('rag-lab'));
+       extra+=related(topic);if(canRead('home','contact'))extra+=anchor('聊聊类似需求','./?topic='+topic+'#contact');
+      }
     } else if(key==='archive' && id==='projects'){
-      const items=projects.filter(p=>p.visible!==false && pages.has('project-'+p.id) && !pages.get('project-'+p.id).hidden);
+      const items=projects.filter(p=>p.visible!==false && canRead('project-'+p.id,'project-detail'));
       extra='<ul>'+items.map(p=>'<li>'+anchor(zh(p.name),pageUrl('project-'+p.id))+paragraph(zh(p.summary))+'</li>').join('')+'</ul>';
     } else if(key==='project-detail' && project){
       title=zh(project.name);body=zh(project.summary);
@@ -77,7 +91,7 @@ export function publicDocument(template, data, id) {
     }
     title=block.title||title;body=block.text||body;
     if(!title&&!body&&!extra)return '';
-    const tag=['home','engineering-hero','archive','project-detail'].includes(key)?'h1':'h2';
+    const tag=['home','engineering-hero','archive','project-detail','lab-demo'].includes(key)?'h1':'h2';
     return '<section id="'+escape(key)+'"><'+tag+'>'+escape(title)+'</'+tag+'>'+paragraph(body)+extra+'</section>';
   }
   if(!unavailable){

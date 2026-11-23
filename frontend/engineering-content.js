@@ -1,2 +1,11 @@
 export const ENGINEERING_SERVICES = [{"id": "rag", "name": "企业定制 RAG"}, {"id": "avatar", "name": "数字人交互"}, {"id": "oa", "name": "OA 协同办公"}, {"id": "qa", "name": "AI 问答系统"}, {"id": "local", "name": "模型本地化部署"}, {"id": "erp", "name": "ERP 业务系统"}, {"id": "archive", "name": "文档归档整理"}, {"id": "ai", "name": "AI 业务系统"}, {"id": "workflow", "name": "AI Workflow"}, {"id": "harness", "name": "定制 Harness"}, {"id": "algorithm", "name": "算法开发与定制"}, {"id": "assistant", "name": "AI 专属助手"}, {"id": "screen", "name": "可视化数字大屏"}, {"id": "platform", "name": "数据中台"}];
 export const CONTACT_DEFAULTS = {"email": "wkk8144@gmail.com", "wechat": "wang1218422169559", "qr": "/media/76449860-c533-44c1-b7ef-07ef368c83ef.jpg"};
+
+// Curated references are supporting work; a RAG reference documents knowledge governance.
+export const CASE_DEFAULTS = {
+ fde:['datafactory','legal-operations'], agent:['personal-os','job-alerts-agent'], rag:['personal-os'],
+ algorithm:['spectral-graph','dp-svm'], fullstack:['agrotrade','legal-operations'], multimodal:['multimodal','desktop-avatar'],
+ avatar:['desktop-avatar'], oa:['legal-operations'], archive:['personal-os'], workflow:['datafactory','news-push-agent'],
+ assistant:['job-alerts-agent'], ai:['multimodal'], platform:['datafactory']
+};
+export const JOURNEY_TOPICS = [...new Set([...ENGINEERING_SERVICES.map(x=>x.id),...Object.keys(CASE_DEFAULTS),'general'])];
