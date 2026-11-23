@@ -20,5 +20,18 @@ export function organizeSite(site,projects=[]){
   }
   s.layoutVersion=6;
  }
+ if((s.layoutVersion||0)<7){
+  const studio=s.pages.find(p=>p.id==='ws-studio');
+  if(studio){
+   const source=WORKSTATION_PAGES.find(p=>p.id==='ws-studio');
+   for(const block of source.blocks.filter(b=>b.id.startsWith('lab-')||b.id.startsWith('button-lab-'))){
+    if(!studio.blocks.some(b=>b.id===block.id))studio.blocks.push(structuredClone(block));
+   }
+   for(const page of WORKSTATION_PAGES.filter(p=>p.blocks.some(b=>b.id==='name')&&p.parent==='ws-studio')){
+    if(!s.pages.some(p=>p.id===page.id))s.pages.push(structuredClone(page));
+   }
+  }
+  s.layoutVersion=7;
+ }
  return s;
 }

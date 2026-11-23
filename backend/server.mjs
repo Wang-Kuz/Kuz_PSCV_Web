@@ -1,3 +1,4 @@
+import {isIP,BlockList} from 'node:net';
 import {CONTACT_DEFAULTS} from '../frontend/engineering-content.js';
 import {organizeSite} from '../frontend/page-structure.js';
 import {WORKSTATION_PAGES} from '../frontend/workstation-pages.js';
@@ -12,12 +13,23 @@ import { syncGithub } from '../scripts/sync-github.mjs';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MAX_UPLOAD = 250 * 1024 * 1024;
-const TYPES = { '.json': 'application/json; charset=utf-8', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif', '.mp4': 'video/mp4', '.webm': 'video/webm', '.mov': 'video/quicktime', '.woff2': 'font/woff2' };
+const TYPES = { '.wasm':'application/wasm', '.json': 'application/json; charset=utf-8', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif', '.mp4': 'video/mp4', '.webm': 'video/webm', '.mov': 'video/quicktime', '.woff2': 'font/woff2' };
 const readJson = async file => JSON.parse(await readFile(file, 'utf8'));
 async function atomicJson(file, value) {
   const temp = `${file}.${randomUUID()}.tmp`;
   try { await writeFile(temp, `${JSON.stringify(value, null, 2)}\n`, { flag: 'wx' }); await rename(temp, file); }
   catch (error) { await unlink(temp).catch(() => {}); throw error; }
+}
+// Private/link-local addresses must never be submitted to a public geolocation service.
+const privateRanges=new BlockList();
+for(const [address,prefix] of [['0.0.0.0',8],['10.0.0.0',8],['100.64.0.0',10],['127.0.0.0',8],['169.254.0.0',16],['172.16.0.0',12],['192.168.0.0',16],['224.0.0.0',4],['240.0.0.0',4]])privateRanges.addSubnet(address,prefix,'ipv4');
+for(const [address,prefix] of [['::',96],['fc00::',7],['fe80::',10],['ff00::',8],['2001:db8::',32]])privateRanges.addSubnet(address,prefix,'ipv6');
+function networkSelf(req){
+ const peer=(req.socket.remoteAddress||'').replace(/^::ffff:/i,'');
+ const proxy=peer==='127.0.0.1'||peer==='::1';
+ const ip=(proxy&&isIP(req.headers['x-real-ip']||'')?req.headers['x-real-ip']:peer).replace(/^::ffff:/i,'');
+ const version=isIP(ip);
+ return {ip:version?ip:null,public:Boolean(version)&&!privateRanges.check(ip,version===6?'ipv6':'ipv4')};
 }
 function json(res, status, body) { res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(body)); }
 async function requestJson(req) {
@@ -111,6 +123,9 @@ export async function createApp({ root = projectRoot, dataDir = path.join(root, 
       const url = new URL(req.url, `http://${req.headers.host}`); let pathname;
       try { pathname = decodeURIComponent(url.pathname); } catch { throw new HttpError(400, 'Invalid URL encoding'); }
       if(pathname.startsWith('/workstation/'))res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'");
+      if(pathname==='/workstation/tools/media-worker.js')res.setHeader('Content-Security-Policy',"default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'");
+      if(pathname==='/workstation/tools/network.html')res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://ipwho.is https://api.iplocation.net; object-src 'none'; base-uri 'self'; frame-ancestors 'self'");
+      if(req.method==='GET' && pathname==='/api/network-self')return json(res,200,networkSelf(req));
       if (req.method === 'GET' && pathname === '/api/health') return json(res, 200, { ok: true, app: 'kuz-pscv' });
       if (req.method === 'GET' && pathname === '/api/analytics') return json(res,200,await readJson(path.join(dataDir,'analytics.json')).catch(e=>{if(e.code==='ENOENT')return {startedAt:new Date().toISOString(),counts:{}};throw e;}));
       if (req.method === 'GET' && pathname === '/api/visit') {

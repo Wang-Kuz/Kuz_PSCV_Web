@@ -11,3 +11,12 @@ test('scroll hands remaining distance back to the page at both rail ends',()=>{a
 test('page migration is idempotent, separates workspaces and preserves custom blocks',()=>{const input={header:{links:[]},pages:[{id:'home',parent:'',blocks:[{id:'home'},{id:'archive'},{id:'custom',text:'keep'}]},{id:'workstation',parent:'home',blocks:[]}]};const p=[{id:'sample',name:{zh:'示例'}}];const a=organizeSite(input,p);assert(!a.pages.some(p=>p.id==='workstation'));assert.equal(a.pages.find(p=>p.id==='ws-index').parent,'');assert.equal(a.pages.find(p=>p.id==='ws-tools-format-tool').parent,'ws-studio');assert.equal(a.pages.find(p=>p.id==='project-sample').parent,'projects');assert.equal(a.pages.find(p=>p.id==='projects').parent,'home');assert(a.pages.find(p=>p.id==='home').blocks.some(b=>b.text==='keep'));assert.deepEqual(organizeSite(a,p),a);assert.equal(input.pages.length,2);});
 
 test('gateway migration inserts once and preserves removal after migration',()=>{const a=organizeSite({layoutVersion:3,header:{links:[]},pages:[{id:'home',parent:'',blocks:[{id:'work'},{id:'about'}]}]});assert.deepEqual(a.pages[0].blocks.map(b=>b.id),['work','aigc-guide','projects-guide','workstation-guide','about','contact']);a.pages[0].blocks=a.pages[0].blocks.filter(b=>b.id!=='projects-guide');assert.deepEqual(organizeSite(a),a);});
+
+test('toolbox upgrade preserves operator edits and respects a subsequent page deletion',()=>{
+ const initial={layoutVersion:6,header:{links:[]},pages:[{id:'ws-studio',blocks:[{id:'lab-media-name',title:'我的音频工具'}]}]};
+ const upgraded=organizeSite(initial);
+ assert.equal(upgraded.pages.find(p=>p.id==='ws-studio').blocks.find(b=>b.id==='lab-media-name').title,'我的音频工具');
+ for(const id of ['document','media','pdf','image','downloads','network'])assert.equal(upgraded.pages.find(p=>p.id==='ws-tools-'+id).parent,'ws-studio');
+ upgraded.pages=upgraded.pages.filter(p=>p.id!=='ws-tools-pdf');
+ assert.deepEqual(organizeSite(upgraded),upgraded);
+});
