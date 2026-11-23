@@ -357,7 +357,7 @@ try {
 } catch (error) {
   const errorView = make('div', 'loading-screen');
   append(errorView, make('span', 'brand-mark', 'K'), make('h1', '', copy('loadError')), button(copy('retry'), 'button-primary', () => location.reload()));
-  $('#main').replaceChildren(errorView);
+  if (!$('#main .public-reading')) $('#main').replaceChildren(errorView);
   console.error(error);
 }
 

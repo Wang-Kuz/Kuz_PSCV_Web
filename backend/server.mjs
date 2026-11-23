@@ -1,3 +1,4 @@
+import {publicDocument} from './public-document.mjs';
 import {isIP,BlockList} from 'node:net';
 import {CONTACT_DEFAULTS} from '../frontend/engineering-content.js';
 import {organizeSite} from '../frontend/page-structure.js';
@@ -171,6 +172,25 @@ export async function createApp({ root = projectRoot, dataDir = path.join(root, 
       if (['GET', 'HEAD'].includes(req.method) && pathname.startsWith('/media/')) {
         const name = pathname.slice(7); if (!mediaNamePattern.test(name)) throw new HttpError(404, 'Media not found');
         return await sendFile(req, res, path.join(uploads, name), true);
+      }
+      if (['GET','HEAD'].includes(req.method) && pathname==='/robots.txt') {
+        const rules=await readFile(path.join(root,'frontend','robots.txt'));
+        res.writeHead(200,{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-cache'});
+        return res.end(req.method==='GET'?rules:undefined);
+      }
+      if (['GET','HEAD'].includes(req.method) && ['/', '/index.html'].includes(pathname)) {
+        if(url.searchParams.get('page')==='workstation'){
+          res.writeHead(302,{Location:'../workstation/index.html'+(url.searchParams.has('preview')?'?preview=1':'')});
+          return res.end();
+        }
+        const template=await readFile(path.join(root,'frontend','index.html'),'utf8');
+        const preview=url.searchParams.has('preview');
+        const {html,plain,status}=preview?{html:template,status:200}:publicDocument(template,await current(),url.searchParams.get('page')||'home');
+        if(preview||status===404)res.setHeader('X-Robots-Tag','noindex');
+        const text=!preview && url.searchParams.get('format')==='text';
+        const body=text?plain:html;
+        res.writeHead(status,{'Content-Type':(text?'text/plain':'text/html')+'; charset=utf-8','Content-Length':Buffer.byteLength(body),'Cache-Control':'no-cache'});
+        return res.end(req.method==='GET'?body:undefined);
       }
       if(['/admin','/admin/'].includes(pathname)){res.writeHead(302,{Location:'/Home/editor'});return res.end();}
       if (['GET', 'HEAD'].includes(req.method) && !pathname.startsWith('/api/')) {

@@ -36,3 +36,19 @@ location = /kuzpscv/api/network-self {
 ```
 
 公网请求须返回 HTTP 200 与 ip、public 字段，内部回环请求的 public 为 false。工作站转码引擎路径 /workstation/tools/vendor/ffmpeg-core.wasm 应返回 application/wasm，重复带相同 ETag 的请求可返回 304。终端复核不打印访客 IP。
+
+## 无脚本访问与抓取规则
+
+品宣首页、AIGC 工程页及项目列表、详情的 HTML 使用当前发布数据生成。JavaScript 成功读取配置后接管页面。相同地址追加 `format=text` 查询参数可读取 UTF-8 正文。隐藏页面、隐藏板块及未展示项目不进入静态正文。
+
+1Panel 的 kuz-gateway 站点在 proxy 目录使用独立的 public-robots.conf，将根路径精确转发至品宣服务的 robots.txt。配置须在 OpenResty 通过 nginx -t 后重载。回退该路由时移出此独立 include，再校验并重载。抓取规则不承担身份验证。
+
+```nginx
+location = /robots.txt {
+    limit_except GET { deny all; }
+    proxy_set_header Host 127.0.0.1:4318;
+    proxy_set_header Origin "";
+    proxy_set_header Sec-Fetch-Site "";
+    proxy_pass http://127.0.0.1:4318/robots.txt;
+}
+```

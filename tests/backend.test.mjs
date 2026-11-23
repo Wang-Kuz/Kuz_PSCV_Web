@@ -154,3 +154,28 @@ test('web GitHub sync writes runtime inventory without modifying read-only relea
  assert.equal(JSON.parse(await readFile(path.join(f.root,'local-data','repositories.json'),'utf8')).repositories.length,1);
  assert.equal((await fetch(f.base+'/api/repositories').then(r=>r.json())).repositories.length,1);
 });
+
+test('initial public HTML follows published blocks and excludes hidden details without JavaScript',async t=>{
+  const f=await fixture(t);
+  await writeFile(path.join(f.root,'frontend','index.html'),'<title>PSCV</title><main><!-- PUBLIC_CONTENT --></main>');
+  const home=()=>fetch(f.base+'/').then(r=>r.text());
+  assert.match(await home(),/<h1>Build<\/h1>/);
+  const p=await fetch(f.base+'/api/portfolio').then(r=>r.json());
+  const blocks=p.site.pages.find(page=>page.id==='home').blocks;
+  blocks.find(b=>b.id==='home').title='Edited <heading> & introduction';
+  blocks.find(b=>b.id==='work').hidden=true;
+  assert.equal((await f.save(p)).status,200);
+  const html=await home();assert.match(html,/Edited &lt;heading&gt; &amp; introduction/);
+  assert.doesNotMatch(html,/<section id="work">|<heading>/);
+  const text=await fetch(f.base+'/?format=text');
+  assert.match(text.headers.get('content-type'),/^text\/plain/);
+  assert.match(await text.text(),/Edited <heading> & introduction/);
+  const archive=await fetch(f.base+'/?page=projects').then(r=>r.text());
+  assert.match(archive,/href='\.\/\?page=project-demo'/);
+  const published=await fetch(f.base+'/api/portfolio').then(r=>r.json());
+  published.projects[0].visible=false;
+  assert.equal((await f.save(published)).status,200);
+  assert.doesNotMatch(await fetch(f.base+'/?page=projects').then(r=>r.text()),/project-demo/);
+  const hidden=await fetch(f.base+'/?page=project-demo');assert.equal(hidden.status,404);assert.doesNotMatch(await hidden.text(),/Observed/);
+  const head=await fetch(f.base+'/',{method:'HEAD'});assert.equal(head.status,200);assert.equal(await head.text(),'');
+});

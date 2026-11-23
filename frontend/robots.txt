@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /
+Allow: /kuzpscv/
+Allow: /workstation/
+Disallow: /kuzpscv/admin
+Disallow: /kuzpscv/api/
+Disallow: /kuzpscv/*preview=
+Disallow: /workstation/*preview=

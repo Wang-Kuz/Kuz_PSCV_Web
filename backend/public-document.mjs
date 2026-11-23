@@ -1,0 +1,90 @@
+import {COPY_DEFAULTS} from '../frontend/copy.js';
+import {ENGINEERING_SERVICES} from '../frontend/engineering-content.js';
+
+const zh = value => typeof value === 'string' ? value : value?.zh ?? value?.en ?? '';
+const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const paragraph = text => text ? '<p>'+escape(text)+'</p>' : '';
+const subheading = text => text ? '<h3>'+escape(text)+'</h3>' : '';
+const pageUrl = id => './?page='+encodeURIComponent(id);
+const anchor = (text,url) => "<a href='"+escape(url)+"'>"+escape(text)+'</a>';
+
+const summaries = {
+  manifest:['manifestTitle','manifestCaption'], numbers:['statsTitle','statsIntro'],
+  expertise:['expertiseTitle','expertiseIntro'], work:['capabilityTitle','capabilityIntro'],
+  about:['aboutTitle','aboutBody'],contact:['reachTitle','reachBody'],
+  'aigc-guide':['gatewayAigcTitle','gatewayAigcBody'],
+  'projects-guide':['gatewayProjectsTitle','gatewayProjectsBody'],
+  'workstation-guide':['gatewayWorkstationTitle','gatewayWorkstationBody'],
+  'engineering-hero':['engHeroTitle','engHeroBody'],archive:['archiveTitle','']
+};
+const gateways = {
+  'aigc-guide':['aigc','gatewayAigcAction'], 'projects-guide':['projects','gatewayProjectsAction'],
+  'workstation-guide':['ws-index','gatewayWorkstationAction']
+};
+
+export function publicDocument(template, data, id) {
+  const {profile,site,projects}=data;
+  const copy=key=>zh(data.copy?.[key] ?? COPY_DEFAULTS[key]);
+  const pages=new Map(site.pages.map(p=>[p.id,p]));
+  const page=pages.get(id);
+  const project=id.startsWith('project-') ? projects.find(p=>'project-'+p.id===id && p.visible!==false) : null;
+  const unavailable=!page || page.hidden || (id.startsWith('project-') && !project);
+  const sections=[];
+  function renderBlock(block) {
+    const key=block.id, [titleKey,bodyKey]=summaries[key] || [];
+    let title=copy(titleKey),body=copy(bodyKey),extra='';
+    if(key==='home'){
+      title=zh(profile.headline);body=zh(profile.intro);
+      extra=paragraph(zh(profile.role))+anchor(profile.name,profile.github);
+    } else if(key==='expertise'){
+      for(const skill of ['Full','Agent','Algorithm','FDE']){
+        extra+=subheading(copy('skill'+skill+'Title'))+paragraph(copy('skill'+skill+'Body'));
+      }
+    } else if(key==='work'){
+      for(const capability of ['FDE','Agent','RAG','Algorithm','Fullstack','Multimodal']){
+        extra+=subheading(copy('cap'+capability+'Name'))+paragraph(copy('cap'+capability+'Body'));
+      }
+    } else if(key==='contact'){
+      const {email,wechat}=site.contact || {};
+      if(email)extra+=anchor(email,'mailto:'+email);
+      if(wechat)extra+=paragraph(copy('reachWechatId')+' '+wechat);
+    } else if(id==='aigc' && ENGINEERING_SERVICES.some(s=>'service-'+s.id===key)){
+      const prefix='eng_'+key.slice(8)+'_';
+      title=copy(prefix+'promise');body=copy(prefix+'pain');
+      extra=subheading(copy(prefix+'title'))+paragraph(copy(prefix+'approach'));
+    } else if(key==='archive' && id==='projects'){
+      const items=projects.filter(p=>p.visible!==false && pages.has('project-'+p.id) && !pages.get('project-'+p.id).hidden);
+      extra='<ul>'+items.map(p=>'<li>'+anchor(zh(p.name),pageUrl('project-'+p.id))+paragraph(zh(p.summary))+'</li>').join('')+'</ul>';
+    } else if(key==='project-detail' && project){
+      title=zh(project.name);body=zh(project.summary);
+      for(const field of ['role','problem','solution','outcome']){
+        if(zh(project[field]))extra+=subheading(copy(field+'Label'))+paragraph(zh(project[field]));
+      }
+    }
+    if(!block.buttonHidden){
+      if(block.href && block.buttonLabel && /^(?:#|\/(?!\/))/.test(block.href)){
+        const url=block.href.replace(/^\/(?=[?#]|$)/,'./');
+        extra+=anchor(block.buttonLabel,url);
+      }else if(gateways[key]){
+        const [target,label]=gateways[key],dest=pages.get(target);
+        if(dest&&!dest.hidden)extra+=anchor(copy(label),dest.legacy||pageUrl(target));
+      }
+    }
+    title=block.title||title;body=block.text||body;
+    if(!title&&!body&&!extra)return '';
+    const tag=['home','engineering-hero','archive','project-detail'].includes(key)?'h1':'h2';
+    return '<section id="'+escape(key)+'"><'+tag+'>'+escape(title)+'</'+tag+'>'+paragraph(body)+extra+'</section>';
+  }
+  if(!unavailable){
+    if(id!=='home' && pages.get('home') && !pages.get('home').hidden)sections.push(anchor(pages.get('home').name,'./'));
+    for(const block of page.blocks)if(!block.hidden)sections.push(renderBlock(block));
+  }
+  const heading=unavailable?'此页面暂未开放':(page.name || profile.name);
+  const main='<article class="public-reading">'+(unavailable?paragraph(heading):sections.join(''))+'</article>';
+  const html=template.replace('<!-- PUBLIC_CONTENT -->',()=>main)
+    .replace(/<title>[^<]*<\/title>/,()=>'<title>'+escape(heading)+' · '+escape(profile.name)+'</title>');
+  // Only decode entities after stripping markup from our own escaped document.
+  const plain=main.replace(/<\/(?:h[123]|p|a|li|section)>/g,'\n').replace(/<[^>]*>/g,'')
+    .replace(/&(amp|lt|gt|quot|#39);/g,(_,name)=>({amp:'&',lt:'<',gt:'>',quot:'"', '#39':"'"}[name]));
+  return {html,plain:heading+'\n\n'+plain.trim()+'\n',status:unavailable?404:200};
+}

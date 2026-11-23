@@ -2146,3 +2146,8 @@ html[lang="en"] .expertise-item h3 {
     transition: scale .38s cubic-bezier(.18,.68,.24,1);
   }
 }
+
+.public-reading { max-width:66rem; margin-inline:auto; padding:clamp(2rem,6vw,6rem) 6vw; color:var(--ink,inherit); }
+.public-reading section { margin-block:0 3rem; }
+.public-reading :is(h1,h2,h3,p,li) { margin-block:0 .75em; line-height:1.5; overflow-wrap:anywhere; }
+.public-reading a { text-decoration:underline; text-underline-offset:.2em; }
