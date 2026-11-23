@@ -103,7 +103,7 @@ WORKSTATION_PAGES.push(...[
         "id": "name"
       },
       {
-        "title": "按系统、处理器和版本从官方获取 Python 或 Java JDK。",
+        "title": "按平台下载 Python、Java、Node.js 与 Go，浏览更多语言、编辑器和数据库。",
         "text": "",
         "image": "",
         "hidden": false,
@@ -222,7 +222,7 @@ WORKSTATION_PAGES.find(page=>page.id==="ws-studio").blocks.push(...[
     "label": "开发环境下载名称"
   },
   {
-    "title": "按系统、处理器和版本从官方获取 Python 或 Java JDK。",
+    "title": "按平台下载 Python、Java、Node.js 与 Go，浏览更多语言、编辑器和数据库。",
     "text": "",
     "image": "",
     "hidden": false,
@@ -287,3 +287,26 @@ WORKSTATION_PAGES.find(page=>page.id==="ws-studio").blocks.push(...[
     "label": "PDF 页面整理入口"
   }
 ]);
+
+export const expandedTools = [
+    ["lines", "名单去重", "逐行去空白、去重，保留首次出现的顺序。"],
+    ["count", "字数与篇幅统计", "统计字符、汉字、英文单词、非空行和 UTF-8 字节数。"],
+    ["compare", "名单核对", "核对两份名单，找出新增、移除和共有条目。"],
+    ["dates", "日期间隔", "计算起止日期之间的自然日，以及含首尾的周一至周五天数。"],
+    ["markdown", "表格转 Markdown", "从 Excel 复制单元格，生成可贴入文档的 Markdown 表格。"],
+    ["records", "JSON 转 CSV", "将对象数组转成适合 Excel 打开的 CSV，合并各行字段。"],
+    ["ndjson", "JSON Lines 转换", "在 JSON 数组和逐行 JSON 之间双向转换。"],
+    ["url-parts", "网址参数解析", "拆分网址、路径、重复查询参数和页面锚点。"],
+    ["epoch", "时间戳转换", "在 Unix 秒、毫秒和含时区的 ISO 时间之间转换。"],
+    ["uuid", "批量 UUID", "按数量生成 UUID v4，每行一个。"],
+    ["sha256", "文件 SHA-256 校验", "计算本机文件摘要，可粘贴发布方的 SHA-256 核对完整性。"],
+    ["radix", "进制转换", "在二、八、十、十六进制间转换整数，支持超过 64 位的数。"],
+    ["ai-directory", "AI 软件与免费工具", "找编程智能体、本地模型工具，以及写作、问答和资料研究的免费入口。"]
+];
+for(const [slug,title,intro] of expandedTools){
+    const id='ws-tools-'+slug,href='/workstation/tools/'+slug+'.html';
+    const block=(id,title)=>({id,title,text:'',image:'',hidden:false});
+    WORKSTATION_PAGES.push({id,name:title,parent:'ws-studio',legacy:href,blocks:[block('name',title),block('intro',intro)]});
+    const studio=WORKSTATION_PAGES.find(page=>page.id==='ws-studio');
+    studio.blocks.push(block('lab-'+slug+'-name',title),block('lab-'+slug+'-intro',intro),{...block('button-lab-'+slug,''),href});
+}

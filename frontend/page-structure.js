@@ -1,5 +1,5 @@
 import {ENGINEERING_SERVICES,CONTACT_DEFAULTS} from './engineering-content.js';
-import {WORKSTATION_PAGES} from './workstation-pages.js';
+import {WORKSTATION_PAGES,expandedTools} from './workstation-pages.js';
 export function organizeSite(site,projects=[]){
  const s=structuredClone(site);if(!s.layoutVersion){for(const p of WORKSTATION_PAGES){const found=s.pages.find(x=>x.id===p.id);if(!found)s.pages.push(structuredClone(p));else for(const b of p.blocks.filter(b=>(b.id.startsWith('section-')||b.id.startsWith('button-'))))if(!found.blocks.some(x=>x.id===b.id))found.blocks.push(structuredClone(b));}}const archive=s.pages.find(p=>p.id==='home')?.blocks.find(b=>b.id==='archive');s.pages=s.pages.filter(p=>p.id!=='workstation');
  const ws=s.pages.find(p=>p.id==='ws-index');if(ws&&!s.layoutVersion){ws.parent='';ws.name='个人工作站';}
@@ -38,6 +38,24 @@ export function organizeSite(site,projects=[]){
    s.pages.push({id:'rag-lab',name:'工程实验室',parent:'aigc',blocks:['lab-demo','lab-practice','contact'].map(id=>({id,title:'',text:'',image:'',hidden:false}))});
   }
   s.layoutVersion=8;
+ }
+
+ if((s.layoutVersion||0)<9){
+  const studio=s.pages.find(p=>p.id==='ws-studio');
+  if(studio){
+   const source=WORKSTATION_PAGES.find(p=>p.id===studio.id);
+   for(const [slug] of expandedTools){
+    const id='ws-tools-'+slug;
+    if(!s.pages.some(p=>p.id===id))s.pages.push(structuredClone(WORKSTATION_PAGES.find(p=>p.id===id)));
+    for(const key of ['lab-'+slug+'-name','lab-'+slug+'-intro','button-lab-'+slug]){
+     if(!studio.blocks.some(b=>b.id===key))studio.blocks.push(structuredClone(source.blocks.find(b=>b.id===key)));
+    }
+   }
+   for(const block of [studio.blocks.find(b=>b.id==='lab-downloads-intro'),s.pages.find(p=>p.id==='ws-tools-downloads')?.blocks.find(b=>b.id==='intro')]){
+    if(block?.title==="按系统、处理器和版本从官方获取 Python 或 Java JDK。")block.title="按平台下载 Python、Java、Node.js 与 Go，浏览更多语言、编辑器和数据库。";
+   }
+  }
+  s.layoutVersion=9;
  }
  return s;
 }
