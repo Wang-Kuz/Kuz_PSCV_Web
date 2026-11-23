@@ -74,6 +74,13 @@ async function sendFile(req, res, file, media = false) {
   try { info = await stat(file); } catch (error) { if (error.code === 'ENOENT') throw new HttpError(404, 'File not found'); throw error; }
   if (!info.isFile()) throw new HttpError(404, 'File not found');
   const headers = { 'Content-Type': TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream', 'Content-Length': info.size, 'Cache-Control': media ? 'private, max-age=3600' : 'no-cache' };
+  if(!media && path.basename(path.dirname(file))==='vendor'){
+    const tag='W/"'+info.size.toString(16)+'-'+Math.trunc(info.mtimeMs).toString(16)+'"';
+    headers.ETag=tag;
+    if(req.headers['if-none-match']?.split(',').some(value=>value.trim()===tag)){
+      res.writeHead(304,{'ETag':tag,'Cache-Control':'no-cache'});res.end();return;
+    }
+  }
   let start = 0; let end = info.size - 1; let status = 200;
   if (media) headers['Accept-Ranges'] = 'bytes';
   if (media && req.headers.range) {

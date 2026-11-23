@@ -20,3 +20,19 @@
 2026-11-06 深层路由修复：面板入口改为 /1panel/，旧 /panel/ 重定向到新入口。面板 JS/CSS 使用 /1panel/assets/ 独立路径并重写动态加载映射，避免旧根路由 bundle 缓存。Hermes 的动态预加载仍生成根 assets 地址，代理将依赖映射统一适配至 /hermes/route-assets/；HTML 与模块引用保持同一 URL，避免重复模块实例。已通过真实浏览器登录、面板应用商店导航/刷新、Hermes chat 深链接与终端内容加载检查。未发送模型消息。更新应用版本后需重新验证资源映射。
 
 2026-11-09：修复外部分享进入作品集返回 Cross-site requests are not allowed。原本机服务拒绝 Sec-Fetch-Site: cross-site；仅在四个公开只读 Nginx 代理位置清除该头，保留 GET/HEAD 白名单与管理/API 限制。浏览器从独立站点实际点击进入，捕获 cross-site 导航后页面渲染成功、无 JS/HTTP 错误；资源/读取接口200，admin/session404，PUT403，Home 未授权401。尚待用户微信真机复测。
+
+## 工作站网络环境与文件引擎
+
+1Panel 网关的公开 API 使用精确匹配。工作站的客户端出口查询需要在 kuz-gateway 的现有拒绝规则之前配置下列 location。后端仅信任来自本机代理的 X-Real-IP。调整后在 OpenResty 容器内执行 nginx -t，成功后 reload。
+
+```nginx
+location = /kuzpscv/api/network-self {
+    limit_except GET { deny all; }
+    proxy_set_header Host 127.0.0.1:4318;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header Origin "";
+    proxy_pass http://127.0.0.1:4318/api/network-self;
+}
+```
+
+公网请求须返回 HTTP 200 与 ip、public 字段，内部回环请求的 public 为 false。工作站转码引擎路径 /workstation/tools/vendor/ffmpeg-core.wasm 应返回 application/wasm，重复带相同 ETag 的请求可返回 304。终端复核不打印访客 IP。
