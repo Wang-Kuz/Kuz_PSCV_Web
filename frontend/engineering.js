@@ -10,7 +10,7 @@ export function renderEngineering({copy,base,site}){
  append(hero,back,el('p','eyebrow',copy('engHeroEyebrow')),el('h1','section-title',copy('engHeroTitle')),el('p','section-description',copy('engHeroBody')));
  const catalog=el('nav','engineering-catalog');catalog.setAttribute('aria-label',copy('engHeroEyebrow'));
  const blocks=site?.pages?.find(p=>p.id==='aigc')?.blocks;
- for(const service of ENGINEERING_SERVICES){if(blocks&&!blocks.some(b=>b.id==='service-'+service.id&&!b.hidden))continue;const a=el('a','',copy('eng_'+service.id+'_title'));a.href='#service-'+service.id;catalog.append(a);}
+ for(const [index,service] of ENGINEERING_SERVICES.entries()){if(blocks&&!blocks.some(b=>b.id==='service-'+service.id&&!b.hidden))continue;const a=el('a','',copy('eng_'+service.id+'_title'));a.href='#service-'+service.id;a.dataset.chapter=String(index+1).padStart(2,'0');catalog.append(a);}
  hero.append(catalog);page.append(hero);
  const serviceLinks = [...catalog.querySelectorAll('a')];
  for(const [index,service]of ENGINEERING_SERVICES.entries()){
