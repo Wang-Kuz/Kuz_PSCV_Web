@@ -12,13 +12,14 @@ export function renderEngineering({copy,base,site}){
  const blocks=site?.pages?.find(p=>p.id==='aigc')?.blocks;
  for(const service of ENGINEERING_SERVICES){if(blocks&&!blocks.some(b=>b.id==='service-'+service.id&&!b.hidden))continue;const a=el('a','',copy('eng_'+service.id+'_title'));a.href='#service-'+service.id;catalog.append(a);}
  hero.append(catalog);page.append(hero);
+ const serviceLinks = [...catalog.querySelectorAll('a')];
  for(const [index,service]of ENGINEERING_SERVICES.entries()){
  const key='eng_'+service.id+'_',block=blocks?.find(b=>b.id==='service-'+service.id);
  if(blocks&&(!block||block.hidden))continue;
  const section=el('section','engineering-service section-inner reveal');section.id='service-'+service.id;
  const content=el('div','engineering-copy');
  append(content,el('p','eyebrow',String(index+1).padStart(2,'0')+' / '+copy(key+'title')),el('h2','section-title',copy(key+'promise')),el('h3','engineering-label',copy('engPain')),el('p','section-description',copy(key+'pain')),el('h3','engineering-label',copy('engApproach')),el('p','',copy(key+'approach')));
- const detail=button(copy('engDetail')+' ↗',()=>{});detail.disabled=true;detail.title=copy('engSoon');append(content,append(el('div','engineering-detail'),detail,el('span','',copy('engSoon'))));
+ const detail=button(copy('engDetail'),()=>{});detail.disabled=true;detail.title=copy('engSoon');append(content,append(el('div','engineering-detail'),detail,el('span','',copy('engSoon'))));
  const visual=el('div','engineering-visual');visual.dataset.carousel='';visual.dataset.autoplay=String(block?.autoplay!==false);visual.dataset.seconds=String(block?.slideSeconds||7);
  const track=el('div','engineering-track');track.tabIndex=0;track.setAttribute('aria-label',copy(key+'title')+' / '+copy('engConcept')+' / '+copy('engBusiness'));
  const concept=el('figure','engineering-slide'),business=el('figure','engineering-slide business-slide');
@@ -30,11 +31,26 @@ export function renderEngineering({copy,base,site}){
  else business.append(renderEngineeringArt(service.id,'business',copy));
  append(track,concept,business);const controls=el('div','engineering-controls');const previous=button('← '+copy('engPrevious'),()=>{}),next=button(copy('engNext')+' →',()=>{}),pause=button(copy('engPause'),()=>{}),count=el('span','','01 / 02');previous.dataset.previous='';next.dataset.next='';pause.dataset.pause='';pause.dataset.playLabel=copy('engPlay');pause.dataset.pauseLabel=copy('engPause');count.dataset.countLabel='';const zoom=button(copy('engZoom'),()=>{const slide=track.children[Math.round(track.scrollLeft/Math.max(1,track.clientWidth))]||track.children[0];const clone=slide.cloneNode(true);clone.querySelectorAll('[id]').forEach(n=>n.id='zoom-'+n.id);clone.querySelectorAll('[fill^="url(#"]').forEach(n=>n.setAttribute('fill',n.getAttribute('fill').replace('url(#','url(#zoom-')));zoomContent.replaceChildren(clone);dialog.showModal();});
  const dialog=el('dialog','engineering-zoom');dialog.setAttribute('aria-label',copy(key+'title'));const close=button(copy('engZoomClose')+' ×',()=>dialog.close()),zoomContent=el('div','engineering-zoom-content');append(dialog,close,zoomContent);dialog.addEventListener('close',()=>zoom.focus());dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
- append(controls,previous,count,next,pause,zoom);append(visual,track,controls,el('p','engineering-disclaimer',copy('engDisclaimer')),dialog);append(section,content,visual);page.append(section);
+ append(controls,previous,count,next,pause,zoom);append(visual,track,controls,el('p','engineering-disclaimer',copy('engDisclaimer')),dialog);append(section,content,visual);
+ const navigation = el('nav','engineering-chapters');
+ navigation.setAttribute('aria-label', copy('engNavigation'));
+ const contents = el('a','chapter-contents',copy('engContents'));
+ contents.href = '#engineering-hero';
+ navigation.append(contents);
+ const current = serviceLinks.findIndex(link => link.hash === '#' + section.id);
+ const nextLink = serviceLinks[current + 1];
+ if (nextLink) {
+   const next = el('a','chapter-next');
+   next.href = nextLink.hash;
+   append(next, el('small','',copy('engNextService')), el('strong','',nextLink.textContent));
+   navigation.append(next);
+ }
+ section.append(navigation);
+ page.append(section);
  }
  return page;
 }
-export function renderAigcGuide({copy,base}){const s=el('section','gateway-section gateway-aigc');s.id='aigc-guide';const c=el('div','gateway-copy');const a=el('a','button-primary',copy('gatewayAigcAction')+' ↗');a.href=base+'/?page=aigc';a.dataset.gatewayAction='';append(c,el('p','eyebrow',copy('gatewayAigcEyebrow')),el('h2','section-title',copy('gatewayAigcTitle')),el('p','section-description',copy('gatewayAigcBody')),a);const art=el('div','gateway-art engineering-guide-art');const canvas=el('canvas','engineering-canvas');canvas.dataset.field='agent';canvas.setAttribute('aria-hidden','true');art.append(canvas);append(s,append(el('div','section-inner gateway-grid reveal'),c,art));return s;}
+export function renderAigcGuide({copy,base}){const s=el('section','gateway-section gateway-aigc');s.id='aigc-guide';const c=el('div','gateway-copy');const a=el('a','button-primary',copy('gatewayAigcAction'));a.href=base+'/?page=aigc';a.dataset.gatewayAction='';append(c,el('p','eyebrow',copy('gatewayAigcEyebrow')),el('h2','section-title',copy('gatewayAigcTitle')),el('p','section-description',copy('gatewayAigcBody')),a);const art=el('div','gateway-art engineering-guide-art');const canvas=el('canvas','engineering-canvas');canvas.dataset.field='agent';canvas.setAttribute('aria-hidden','true');art.append(canvas);append(s,append(el('div','section-inner gateway-grid reveal'),c,art));return s;}
 export function renderContact({copy,base,site}){
  const contact={...CONTACT_DEFAULTS,...site?.contact},s=el('section','contact-section section-inner reveal');s.id='contact';append(s,el('p','eyebrow','CONTACT'),el('h2','section-title',copy('reachTitle')),el('p','section-description',copy('reachBody')));
  const row=el('div','contact-actions');if(contact.email){const email=el('a','contact-email',contact.email);email.href='mailto:'+contact.email;row.append(email);}

@@ -22,6 +22,7 @@ let portfolio;
 let inventory;
 let language = (() => { try { return localStorage.getItem('kuz-language') === 'en' ? 'en' : 'zh'; } catch { return 'zh'; } })();
 let filter = 'all';
+let projectQuery = '';
 let revealObserver;
 let revealCleanup;
 let fieldCleanup;
@@ -34,7 +35,26 @@ const safeGithub = value => { try { const url = new URL(value); return url.proto
 const link = (label, href, className) => { const a = make('a', className, label); a.href = href; return a; };
 const externalLink = (label, url, className) => { const a = link(label, safeGithub(url), className); a.target = '_blank'; a.rel = 'noopener noreferrer'; return a; };
 const button = (label, className, click) => { const b = make('button', className, label); b.type = 'button'; b.addEventListener('click', click); return b; };
-const arrow = (symbol = '↗') => { const s = make('span', 'arrow', symbol); s.setAttribute('aria-hidden', 'true'); return s; };
+const iconPaths = {
+  external: 'M5 19 19 5 M6 5h13v13',
+  down: 'M12 3v17 M5 13l7 7 7-7',
+  Full: 'm8 6-6 6 6 6 M16 6l6 6-6 6 M14 3l-4 18',
+  Agent: 'M4 4h5v5H4z M15 15h5v5h-5z M9 6.5h8.5V15 M6.5 9v8.5H15',
+  Algorithm: 'M3 17h4V7h4v10h4V7h6',
+  FDE: 'M3 5h18v12H3z M8 21h8 M12 17v4 M7 12l3-3 3 3 4-4'
+};
+function lineIcon(name) {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('class', 'line-icon');
+  svg.setAttribute('aria-hidden', 'true');
+  const path = document.createElementNS(ns, 'path');
+  path.setAttribute('d', iconPaths[name]);
+  svg.append(path);
+  return svg;
+}
+const arrow = (name = 'external') => append(make('span', 'arrow'), lineIcon(name));
 const eyebrow = value => make('p', 'eyebrow', value);
 const heading = (value, level = 'h2') => make(level, 'section-title', value);
 const tag = value => make('span', 'tag', value);
@@ -53,7 +73,7 @@ function renderHeader() {
     const currentY = scrollY; render(); scrollTo(0, currentY);
   });
   languageButton.setAttribute('aria-label', language === 'zh' ? 'Switch to English' : '切换到中文');
-  append(header, brand, nav, append(make('div', 'nav-actions'), languageButton, externalLink(`${copy('githubLabel')} ↗`, portfolio.profile.github, 'nav-github')));
+  append(header, brand, nav, append(make('div', 'nav-actions'), languageButton, externalLink(`${copy('githubLabel')}`, portfolio.profile.github, 'nav-github')));
 }
 
 function renderHero() {
@@ -69,7 +89,7 @@ function renderHero() {
   lines.forEach(line => title.append(make('span', 'hero-line', line)));
   append(body, status, roles, title, make('p', 'hero-intro', localize(portfolio.profile.intro)));
   const actions = append(make('div', 'hero-actions'),
-    append(link(copy('capabilitySelected'), '#work', 'button-primary'), arrow('↓')),
+    append(link(copy('capabilitySelected'), '#work', 'button-primary'), arrow('down')),
     append(externalLink(copy('heroSecondary'), portfolio.profile.github, 'text-link'), arrow()));
   body.append(actions);
   const art = make('div', 'hero-art'); art.setAttribute('aria-hidden', 'true');
@@ -129,9 +149,9 @@ function renderExpertise() {
   const inner = make('div', 'section-inner');
   const intro = append(make('div', 'expertise-intro reveal'), eyebrow(copy('expertiseEyebrow')), heading(copy('expertiseTitle')), make('p', 'section-description', copy('expertiseIntro')));
   const list = make('div', 'expertise-list');
-  [['Full', '⌘', '01'], ['Agent', '✳', '02'], ['Algorithm', '∿', '03'], ['FDE', '↗', '04']].forEach(([key, symbol, number]) => {
+  [['Full', '01'], ['Agent', '02'], ['Algorithm', '03'], ['FDE', '04']].forEach(([key, number]) => {
     const item = make('div', 'expertise-item reveal');
-    append(item, make('span', 'expertise-icon', symbol), make('span', 'expertise-number', number), make('h3', '', copy(`skill${key}Title`)), make('p', '', copy(`skill${key}Body`)));
+    append(item, append(make('span', 'expertise-icon'), lineIcon(key)), make('span', 'expertise-number', number), make('h3', '', copy(`skill${key}Title`)), make('p', '', copy(`skill${key}Body`)));
     list.append(item);
   });
   append(inner, intro, list); append(section, inner); return section;
@@ -154,7 +174,7 @@ function renderWork() {
  capabilities.forEach(([key,visual],i)=>{const story=make('article',`project-story story-${i} reveal`);story.id='capability-'+key.toLowerCase();
  const detail=make('div','story-copy');append(detail,eyebrow(copy('cap'+key+'Name')),make('h3','story-title',copy('cap'+key+'Title')),make('p','story-summary',copy('cap'+key+'Body')));
  const tech=make('div','tech-list');copy('cap'+key+'Tags').split('·').forEach(t=>tech.append(tag(t.trim())));detail.append(tech);
- append(detail,append(make('div','story-actions'),append(link(copy('capabilityProjects'),base+'/?page=projects','button-primary'),arrow('↗'))));
+ append(detail,append(make('div','story-actions'),append(link(copy('capabilityProjects'),base+'/?page=projects','button-primary'),arrow())));
  append(story,append(make('div','story-topline'),make('span','',String(i+1).padStart(2,'0')+' / '+copy('capabilitySelected'))),append(make('div','story-main'),detail,projectVisual({id:visual,categories:[]},i)));inner.append(story);});
  section.append(inner);return section;
 }
@@ -163,9 +183,9 @@ function renderGateway(kind){
  const projects=kind==='projects',key=projects?'gatewayProjects':'gatewayWorkstation';
  const section=make('section','gateway-section gateway-'+kind);section.id=projects?'projects-guide':'workstation-guide';
  const content=make('div','gateway-copy');append(content,eyebrow(copy(key+'Eyebrow')),heading(copy(key+'Title')),make('p','section-description',copy(key+'Body')));
- const action=append(link(copy(key+'Action'),projects?base+'/?page=projects':'/workstation/index.html','button-primary'),arrow('↗'));action.dataset.gatewayAction='';content.append(action);
+ const action=append(link(copy(key+'Action'),projects?base+'/?page=projects':'/workstation/index.html','button-primary'),arrow());action.dataset.gatewayAction='';content.append(action);
  const art=make('div','gateway-art');art.setAttribute('aria-hidden','true');
- if(projects){['01 / AI & AGENTS','02 / ALGORITHMS','03 / SYSTEMS'].forEach((label,i)=>{const row=make('div','gateway-index');append(row,make('span','',label),make('span','gateway-index-line'),make('span','','↗'));art.append(row);});}
+ if(projects){['01 / AI & AGENTS','02 / ALGORITHMS','03 / SYSTEMS'].forEach((label,i)=>{const row=make('div','gateway-index');append(row,make('span','',label),make('span','gateway-index-line'),arrow());art.append(row);});}
  else{const orbit=make('div','gateway-orbit');orbit.append(make('span','gateway-core','K'));for(const word of ['BUILD','EXPLORE','CREATE'])orbit.append(make('span','gateway-node',word));art.append(orbit);}
  append(section,append(make('div','section-inner gateway-grid reveal'),content,art));return section;
 }
@@ -184,21 +204,37 @@ function renderArchive() {
     b.dataset.filter = key; b.setAttribute('aria-pressed', String(filter === key)); filters.append(b);
   });
   const rows = make('div', 'archive-list'); rows.id = 'archive-list'; rows.setAttribute('aria-live', 'polite');
+  const searchLabel = make('label', 'archive-search', copy('projectSearch'));
+  const search = make('input');
+  search.type = 'search';
+  search.value = projectQuery;
+  search.placeholder = copy('projectSearchHint');
+  search.setAttribute('aria-controls', rows.id);
+  search.addEventListener('input', () => {
+    projectQuery = search.value;
+    renderArchiveRows(rows);
+  });
+  searchLabel.append(search);
   renderArchiveRows(rows);
-  append(inner, filters, rows, make('p', 'archive-note', copy('privateNote'))); section.append(inner); return section;
+  append(inner, searchLabel, filters, rows, make('p', 'archive-note', copy('privateNote'))); section.append(inner); return section;
 }
 
 function renderArchiveRows(rows) {
   rows.replaceChildren();
-  const projects = visibleProjects().filter(p => filter === 'all' || p.categories.includes(filter));
+  const query = projectQuery.trim().toLocaleLowerCase();
+  const projects = visibleProjects().filter(project => {
+    const matchesCategory = filter === 'all' || project.categories.includes(filter);
+    const searchable = [localize(project.name), localize(project.summary), ...project.tech].join(' ');
+    return matchesCategory && searchable.toLocaleLowerCase().includes(query);
+  });
   if (!projects.length) { rows.append(make('p', 'empty-state', copy('archiveEmpty'))); return; }
   projects.forEach((project, i) => {
     const article = make('article', 'archive-row');
     const titleButton = button('', 'archive-project', () => openProject(project));
     append(titleButton, make('span', 'archive-index', String(i + 1).padStart(2, '0')), append(make('span', 'archive-name'), make('strong', '', localize(project.name)), make('span', '', localize(project.summary))));
     const tech = make('div', 'archive-tech'); project.tech.slice(0, 3).forEach(t => tech.append(tag(t)));
-    const more = button('↗', 'round-button', () => openProject(project)); more.setAttribute('aria-label', `${copy('projectExplore')}: ${localize(project.name)}`);
-    append(article, titleButton, tech, externalLink(`${copy('githubLabel')} ↗`, project.github, 'archive-github'), more); rows.append(article);
+    const more = button('', 'round-button', () => openProject(project)); more.append(arrow()); more.setAttribute('aria-label', `${copy('projectExplore')}: ${localize(project.name)}`);
+    append(article, titleButton, tech, externalLink(`${copy('githubLabel')}`, project.github, 'archive-github'), more); rows.append(article);
   });
 }
 
@@ -230,7 +266,7 @@ function openProject(project,embedded=false) {
   const close = button('×', 'dialog-close', () => dialog.close()); close.setAttribute('aria-label', copy('close'));
   const head = make('header', 'dialog-head');
   const title = make('h2', '', localize(project.name)); title.id = 'dialog-title';
-  append(head, eyebrow(project.categories.map(c => localize(categories[c] || c)).join(' / ')), title, make('p', 'dialog-tagline', localize(project.tagline)), externalLink(`${copy('projectGithub')} · ${copy('githubLabel')} ↗`, project.github, 'text-link'));
+  append(head, eyebrow(project.categories.map(c => localize(categories[c] || c)).join(' / ')), title, make('p', 'dialog-tagline', localize(project.tagline)), externalLink(`${copy('projectGithub')} · ${copy('githubLabel')}`, project.github, 'text-link'));
   const intro = make('p', 'dialog-summary', localize(project.summary));
   const tech = make('div', 'tech-list'); project.tech.forEach(t => tech.append(tag(t)));
   const details = make('div', 'project-details');

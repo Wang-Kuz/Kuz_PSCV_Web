@@ -6,7 +6,12 @@ export function navigation(root,h,{base='',pageId='home',pages=[],languageButton
  root.replaceChildren();root.classList.remove('menu-open');root.classList.add('unified-header');root.hidden=h.visible===false;
  const brand=anchor(h.brand||'KUZ','/','unified-brand');if(h.logo){brand.textContent='';const img=make('img');img.src=href(h.logo);img.alt=h.brand||'KUZ';brand.append(img);}else brand.prepend(make('span','unified-mark','K'));
  const primary=make('nav','unified-links');primary.setAttribute('aria-label','网站导航');
- for(const l of h.links||[])if(!l.hidden)primary.append(anchor(l.label,l.href));
+ for(const l of h.links||[])if(!l.hidden){
+   const item=anchor(l.label,l.href);
+   const dest=new URL(item.href,location.href);
+   if(!dest.hash && dest.origin===location.origin && dest.pathname===location.pathname && dest.search===location.search) item.setAttribute('aria-current','page');
+   primary.append(item);
+ }
  const pagesMenu=make('details','page-menu'),summary=make('summary','', '页面导航');pagesMenu.append(summary);const list=make('div','page-menu-list');
  const visit=(parent,depth)=>{for(const p of pages.filter(x=>x.parent===parent&&!x.hidden)){const a=anchor(p.name,p.legacy||'/?page='+encodeURIComponent(p.id));a.style.paddingLeft=(16+depth*12)+'px';if(p.id===pageId)a.setAttribute('aria-current','page');list.append(a);visit(p.id,depth+1);}};visit('',0);pagesMenu.append(list);if(pageId.startsWith('ws-'))primary.append(pagesMenu);
  const actions=make('div','unified-actions');if(languageButton){languageButton.className='unified-language';languageButton.style.cssText='';languageButton.setAttribute('aria-label','切换语言 / Switch language');actions.append(languageButton);}if(h.home&&pageId!=='home')actions.append(anchor('返回个人品宣','/','home-action'));if(h.settings&&pageId.startsWith('ws-'))actions.append(anchor('配置与服务','/Home/','settings-action'));
