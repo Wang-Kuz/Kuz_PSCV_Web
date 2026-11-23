@@ -150,7 +150,8 @@ function mountOrbit(art, reduced, onChange) {
   angle.className='orbit-angle';
   angle.setAttribute('aria-hidden','true');
   art.append(angle);
-  let degrees=0, drag=null;
+  let degrees=0, drag=null, glide=0;
+  const stopGlide=()=>{cancelAnimationFrame(glide);glide=0;};
   const set=value=>{
     degrees=clamp(value,-180,180);
     const rounded=Math.round(degrees);
@@ -163,19 +164,101 @@ function mountOrbit(art, reduced, onChange) {
   };
   const down=e=>{
     if(!e.isPrimary||e.button!==0)return;
-    drag={id:e.pointerId,x:e.clientX,start:degrees};
+    stopGlide();
+    drag={id:e.pointerId,x:e.clientX,start:degrees,stamp:e.timeStamp,velocity:0};
     art.setPointerCapture(e.pointerId);
   };
-  const move=e=>{if(drag?.id===e.pointerId)set(drag.start+(e.clientX-drag.x)*250/Math.max(200,art.clientWidth));};
-  const up=e=>{if(drag?.id===e.pointerId)drag=null;};
+  const move=e=>{
+    if(drag?.id!==e.pointerId)return;
+    const before=degrees,dt=Math.max(8,e.timeStamp-drag.stamp);
+    set(drag.start+(e.clientX-drag.x)*250/Math.max(200,art.clientWidth));
+    drag.velocity=clamp((degrees-before)/dt,-.55,.55);
+    drag.stamp=e.timeStamp;
+  };
+  const up=e=>{
+    if(drag?.id!==e.pointerId)return;
+    const speed=drag.velocity,age=e.timeStamp-drag.stamp;
+    drag=null;
+    if(e.type!=='pointerup'||age>75||reduced.matches||Math.abs(speed)<.05)return;
+    const start=degrees, target=clamp(start+speed*100,-180,180);
+    if(Math.abs(target-start)<1)return;
+    const since=performance.now();
+    const coast=now=>{
+      const t=Math.min(1,(now-since)/300);
+      set(start+(target-start)*(1-(1-t)**3));
+      if(t<1)glide=requestAnimationFrame(coast);
+    };
+    glide=requestAnimationFrame(coast);
+  };
   const key=e=>{
+    stopGlide();
     const values={ArrowRight:degrees+15,ArrowLeft:degrees-15,ArrowUp:degrees+15,ArrowDown:degrees-15,Home:-180,End:180};
     if(Object.hasOwn(values,e.key)){e.preventDefault();set(values[e.key]);}
   };
   set(0);
   const events={pointerdown:down,pointermove:move,lostpointercapture:up,pointercancel:up,pointerup:up,keydown:key};
   for(const [type,handler] of Object.entries(events))art.addEventListener(type,handler);
-  return ()=>{for(const [type,handler] of Object.entries(events))art.removeEventListener(type,handler);};
+  reduced.addEventListener('change',stopGlide);
+  return ()=>{stopGlide();reduced.removeEventListener('change',stopGlide);for(const [type,handler] of Object.entries(events))art.removeEventListener(type,handler);};
+}
+
+function mountDiagramLens(canvas, redraw) {
+  const art = canvas.closest('.project-art');
+  if (!art || new URL(location.href).searchParams.has('preview')) return null;
+  const zh = document.documentElement.lang.startsWith('zh');
+  const control = document.createElement('button');
+  control.type = 'button';
+  control.className = 'diagram-lens';
+  control.textContent = zh ? '放大镜' : 'Lens';
+  control.title = zh ? '点击图面定位，方向键移动，Esc 关闭' : 'Point or tap to inspect. Use arrow keys to move, Escape to close.';
+  control.setAttribute('aria-pressed','false');
+  art.removeAttribute('aria-hidden');
+  art.append(control);
+  let enabled = false, x = .5, y = .5;
+  const toggle = value => {
+    enabled = value;
+    control.setAttribute('aria-pressed',String(value));
+    art.classList.toggle('inspecting',value);
+    redraw();
+  };
+  control.onclick = () => toggle(!enabled);
+  control.onkeydown = event => {
+    if (!enabled) return;
+    if (event.key === 'Escape') { toggle(false); return; }
+    const direction = {ArrowLeft:[-.06,0],ArrowRight:[.06,0],ArrowUp:[0,-.06],ArrowDown:[0,.06]}[event.key];
+    if (!direction) return;
+    event.preventDefault();
+    x = clamp(x + direction[0],0,1); y = clamp(y + direction[1],0,1); redraw();
+  };
+  const point = event => {
+    if (!enabled || control.contains(event.target)) return;
+    const rect = canvas.getBoundingClientRect();
+    x = clamp((event.clientX-rect.left)/rect.width,0,1);
+    y = clamp((event.clientY-rect.top)/rect.height,0,1);
+    redraw();
+  };
+  art.addEventListener('pointerdown',point,{passive:true});
+  art.addEventListener('pointermove',point,{passive:true});
+  return {
+    draw(ctx,w,h) {
+      if (!enabled || w < 1 || h < 1) return;
+      const cx = x*w, cy = y*h, radius = Math.min(w,h)*.18, zoom = 2;
+      ctx.save();
+      ctx.beginPath(); ctx.arc(cx,cy,radius,0,Math.PI*2); ctx.clip();
+      ctx.fillStyle = '#101923';
+      // Copy pixels before painting the backing, so fine translucent strokes keep their contrast.
+      ctx.globalCompositeOperation = 'copy';
+      ctx.drawImage(canvas,cx*(1-zoom),cy*(1-zoom),w*zoom,h*zoom);
+      ctx.globalCompositeOperation = 'destination-over'; ctx.fillRect(cx-radius,cy-radius,radius*2,radius*2);
+      ctx.restore();
+      ctx.save(); ctx.strokeStyle = '#d0e7f0'; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.arc(cx,cy,radius,0,Math.PI*2); ctx.stroke(); ctx.restore();
+    },
+    remove() {
+      art.removeEventListener('pointerdown',point); art.removeEventListener('pointermove',point);
+      art.classList.remove('inspecting'); art.setAttribute('aria-hidden','true'); control.remove();
+    }
+  };
 }
 
 export function mountFields(root=document){
@@ -219,11 +302,14 @@ export function mountFields(root=document){
           const rect=canvas.getBoundingClientRect();
           const arrival=reduced.matches?1:clamp((innerHeight-rect.top)/Math.max(1,Math.min(rect.height*.8,innerHeight*.48)),0,1);
           drawProject(ctx,w,h,time,pointer,canvas.dataset.field,arrival);
+          lens?.draw(ctx,w,h);
         }
       }
       if(!reduced.matches)frame=requestAnimationFrame(draw);
     };
     const schedule=()=>{cancelAnimationFrame(frame);lastClock=0;if(visible&&!document.hidden)frame=requestAnimationFrame(draw);};
+    const lens = mountDiagramLens(canvas, () => { if(reduced.matches) schedule(); });
+    if (lens) disposers.push(() => lens.remove());
     const art=canvas.closest('.hero-art');
     if(art && !new URL(location.href).searchParams.has('preview')){
       disposers.push(mountOrbit(art,reduced,(angle,immediate)=>{targetOrbit=angle;if(immediate)schedule();}));

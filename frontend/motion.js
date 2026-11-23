@@ -1,6 +1,51 @@
 // One event-driven camera controller. Natural browser scrolling remains untouched.
 import {mountTitleParticles} from './title-particles.js';
 const clamp = n => Math.max(0, Math.min(1,n));
+// One thumb-sized chapter control for long features. Titles come from the published page.
+function chapterDial(root) {
+  if (new URL(location.href).searchParams.has('preview')) return null;
+  const sections = [...root.querySelectorAll('.project-story[id], .engineering-service[id]')];
+  const entries = sections.filter(section => section.getClientRects().length).map(section => ({
+    section, title: section.querySelector('.story-copy .eyebrow,.engineering-copy .eyebrow')?.textContent.replace(/^\d+\s*\/\s*/, '').trim()
+  })).filter(entry => entry.title);
+  if (entries.length < 2) return null;
+  const dial = document.createElement('label');
+  dial.className = 'chapter-dial';
+  dial.hidden = true;
+  const number = document.createElement('span');
+  number.className = 'chapter-position';
+  number.setAttribute('aria-hidden','true');
+  const select = document.createElement('select');
+  select.setAttribute('aria-label',document.documentElement.lang.startsWith('zh') ? '跳转到章节' : 'Jump to chapter');
+  const meter = document.createElement('i');
+  meter.setAttribute('aria-hidden','true');
+  entries.forEach(({section,title}) => select.add(new Option(title,section.id)));
+  select.onchange = () => {
+    const section = entries[select.selectedIndex].section;
+    if (location.hash === '#' + section.id) section.scrollIntoView();
+    else location.hash = section.id;
+  };
+  dial.append(number,select,meter);
+  document.body.append(dial);
+  let current = -1;
+  return {
+    update() {
+      const line = innerHeight * .43;
+      const bounds = entries.map(({section}) => section.getBoundingClientRect());
+      dial.hidden = bounds[0].top > line || bounds.at(-1).bottom <= line;
+      if (dial.hidden) return;
+      const index = bounds.findLastIndex(rect => rect.top <= line);
+      if (index !== current) {
+        current = index;
+        select.selectedIndex = index;
+        number.textContent = String(index+1).padStart(2,'0') + ' / ' + String(entries.length).padStart(2,'0');
+      }
+      const rect = bounds[index];
+      meter.style.transform = 'scaleX(' + clamp((line-rect.top)/Math.max(rect.height,1)) + ')';
+    },
+    remove() { dial.remove(); }
+  };
+}
 export function mountMotion(root=document){
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const fine=matchMedia('(hover: hover) and (pointer: fine)');
@@ -9,12 +54,14 @@ export function mountMotion(root=document){
   let frame=0;
   const stage=root.querySelector('.hero-stage');
   const disposeInk=mountTitleParticles(root,reduced);
+  const dial=chapterDial(root);
   const layers=[...root.querySelectorAll('.hero-stage ~ section .gateway-art,.hero-stage ~ section .project-art,.hero-stage ~ section .about-visual')];
   const stories=[...root.querySelectorAll('.project-story')];
   const manifest=root.querySelector('.manifest-section');
   const words=[...root.querySelectorAll('.manifest-word')];
   const update=()=>{
     frame=0;
+    dial?.update();
     if(stage){
       const p=clamp(-stage.getBoundingClientRect().top/Math.max(1,stage.offsetHeight-innerHeight));
       stage.style.setProperty('--camera-progress',reduced.matches?0:p);
@@ -59,5 +106,5 @@ export function mountMotion(root=document){
     listen(element,'pointerleave',reset);listen(reduced,'change',reset);
   });
   update();
-  return()=>{cancelAnimationFrame(frame);disposeInk();listeners.forEach(fn=>fn());};
+  return()=>{cancelAnimationFrame(frame);disposeInk();dial?.remove();listeners.forEach(fn=>fn());};
 }
