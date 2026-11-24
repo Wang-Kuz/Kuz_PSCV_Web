@@ -87,17 +87,25 @@ function brief(section,env,initialTopic){
  for(const [id,zh,en] of [['source','资料或系统在哪里？','Where does the material live?'],['pain','现在最费时间的是哪一步？','Which step takes the most time?'],['outcome','希望得到什么结果？','What outcome do you need?'],['limits','有哪些部署或数据限制？','What constraints apply?']]){
   const input=el('textarea');input.rows=2;input.maxLength=600;input.required=false;input.value=draft[id];input.oninput=()=>draft[id]=input.value;field(ui(zh,en),input);
  }
+ const email=section.querySelector('.contact-email');
+ const mailForTopic=()=>{
+  if(!email)return;
+  const address=new URL(email.href);
+  address.searchParams.set('subject',[topic.selectedOptions[0].text,project&&env.localize(project.name)].filter(Boolean).join(' · '));
+  email.href=address.href.replaceAll('+','%20');
+ };
+ mailForTopic();topic.addEventListener('change',mailForTopic);
  const submit=el('button','engineering-control',ui('生成需求摘要','Build brief'));submit.type='submit';const result=el('div','brief-result');
  form.append(submit,result);const reset=()=>result.replaceChildren();form.addEventListener('input',reset);
  form.onsubmit=event=>{
   event.preventDefault();
-  const text=[topic.selectedOptions[0].text,...(project?[env.localize(project.name)]:[]),...[...form.querySelectorAll('textarea')].filter(n=>n.value.trim()).map(n=>n.parentNode.firstChild.textContent+'\n'+n.value.trim())].join('\n\n');
+  const text=[topic.selectedOptions[0].text,...(project?[env.localize(project.name)]:[]),...[...form.querySelectorAll('label textarea')].filter(n=>n.value.trim()).map(n=>n.parentNode.firstChild.textContent+'\n'+n.value.trim())].join('\n\n');
   const output=el('textarea');output.readOnly=true;output.rows=7;output.value=text;output.setAttribute('aria-label',ui('需求摘要','Project brief'));
   const copyButton=el('button','engineering-control',ui('复制摘要','Copy brief'));copyButton.type='button';
   const message=el('span');message.setAttribute('role','status');
   copyButton.onclick=async()=>{try{await navigator.clipboard.writeText(text);message.textContent=ui('已复制，可粘贴到微信或邮件。','Copied. Paste into WeChat or email.');}catch{output.focus();output.select();message.textContent=ui('已选中摘要，请复制。','Brief selected. Copy it now.');}};
   result.replaceChildren(output,copyButton,message);
-  const email=section.querySelector('.contact-email');if(email){const mail=link(ui('在邮件中打开','Open email draft'),email.href+'?subject='+encodeURIComponent(topic.selectedOptions[0].text)+'&body='+encodeURIComponent(text));mail.onclick=()=>record(base,env.route,'contact',topic.value);result.append(mail);}
+  if(email){const address=new URL(email.href);address.searchParams.set('body',text);const mail=link(ui('在邮件中打开','Open email draft'),address.href.replaceAll('+','%20'));mail.onclick=()=>record(base,env.route,'contact',topic.value);result.append(mail);}
  };
  details.append(form);section.append(details);
  return ()=>topic.value;

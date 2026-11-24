@@ -57,5 +57,14 @@ export function organizeSite(site,projects=[]){
   }
   s.layoutVersion=9;
  }
+ if(s.layoutVersion===9){
+  const current=s.pages.find(p=>p.id==='ws-index');
+  const defaults=WORKSTATION_PAGES.find(p=>p.id==='ws-index');
+  for(const [id,field,legacy] of [['text-6','title','Project Alpha'],['text-7','text','An advanced AI vision system for industrial inspection.']]){
+   const block=current?.blocks.find(b=>b.id===id);
+   if(block?.[field]===legacy)block[field]=defaults.blocks.find(b=>b.id===id)[field];
+  }
+  s.layoutVersion=10;
+ }
  return s;
 }

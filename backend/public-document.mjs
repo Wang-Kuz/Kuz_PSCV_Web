@@ -105,7 +105,7 @@ export function publicDocument(template, data, id, {lang='zh',base='./'}={}) {
   }
   const detailVisible=project&&canRead(id,'project-detail');
   const localizedTitles={home:t('个人品宣','Portfolio'),projects:t('项目作品','Project portfolio'),aigc:t('AIGC工程','AIGC Engineering'),'rag-lab':t('工程实验室','Engineering lab')};
-  const heading=unavailable?t('此页面暂未开放','Page unavailable'):detailVisible?local(project.name):localizedTitles[id]||page.name||profile.name;
+  const heading=unavailable?t('此页面暂未开放','Page unavailable'):detailVisible?local(project.name):(page.name&&page.name!==({home:'个人品宣',projects:'项目作品',aigc:'AIGC工程','rag-lab':'工程实验室'})[id]?page.name:localizedTitles[id])||page.name||profile.name;
   const main='<article class="public-reading">'+(unavailable?paragraph(heading):sections.join(''))+'</article>';
   const canonical=base+(id==='home'?(lang==='en'?'?lang=en':''):'?page='+encodeURIComponent(id)+(lang==='en'?'&lang=en':''));
   const first=page?.blocks.find(b=>!b.hidden&&['home','engineering-hero','archive','project-detail','lab-demo'].includes(b.id));
