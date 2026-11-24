@@ -1,5 +1,4 @@
 import {centerObserver} from './center-observer.js';
-import {mountChapterPaging} from './chapter-paging.js';
 import {caseActions,renderLab,mountJourney} from './journey.js';
 import {guideProjects} from './lib.js';
 import {mountScrollFlow} from './scroll-flow.js';
@@ -30,7 +29,7 @@ let projectQuery = '';
 let revealObserver;
 let revealCleanup;
 let fieldCleanup;
-let motionCleanup, pagingCleanup;
+let motionCleanup;
 let engineeringCleanup,journeyCleanup;
 let lastFocus;
 const localize = value => typeof value === 'string' ? value : value?.[language] ?? value?.zh ?? value?.en ?? '';
@@ -358,7 +357,7 @@ function observeReveals() {
 
 
 function render() {
-  pagingCleanup?.();fieldCleanup?.(); motionCleanup?.(); engineeringCleanup?.(); journeyCleanup?.();
+  fieldCleanup?.(); motionCleanup?.(); engineeringCleanup?.(); journeyCleanup?.();
   portfolio.site=organizeSite(portfolio.site||defaults(),portfolio.projects);
   Object.entries(categoryKeys).forEach(([key, copyKey]) => { categories[key] = portfolio?.copy?.[copyKey] || defaultCopy[copyKey]; });
   document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
@@ -375,8 +374,6 @@ function render() {
   else if(route.startsWith('project-')){const project=visibleProjects().find(p=>'project-'+p.id===route);if(project)openProject(project,true);else $('#main').replaceChildren(make('p','cms-page',language==='zh'?'项目暂未公开。':'Project unavailable.'));}
   else $('#main').replaceChildren(renderHero(), renderManifest(), renderStats(), renderExpertise(), renderWork(), renderAigcGuide({copy,base}), renderGateway('projects'), renderGateway('workstation'), renderAbout(),renderContact({copy,base,site:portfolio.site}));
   applySite(portfolio); journeyCleanup=mountJourney({base,route,portfolio,copy,localize}); renderFooter(); observeReveals(); fieldCleanup = mountFields(); motionCleanup = mountMotion(); engineeringCleanup=mountEngineeringCarousels();
-  pagingCleanup=['home','aigc'].includes(route)&&document.querySelector('.hero-stage,.engineering-page')?
-      mountChapterPaging('#main > .hero-stage, #main > section:not(.work-section), #main .work-intro, #main .project-story, #main .engineering-page > section, #footer'):undefined;
 }
 
 
@@ -400,7 +397,8 @@ if(parent!==window&&new URL(location.href).searchParams.has('preview'))parent.po
 addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent||parent===window||!location.search.includes('preview'))return;if(e.data?.type==='kuz-focus'){const target=document.getElementById(e.data.block)||[...document.querySelectorAll('[data-edit-block]')].find(n=>n.dataset.editBlock===e.data.block);if(target){dispatchEvent(new Event('kuz-scroll-reset'));const rect=target.getBoundingClientRect();window.scrollTo({top:scrollY+rect.top-Math.max(0,(innerHeight-rect.height)/2),behavior:e.data.instant?'instant':matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});target.animate([{outline:'2px solid #aac8ef'},{outline:'2px solid transparent'}],{duration:1400});}}});
 addEventListener('storage',e=>{if(e.key==='kuz-language'){language=e.newValue==='en'?'en':'zh';render();}});
 
-if(!document.documentElement.classList.contains('chapter-paging')&&!new URL(location.href).searchParams.has('preview'))mountScrollFlow({damping:110});
+const query = new URL(location.href).searchParams;
+if (!query.has('preview') && !['home','aigc'].includes(query.get('page') || 'home')) mountScrollFlow({damping:110});
 
 function followLocationHash(event){
  let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}
