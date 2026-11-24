@@ -2306,3 +2306,6 @@ html[lang="en"] .expertise-item h3 {
 .diagram-lens[aria-pressed=true] { background:#d3e4e9; color:#15242a; }
 .project-art.inspecting { cursor:crosshair; }
 .project-art:has(.diagram-lens) .art-label { max-width:calc(100% - 112px); }
+@media (prefers-reduced-motion:no-preference) {
+  .chapter-paging .hero-stage {height:auto;min-height:0}
+}

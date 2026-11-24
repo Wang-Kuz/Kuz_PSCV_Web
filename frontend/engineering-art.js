@@ -1,3 +1,4 @@
+import {centerObserver} from './center-observer.js';
 // Fourteen authored architecture diagrams and fourteen distinct business scenes.
 // All are editable-label illustrations, not customer screenshots or measured data.
 const NS='http://www.w3.org/2000/svg';
@@ -154,7 +155,7 @@ export function renderEngineeringArt(id,kind,copy){
 
 export function mountEngineeringArt(){
  const visible=new Set(),update=()=>visible.forEach(svg=>svg.classList.toggle('art-visible',!document.hidden));
- const observer=new IntersectionObserver(entries=>{entries.forEach(({target,isIntersecting})=>{if(isIntersecting)visible.add(target);else{visible.delete(target);target.classList.remove('art-visible');}});update();},{threshold:.05});
+ const observer=centerObserver(entries=>{entries.forEach(({target,isIntersecting})=>{if(isIntersecting)visible.add(target);else{visible.delete(target);target.classList.remove('art-visible');}});update();});
  document.querySelectorAll('.engineering-art').forEach(svg=>observer.observe(svg));document.addEventListener('visibilitychange',update);
  return()=>{observer.disconnect();document.removeEventListener('visibilitychange',update);};
 }

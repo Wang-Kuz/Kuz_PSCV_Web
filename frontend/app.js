@@ -1,3 +1,5 @@
+import {centerObserver} from './center-observer.js';
+import {mountChapterPaging} from './chapter-paging.js';
 import {caseActions,renderLab,mountJourney} from './journey.js';
 import {guideProjects} from './lib.js';
 import {mountScrollFlow} from './scroll-flow.js';
@@ -28,7 +30,7 @@ let projectQuery = '';
 let revealObserver;
 let revealCleanup;
 let fieldCleanup;
-let motionCleanup;
+let motionCleanup, pagingCleanup;
 let engineeringCleanup,journeyCleanup;
 let lastFocus;
 const localize = value => typeof value === 'string' ? value : value?.[language] ?? value?.zh ?? value?.en ?? '';
@@ -344,19 +346,19 @@ function observeReveals() {
  const preview=new URL(location.href).searchParams.has('preview');
  const home=!!document.querySelector('.hero-stage');
  const enter=(element,delay=0)=>{if(preference.matches||preview)return;const frames=home?[{opacity:.20,translate:'0 38px'},{opacity:.92,translate:'0 4px',offset:.68},{opacity:1,translate:'0 0'}]:[{opacity:0,translate:'0 32px'},{opacity:1,translate:'0 0'}];const animation=element.animate(frames,{duration:home?880:950,delay,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'});animations.add(animation);animation.onfinish=()=>animations.delete(animation);};
- revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+ revealObserver=centerObserver(entries=>entries.forEach(entry=>{
   if(!entry.isIntersecting)return;const target=entry.target;target.classList.add('is-visible');revealObserver.unobserve(target);
   // Individual layers avoid overriding the scene camera / pointer transforms.
   const layers=target.matches('.engineering-service')?[...target.children]:target.matches('.project-story')?[...target.querySelectorAll('.story-topline,.story-copy,.project-art')]:target.matches('.gateway-grid')?[...target.children]:[];
   if(layers.length)layers.forEach((layer,i)=>enter(layer,i*110));else enter(target);
-  if(!preference.matches)$$('[data-count]',target).forEach(element=>{const total=Number(element.dataset.count),start=performance.now();const tick=now=>{if(!element.isConnected)return;const p=Math.min(1,(now-start)/1100);element.textContent=String(Math.round(total*(1-(1-p)**3)));if(p<1)requestAnimationFrame(tick);};requestAnimationFrame(tick);});
- }),{threshold:0,rootMargin:'0px 0px -48px 0px'});
+  if(!preference.matches&&!preview)$$('[data-count]',target).forEach(element=>{const total=Number(element.dataset.count),start=performance.now();const tick=now=>{if(!element.isConnected)return;const p=Math.min(1,(now-start)/1100);element.textContent=String(Math.round(total*(1-(1-p)**3)));if(p<1)requestAnimationFrame(tick);};requestAnimationFrame(tick);});
+ }));
  $$('.reveal').forEach(element=>revealObserver.observe(element));
 }
 
 
 function render() {
-  fieldCleanup?.(); motionCleanup?.(); engineeringCleanup?.(); journeyCleanup?.();
+  pagingCleanup?.();fieldCleanup?.(); motionCleanup?.(); engineeringCleanup?.(); journeyCleanup?.();
   portfolio.site=organizeSite(portfolio.site||defaults(),portfolio.projects);
   Object.entries(categoryKeys).forEach(([key, copyKey]) => { categories[key] = portfolio?.copy?.[copyKey] || defaultCopy[copyKey]; });
   document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
@@ -373,6 +375,8 @@ function render() {
   else if(route.startsWith('project-')){const project=visibleProjects().find(p=>'project-'+p.id===route);if(project)openProject(project,true);else $('#main').replaceChildren(make('p','cms-page',language==='zh'?'项目暂未公开。':'Project unavailable.'));}
   else $('#main').replaceChildren(renderHero(), renderManifest(), renderStats(), renderExpertise(), renderWork(), renderAigcGuide({copy,base}), renderGateway('projects'), renderGateway('workstation'), renderAbout(),renderContact({copy,base,site:portfolio.site}));
   applySite(portfolio); journeyCleanup=mountJourney({base,route,portfolio,copy,localize}); renderFooter(); observeReveals(); fieldCleanup = mountFields(); motionCleanup = mountMotion(); engineeringCleanup=mountEngineeringCarousels();
+  pagingCleanup=['home','aigc'].includes(route)&&document.querySelector('.hero-stage,.engineering-page')?
+      mountChapterPaging('#main > .hero-stage, #main > section:not(.work-section), #main .work-intro, #main .project-story, #main .engineering-page > section, #footer'):undefined;
 }
 
 
@@ -396,7 +400,7 @@ if(parent!==window&&new URL(location.href).searchParams.has('preview'))parent.po
 addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent||parent===window||!location.search.includes('preview'))return;if(e.data?.type==='kuz-focus'){const target=document.getElementById(e.data.block)||[...document.querySelectorAll('[data-edit-block]')].find(n=>n.dataset.editBlock===e.data.block);if(target){dispatchEvent(new Event('kuz-scroll-reset'));const rect=target.getBoundingClientRect();window.scrollTo({top:scrollY+rect.top-Math.max(0,(innerHeight-rect.height)/2),behavior:e.data.instant?'instant':matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});target.animate([{outline:'2px solid #aac8ef'},{outline:'2px solid transparent'}],{duration:1400});}}});
 addEventListener('storage',e=>{if(e.key==='kuz-language'){language=e.newValue==='en'?'en':'zh';render();}});
 
-mountScrollFlow({damping:110});
+if(!document.documentElement.classList.contains('chapter-paging')&&!new URL(location.href).searchParams.has('preview'))mountScrollFlow({damping:110});
 
 function followLocationHash(event){
  let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}

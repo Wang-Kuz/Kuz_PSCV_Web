@@ -63,7 +63,7 @@ export function mountMotion(root=document){
     frame=0;
     dial?.update();
     if(stage){
-      const p=clamp(-stage.getBoundingClientRect().top/Math.max(1,stage.offsetHeight-innerHeight));
+      const p=clamp(-stage.getBoundingClientRect().top/Math.max(innerHeight*.65,stage.offsetHeight-innerHeight));
       stage.style.setProperty('--camera-progress',reduced.matches?0:p);
     }
     stories.forEach(story=>{
@@ -75,12 +75,12 @@ export function mountMotion(root=document){
     for(const layer of layers){
       const rect=layer.parentElement.getBoundingClientRect();
       if(rect.bottom<0 || rect.top>innerHeight)continue;
-      const arrival=clamp((innerHeight-rect.top)/(innerHeight*.72));
+      const arrival=clamp((innerHeight*.60-(rect.top+Math.min(rect.height,innerHeight)/2))/(innerHeight*.10));
       layer.style.setProperty('--arrival-scale',reduced.matches?1:1+(1-arrival)*.075);
     }
     if(manifest){
       const r=manifest.getBoundingClientRect();
-      const p=clamp((innerHeight*.82-r.top)/Math.max(1,r.height*.65));
+      const p=clamp((innerHeight*.60-r.top-Math.min(r.height,innerHeight)/2)/(innerHeight*.10));
       words.forEach((word,i)=>word.style.setProperty('--lit',reduced.matches?1:clamp(p*(words.length+2)-i)));
     }
     const progress=scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight);

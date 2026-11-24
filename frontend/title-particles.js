@@ -1,3 +1,4 @@
+import {centerObserver} from './center-observer.js';
 // A short-lived overlay samples the actual wrapped heading, including CMS edits.
 // The semantic text remains selectable and visible throughout the sequence.
 function sampleInk(title, text, width, height) {
@@ -99,16 +100,16 @@ export function mountTitleParticles(root, reduced) {
   if (!titles.length || new URL(location.href).searchParams.has('preview')) return () => {};
   const running = new Map(), seen = new Set();
   const stop = () => { for (const finish of running.values()) finish(); };
-  const observer = new IntersectionObserver(entries => {
+  const observer = centerObserver(entries => {
     for (const {target,isIntersecting} of entries) {
-      if (!isIntersecting) { running.get(target)?.(); continue; }
+      if (!isIntersecting) continue;
       if (seen.has(target) || reduced.matches || document.hidden) continue;
       const finish=assemble(target,()=>running.delete(target));
       if (finish) running.set(target,finish);
       seen.add(target);
     }
-  }, {threshold:0, rootMargin:'0px 0px -8% 0px'});
-  const configure=()=>{stop();observer.disconnect();if(!document.hidden&&!reduced.matches)titles.forEach(title=>observer.observe(title));};
+  });
+  const configure=()=>{stop();titles.forEach(title=>observer.unobserve(title));if(!document.hidden&&!reduced.matches)titles.forEach(title=>observer.observe(title));};
   reduced.addEventListener('change',configure);
   document.addEventListener('visibilitychange',configure);
   window.addEventListener('resize',stop);

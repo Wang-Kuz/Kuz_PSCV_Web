@@ -1,3 +1,4 @@
+import {centerObserver} from './center-observer.js';
 import {ENGINEERING_SERVICES,CONTACT_DEFAULTS} from './engineering-content.js';
 import {renderEngineeringArt,mountEngineeringArt} from './engineering-art.js';
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
@@ -63,5 +64,5 @@ export function mountEngineeringCarousels(){const cleanups=[mountEngineeringArt(
  host.querySelector('[data-previous]').onclick=()=>go(index-1,true);host.querySelector('[data-next]').onclick=()=>go(index+1,true);pause.onclick=()=>{playing=!playing;state();};
  const scroll=()=>{index=Math.round(track.scrollLeft/Math.max(1,track.clientWidth));count.textContent=String(index+1).padStart(2,'0')+' / 02';};track.addEventListener('scroll',scroll,{passive:true});
  const enter=()=>hover=true,leave=()=>hover=false,focus=()=>focused=true,blur=e=>{focused=host.contains(e.relatedTarget);};host.addEventListener('pointerenter',enter);host.addEventListener('pointerleave',leave);host.addEventListener('focusin',focus);host.addEventListener('focusout',blur);
- const observer=new IntersectionObserver(entries=>visible=entries[0].isIntersecting,{threshold:.2});observer.observe(host);const timer=setInterval(()=>{if(visible&&playing&&!hover&&!focused&&!document.hidden&&!reduced.matches)go(index+1);},Math.max(5,Math.min(30,Number(host.dataset.seconds)||7))*1000);
+ const observer=centerObserver(entries=>visible=entries[0].isIntersecting);observer.observe(host);const timer=setInterval(()=>{if(visible&&playing&&!hover&&!focused&&!document.hidden&&!reduced.matches)go(index+1);},Math.max(5,Math.min(30,Number(host.dataset.seconds)||7))*1000);
  const change=()=>{if(reduced.matches)playing=false;state();};reduced.addEventListener('change',change);state();cleanups.push(()=>{clearInterval(timer);observer.disconnect();reduced.removeEventListener('change',change);track.removeEventListener('scroll',scroll);host.removeEventListener('pointerenter',enter);host.removeEventListener('pointerleave',leave);host.removeEventListener('focusin',focus);host.removeEventListener('focusout',blur);});});return()=>cleanups.forEach(fn=>fn());}

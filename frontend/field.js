@@ -278,7 +278,7 @@ export function mountFields(root=document){
     canvas.dataset.renderer=renderer?'webgl':'canvas2d';
     const host=canvas.closest('.hero')||canvas.parentElement;
     let w=1,h=1,frame=0,visible=false,last=0,elapsed=0,lastClock=0;
-    let orbit=0,targetOrbit=0,travel=0;
+    let orbit=0,targetOrbit=0,travel=0,arrivalTime=null;
     const target={x:0,y:0},pointer={x:0,y:0};
     const resize=()=>{w=canvas.clientWidth;h=canvas.clientHeight;const dpr=Math.min(devicePixelRatio||1,1.7);if(renderer)renderer.resize(w,h,dpr);else{canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);}};
     const draw=(clock)=>{
@@ -300,8 +300,10 @@ export function mountFields(root=document){
           else drawSculpture(ctx,w,h,time,pointer,progress,orbit);
         }else{
           const rect=canvas.getBoundingClientRect();
-          const arrival=reduced.matches?1:clamp((innerHeight-rect.top)/Math.max(1,Math.min(rect.height*.8,innerHeight*.48)),0,1);
-          drawProject(ctx,w,h,time,pointer,canvas.dataset.field,arrival);
+          const center=rect.top+rect.height/2;
+          if(arrivalTime===null && Math.abs(center-innerHeight/2)<innerHeight*.10)arrivalTime=clock;
+          const arrival=reduced.matches?1:arrivalTime===null?0:clamp((clock-arrivalTime)/720,0,1);
+          drawProject(ctx,w,h,arrivalTime===null?0:time,pointer,canvas.dataset.field,arrival);
           lens?.draw(ctx,w,h);
         }
       }
