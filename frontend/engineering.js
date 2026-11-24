@@ -12,8 +12,28 @@ export function renderEngineering({copy,base,site}){
  const catalog=el('nav','engineering-catalog');catalog.setAttribute('aria-label',copy('engHeroEyebrow'));
  const blocks=site?.pages?.find(p=>p.id==='aigc')?.blocks;
  for(const [index,service] of ENGINEERING_SERVICES.entries()){if(blocks&&!blocks.some(b=>b.id==='service-'+service.id&&!b.hidden))continue;const a=el('a','',copy('eng_'+service.id+'_title'));a.href='#service-'+service.id;a.dataset.chapter=String(index+1).padStart(2,'0');catalog.append(a);}
- hero.append(catalog);page.append(hero);
  const serviceLinks = [...catalog.querySelectorAll('a')];
+ // Keep the published sequence for next/previous navigation, group only the index.
+ const directions=[
+  ['知识与交互','Knowledge & interaction',['rag','qa','assistant','avatar']],
+  ['业务系统','Business systems',['oa','erp','archive','ai']],
+  ['模型与自动化','Models & automation',['local','workflow','harness','algorithm']],
+  ['数据与可视化','Data & visualization',['platform','screen']]
+ ];
+ const used=new Set();
+ const addDirection=(name,links)=>{
+  if(!links.length)return;
+  const group=el('details','catalog-direction'),head=el('summary','',name);
+  group.name='engineering-directions';group.open=used.size===0;
+  const count=el('span','catalog-count',String(links.length).padStart(2,'0'));
+  count.setAttribute('aria-hidden','true');head.append(count);
+  const items=el('div','catalog-items');items.append(...links);group.append(head,items);
+  catalog.append(group);links.forEach(link=>used.add(link));
+ };
+ const zh=document.documentElement.lang.startsWith('zh');
+ for(const [cn,en,ids] of directions)addDirection(zh?cn:en,serviceLinks.filter(link=>ids.includes(link.hash.slice(9))));
+ addDirection(zh?'其他工程':'Other services',serviceLinks.filter(link=>!used.has(link)));
+ hero.append(catalog);page.append(hero);
  for(const [index,service]of ENGINEERING_SERVICES.entries()){
  const key='eng_'+service.id+'_',block=blocks?.find(b=>b.id==='service-'+service.id);
  if(blocks&&(!block||block.hidden))continue;

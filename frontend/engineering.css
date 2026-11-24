@@ -73,3 +73,17 @@
 @media(max-width:760px) { .lab-desk {grid-template-columns:1fr;} .lab-source {border-top:1px solid #8195ad44;} }
 
 .brief-disclosure { margin-top:32px; max-width:680px; }.brief-disclosure summary { cursor:pointer; color:#ccdee8; padding:12px 0; }.brief-disclosure .brief-form { margin-top:4px; }
+
+.engineering-hero .engineering-catalog {display:block;min-width:0;border-block-end:1px solid #839bab42}
+.catalog-direction {border-block-start:1px solid #839bab42}
+.catalog-direction summary {display:flex;align-items:center;gap:1em;cursor:pointer;padding:14px 2px;color:#bcc9d5;font-size:clamp(16px,1.45vw,21px);font-weight:560;line-height:1.35;list-style:none}
+.catalog-direction summary::-webkit-details-marker {display:none}
+.catalog-direction summary::after {content:'';width:.4em;height:.4em;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg);margin-inline:0 .5em}
+.catalog-direction[open] summary {color:#ddf7ed}
+.catalog-direction[open] summary::after {transform:rotate(225deg)}
+.catalog-direction .catalog-count {margin-inline-start:auto;font:12px/1.4 ui-monospace,monospace;color:#9aadb8}
+.catalog-direction summary:focus-visible {outline:2px solid #a6ddcd;outline-offset:-2px}
+.catalog-items {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px;padding:0 0 12px 12px;border-inline-start:2px solid #68998e;margin:0 0 12px 2px}
+.engineering-catalog .catalog-items a {min-height:42px;padding:9px 4px;border:0;border-radius:3px;line-height:1.5}
+.catalog-items a:is(:hover,:focus-visible) {background:#a3cdb90c}
+@media(max-width:420px){.catalog-items {gap:0 6px}.engineering-catalog .catalog-items a {column-gap:6px}}

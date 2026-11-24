@@ -2309,3 +2309,17 @@ html[lang="en"] .expertise-item h3 {
 @media (prefers-reduced-motion:no-preference) {
   .chapter-paging .hero-stage {height:auto;min-height:0}
 }
+
+/* The capability headline, diagram and reference links each have a distinct weight. */
+.work-section .story-copy {min-width:0}
+.work-section .story-copy>.eyebrow {display:flex;align-items:center;gap:.7em;color:#b3d8cb}
+.work-section .story-copy>.eyebrow::before {content:'';width:1.8em;height:1px;background:currentColor;flex:none}
+.work-section .story-summary {max-width:38ch;text-wrap:pretty}
+.work-section .tech-list {gap:0;align-items:baseline;margin-top:1.15rem}
+.work-section .tech-list .tag {padding:0;border:0;color:#b8c6ce;white-space:normal;font-size:.86rem}
+.work-section .tech-list .tag+.tag::before {content:'/';margin-inline:.7em;color:#75858e}
+.work-section .story-actions {flex-wrap:wrap;align-items:flex-start;gap:16px 24px;margin-top:1.7rem}
+.work-section .story-actions .case-references {display:flex;flex-flow:row wrap;align-items:center;gap:0 18px;margin:0;padding-block-start:12px;border-top:1px solid #8ba09b38}
+.work-section .case-references small {flex:1 0 100%;color:#a7b7bd}
+.work-section .project-art {border-radius:3px;border:1px solid color-mix(in srgb,var(--plate-ink) 22%,transparent);background-image:radial-gradient(ellipse at center,color-mix(in srgb,var(--plate-ink) 10%,transparent),transparent 69%),radial-gradient(#aebcce20 .65px,transparent .95px);background-size:auto,16px 16px}
+@media(max-width:650px){.work-section .story-summary {margin-top:18px}.work-section .story-actions {margin-top:18px}}
