@@ -1,24 +1,15 @@
-// One deliberate wheel or vertical swipe advances one reading position.
+// The browser owns direct scrolling. Align a completed gesture to a reading position.
 export function mountChapterPaging(selector) {
-    const root=document.documentElement;
-    const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-    const sections=()=>[...document.querySelectorAll(selector)].filter(node=>node.getClientRects().length && node.getBoundingClientRect().height>1);
-    if(new URL(location.href).searchParams.has('preview') || sections().length<2) return ()=>{};
+    const root = document.documentElement;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const sections = () => [...document.querySelectorAll(selector)].filter(node => node.getBoundingClientRect().height > 1);
+    if (new URL(location.href).searchParams.has('preview') || sections().length < 2) return () => {};
     root.classList.add('chapter-paging');
-    let frame=0, lastWheel=-Infinity, previousSign=0, consumed=false, impulse=0, touch=null;
-    const stop=()=>{cancelAnimationFrame(frame);frame=0;};
-    const reset=()=>{stop();lastWheel=-Infinity;consumed=false;impulse=0;touch=null;};
-    function move(top) {
-        stop();
-        const start=scrollY, distance=top-start, time=performance.now();
-        const duration=Math.min(580,260+Math.abs(distance)*.30);
-        function tick(now){
-            const t=Math.min(1,(now-time)/duration);
-            window.scrollTo({top:start+distance*(t*t*(3-2*t)),behavior:'instant'});
-            frame=t<1?requestAnimationFrame(tick):0;
-        }
-        frame=requestAnimationFrame(tick);
-    }
+
+    let lastScrollY = scrollY;
+    let gesture = null, timer = 0, destination = null, touch = null;
+    const rail = document.querySelector('#timeline-wrapper');
+    const railSection = rail?.closest('section');
     function stops() {
         const max=Math.max(0,root.scrollHeight-innerHeight);
         const positions=[0,max];
@@ -35,12 +26,7 @@ export function mountChapterPaging(selector) {
         }
         return positions.map(y=>Math.max(0,Math.min(max,y))).sort((a,b)=>a-b);
     }
-    function go(sign) {
-        const positions=stops(), tolerance=Math.min(80,innerHeight*.09);
-        const y=sign>0?positions.find(v=>v>scrollY+tolerance):positions.findLast(v=>v<scrollY-tolerance);
-        const dest=y??(sign>0?positions.at(-1):0);
-        if(Math.abs(dest-scrollY)>1) move(dest);
-    }
+
     function browsing(event) {
         if(reduced.matches || event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey ||
             document.querySelector('dialog[open], [aria-modal="true"]:not([hidden])'))return false;
@@ -51,70 +37,182 @@ export function mountChapterPaging(selector) {
         }
         return true;
     }
-    function timeline(sign) {
-        const rail=document.querySelector('#timeline-wrapper');
-        if(!rail || !rail.getClientRects().length)return null;
-        const rect=rail.closest('section').getBoundingClientRect();
-        if(Math.abs(rect.top+rect.height/2-innerHeight/2)>8)return null;
-        return sign>0 ? (rail.scrollLeft+rail.clientWidth<rail.scrollWidth-1?rail:null) : (rail.scrollLeft>1?rail:null);
+
+    function clearGesture() {
+        clearTimeout(timer);
+        gesture = null;
     }
-    function wheel(event){
-        if(!browsing(event)||Math.abs(event.deltaX)>Math.abs(event.deltaY)||!event.deltaY)return;
-        const delta=event.deltaY*(event.deltaMode===1?18:event.deltaMode===2?innerHeight:1);
-        const sign=Math.sign(delta),now=performance.now();
-        if(now-lastWheel>165 || sign!==previousSign){consumed=false;impulse=0;}
-        lastWheel=now; previousSign=sign;
-        const rail=timeline(sign);
-        event.preventDefault();
-        if(rail && !frame){rail.scrollLeft+=delta;return;}
-        if(consumed || (frame && Math.sign(delta)===direction))return;
-        impulse+=Math.abs(delta);
-        if(impulse<18)return;
-        consumed=true;direction=sign;go(sign);
+    let capturing = false;
+    function updateCapture() {
+        const needed = destination !== null || centeredRail();
+        if (needed === capturing) return;
+        capturing = needed;
+        if (needed) window.addEventListener('wheel', captureWheel, {capture:true, passive:false});
+        else window.removeEventListener('wheel', captureWheel, true);
     }
-    let direction=0;
-    function key(event){
-        if(!browsing(event)||event.shiftKey||event.target.closest?.('button,a,summary,[role=slider]'))return;
-        const sign={PageDown:1,PageUp:-1,ArrowDown:1,ArrowUp:-1,' ':1}[event.key];
-        if(!sign){if(event.key==='Home'||event.key==='End')reset();return;}
-        event.preventDefault();
-        if(event.repeat && frame)return;
-        const rail=timeline(sign);
-        if(rail)rail.scrollLeft+=sign*rail.clientWidth*.75;
-        else {direction=sign;go(sign);}
+    function endAlignment() {
+        destination = null;
+        updateCapture();
     }
-    function startTouch(e){
-        reset();
-        if(e.touches.length!==1||!browsing(e))return;
-        const p=e.touches[0];touch={x:p.clientX,y:p.clientY,last:p.clientY};
-    }
-    function moveTouch(e){
-        if(!touch || !e.cancelable)return;
-        if(e.touches.length!==1){touch=null;return;}
-        const p=e.touches[0],dy=touch.y-p.clientY,delta=touch.last-p.clientY;
-        const dx=touch.x-p.clientX;
-        if(!touch.axis){
-            if(Math.max(Math.abs(dx),Math.abs(dy))<5)return;
-            touch.axis=Math.abs(dy)>Math.abs(dx)?'vertical':'horizontal';
+    function interrupt() {
+        clearGesture();
+        if (destination !== null) {
+            endAlignment();
+            window.scrollTo({top: scrollY, behavior: 'instant'});
         }
-        if(touch.axis!=='vertical')return;
+    }
+    function align(top) {
+        if (Math.abs(top - scrollY) < 2) return;
+        destination = top;
+        updateCapture();
+        window.scrollTo({top, behavior: 'smooth'});
+    }
+    function adjacent(positions, start, sign) {
+        return sign > 0 ? positions.find(y => y > start + 8) : positions.findLast(y => y < start - 8);
+    }
+    function settle() {
+        if (!gesture || touch) return;
+        const {start, sign, distance} = gesture;
+        clearGesture();
+        if (distance < 42 || reduced.matches) return;
+        const positions = stops();
+        const nearest = y => positions.reduce((a,b) => Math.abs(a-y) <= Math.abs(b-y) ? a : b);
+        const origin = nearest(start);
+        const next = adjacent(positions, origin, sign);
+        const landed = nearest(scrollY);
+        const fromRest = Math.abs(start - origin) <= 28;
+        // Mid-chapter adjustments must never snap back past the gesture start.
+        if (!fromRest && sign * (landed - start) < 0) return;
+        align(fromRest && next !== undefined && sign * (landed - next) < 0 ? next : landed);
+    }
+    function schedule() {
+        clearTimeout(timer);
+        timer = setTimeout(settle, 140);
+    }
+    function record(delta, start) {
+        const sign = Math.sign(delta);
+        if (!sign) return;
+        if (!gesture || gesture.sign !== sign) {
+            interrupt();
+            gesture = {start, sign, distance: 0};
+        }
+        gesture.distance += Math.abs(delta);
+    }
+    function centeredRail() {
+        if (!railSection || !rail.scrollWidth) return false;
+        const r = railSection.getBoundingClientRect();
+        return Math.abs(r.top + (r.height - innerHeight)/2) <= 8;
+    }
+    function moveRail(delta) {
+        if (!delta || !centeredRail()) return false;
+        const before = rail.scrollLeft;
+        rail.scrollLeft += delta;
+        return rail.scrollLeft - before;
+    }
+    function wheelDelta(e) {
+        if (!e.deltaY || Math.abs(e.deltaX) > Math.abs(e.deltaY) || !browsing(e)) return 0;
+        return e.deltaY * (e.deltaMode === 1 ? 18 : e.deltaMode === 2 ? innerHeight : 1);
+    }
+    function captureWheel(e) {
+        if (!e.cancelable) return;
+        const delta = wheelDelta(e);
+        if (!delta) return;
+        const consumed = moveRail(delta);
+        if (consumed) {
+            e.preventDefault();
+            interrupt();
+            const remaining = delta - consumed;
+            if (Math.abs(remaining) >= 1) {
+                record(remaining, scrollY);
+                window.scrollBy({top:remaining, behavior:'instant'});
+                schedule();
+            }
+        } else if (destination !== null) {
+            const start = scrollY;
+            interrupt();
+            e.preventDefault();
+            window.scrollBy({top:delta, behavior:'instant'});
+            record(delta, start);
+            schedule();
+        }
+    }
+    function wheel(e) {
+        const delta = wheelDelta(e);
+        if (!delta) return;
+        record(delta, lastScrollY);
+        schedule();
+    }
+    function scrolled() {
+        lastScrollY = scrollY;
+        if (rail && destination === null) updateCapture();
+        if (gesture && !touch) schedule();
+        if (destination !== null && Math.abs(scrollY - destination) < 2) endAlignment();
+    }
+    function key(e) {
+        if (!browsing(e) || e.shiftKey || e.target.closest?.('button,a,summary,[role=slider]')) return;
+        const sign = {PageDown:1, PageUp:-1, ArrowDown:1, ArrowUp:-1, ' ':1}[e.key];
+        if (!sign) {
+            if (e.key === 'Home' || e.key === 'End') interrupt();
+            return;
+        }
         e.preventDefault();
-        if(touch.paged)return;
-        const sign=Math.sign(delta);
-        const rail=timeline(sign);
-        if(rail && sign){
-            rail.scrollLeft+=delta;touch.y=p.clientY;
-        } else if(Math.abs(dy)>36){
-            touch.paged=true;direction=Math.sign(dy);go(direction);
-        }
-        touch.last=p.clientY;
+        if (e.repeat && destination !== null) return;
+        interrupt();
+        if (rail && moveRail(sign * rail.clientWidth * .75)) return;
+        const next = adjacent(stops(), scrollY, sign);
+        if (next !== undefined) align(next);
     }
-    const endTouch=()=>{touch=null;};
-    const bindings=[['wheel',wheel,{passive:false}],['keydown',key],['touchstart',startTouch,{passive:true}],
-        ['touchmove',moveTouch,{passive:false}],['touchend',endTouch],['touchcancel',endTouch],['pointerdown',reset,{passive:true}],['hashchange',reset],
-        ['popstate',reset],['resize',reset],['kuz-scroll-reset',reset]];
-    for(const [name,fn,options] of bindings)window.addEventListener(name,fn,options);
+    function startTouch(e) {
+        reset();
+        if (e.touches.length !== 1 || !browsing(e)) return;
+        const p = e.touches[0];
+        touch = {x:p.clientX, y:p.clientY, last:p.clientY, start:scrollY, axis:null, rail: centeredRail()};
+        if (touch.rail) window.addEventListener('touchmove', railTouch, {passive:false});
+    }
+    function trackTouch(e) {
+        if (!touch || e.touches.length !== 1) return;
+        const p = e.touches[0], dy = touch.y - p.clientY;
+        if (!touch.axis && Math.max(Math.abs(dy), Math.abs(p.clientX-touch.x)) >= 5)
+            touch.axis = Math.abs(dy) > Math.abs(p.clientX-touch.x) ? 'y' : 'x';
+        if (touch.axis !== 'y') return;
+        const delta = touch.last - p.clientY;
+        touch.last = p.clientY;
+        if (touch.rail && e.cancelable) {
+            e.preventDefault();
+            const remaining = delta - moveRail(delta);
+            if (Math.abs(remaining) < 1) { clearGesture(); return; }
+            // A gesture already captured by the rail continues vertically at its edge.
+            record(remaining, scrollY);
+            window.scrollBy({top:remaining, behavior:'instant'});
+        } else {
+            record(delta, gesture ? scrollY : touch.start);
+        }
+    }
+    function railTouch(e) { trackTouch(e); }
+    function nativeTouch(e) { if (!touch?.rail) trackTouch(e); }
+    function releaseTouch() {
+        window.removeEventListener('touchmove', railTouch);
+        touch = null;
+    }
+    function endTouch() {
+        releaseTouch();
+        settle();
+    }
+    function reset() { releaseTouch(); interrupt(); }
+    const bindings = [
+        ['wheel', wheel, {passive:true}], ['scroll', scrolled, {passive:true}], ['keydown', key],
+        ['touchstart', startTouch, {passive:true}], ['touchmove', nativeTouch, {passive:true}],
+        ['touchend', endTouch, {passive:true}], ['touchcancel', reset], ['pointerdown', reset, {passive:true}],
+        ['hashchange', reset], ['popstate', reset], ['resize', reset], ['kuz-scroll-reset', reset]
+    ];
+    for (const [name,fn,options] of bindings) window.addEventListener(name,fn,options);
+    updateCapture();
     reduced.addEventListener('change',reset);
-    return ()=>{reset();root.classList.remove('chapter-paging');reduced.removeEventListener('change',reset);
-        for(const [name,fn,options] of bindings)window.removeEventListener(name,fn,options);};
+    return () => {
+        reset();
+        window.removeEventListener('wheel', captureWheel, true);
+        root.classList.remove('chapter-paging');
+        reduced.removeEventListener('change',reset);
+        for (const [name,fn,options] of bindings) window.removeEventListener(name,fn,options);
+    };
 }
