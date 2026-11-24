@@ -153,9 +153,9 @@ export function renderEngineeringArt(id,kind,copy){
  return svg;
 }
 
-export function mountEngineeringArt(){
+export function mountEngineeringArt(root=document){
  const visible=new Set(),update=()=>visible.forEach(svg=>svg.classList.toggle('art-visible',!document.hidden));
  const observer=centerObserver(entries=>{entries.forEach(({target,isIntersecting})=>{if(isIntersecting)visible.add(target);else{visible.delete(target);target.classList.remove('art-visible');}});update();});
- document.querySelectorAll('.engineering-art').forEach(svg=>observer.observe(svg));document.addEventListener('visibilitychange',update);
+ root.querySelectorAll('.engineering-art').forEach(svg=>observer.observe(svg));document.addEventListener('visibilitychange',update);
  return()=>{observer.disconnect();document.removeEventListener('visibilitychange',update);};
 }

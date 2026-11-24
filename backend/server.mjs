@@ -187,7 +187,7 @@ export async function createApp({ root = projectRoot, dataDir = path.join(root, 
         }
         const template=await readFile(path.join(root,'frontend','index.html'),'utf8');
         const preview=url.searchParams.has('preview');
-        const {html,plain,status}=preview?{html:template,status:200}:publicDocument(template,await current(),url.searchParams.get('page')||'home');
+        const {html,plain,status}=preview?{html:template,status:200}:publicDocument(template,await current(),url.searchParams.get('page')||'home',{lang:url.searchParams.get('lang')==='en'?'en':'zh',base:process.env.KUZ_PUBLIC_URL||'./'});
         if(preview||status===404)res.setHeader('X-Robots-Tag','noindex');
         const text=!preview && url.searchParams.get('format')==='text';
         const body=text?plain:html;

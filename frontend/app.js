@@ -1,4 +1,5 @@
 import {centerObserver, mountReadingEntrances} from './center-observer.js?v=reading';
+import {CASE_DEFAULTS} from './engineering-content.js';
 import {caseActions,renderLab,mountJourney} from './journey.js';
 import {guideProjects,customerHeadline,publicDestination,linkedCases} from './lib.js';
 import {mountScrollFlow} from './scroll-flow.js';
@@ -23,9 +24,17 @@ const categoryKeys = { ai: 'categoryAI', agent: 'categoryAgent', rag: 'categoryR
 const categories = Object.fromEntries(Object.entries(categoryKeys).map(([key, value]) => [key, defaultCopy[value]]));
 let portfolio;
 let inventory;
-let language = (() => { try { return localStorage.getItem('kuz-language') === 'en' ? 'en' : 'zh'; } catch { return 'zh'; } })();
+let language = (() => { try { const requested=new URLSearchParams(location.search).get('lang');if(['en','zh'].includes(requested)){localStorage.setItem('kuz-language',requested);return requested;}return localStorage.getItem('kuz-language') === 'en' ? 'en' : 'zh'; } catch { return 'zh'; } })();
 let filter = 'all';
-let projectQuery = '';
+const archiveParams=new URLSearchParams(location.search);
+let projectQuery=archiveParams.get('q')||'';
+let need=archiveParams.get('need')||'';
+filter=Object.hasOwn(categories,archiveParams.get('skill'))?archiveParams.get('skill'):'all';
+function rememberArchive(){
+ const url=new URL(location.href);
+ for(const [key,value] of [['q',projectQuery],['need',need],['skill',filter==='all'?'':filter]])value?url.searchParams.set(key,value):url.searchParams.delete(key);
+ history.replaceState(history.state,'',url);
+}
 let revealObserver;
 let revealCleanup;
 let fieldCleanup;
@@ -72,6 +81,7 @@ function renderHeader() {
   append(nav, link(copy('navWork'), '#work'), link(copy('navApproach'), '#expertise'), link(copy('navAbout'), '#about'));
   const languageButton = button(language === 'zh' ? 'EN' : '中文', 'language-toggle', () => {
     language = language === 'zh' ? 'en' : 'zh';
+    const url=new URL(location.href);if(url.searchParams.has('lang')){url.searchParams.set('lang',language);history.replaceState(history.state,'',url);}
     try { localStorage.setItem('kuz-language', language); } catch { /* Local storage may be disabled. */ }
     const currentY = scrollY; render(); scrollTo(0, currentY);
   });
@@ -86,7 +96,7 @@ function renderHero() {
   append(back, make('div', 'hero-grid'), make('div', 'hero-light'));
   const body = make('div', 'hero-content');
   const status = append(make('div', 'hero-status'), make('span', 'status-dot'), make('span', '', localize(portfolio.profile.availability)));
-  const roles = make('p', 'hero-roles', localize(portfolio.profile.role));
+  const roles = make('p', 'hero-roles', (language==='zh'?'王煜鹏 · ':'Wang Yupeng · ')+localize(portfolio.profile.role));
   const title = make('h1', 'hero-title');
   const lines = customerHeadline(localize(portfolio.profile.headline),language).split('\n');
   lines.forEach(line => title.append(make('span', 'hero-line', line)));
@@ -217,6 +227,12 @@ function renderGateway(kind){
  append(section,append(make('div','section-inner gateway-grid reveal'),content,art));return section;
 }
 
+const caseNeeds=[
+ ['knowledge','资料检索与治理','Knowledge access and governance',['rag','archive','assistant']],
+ ['workflow','流程自动化与业务系统','Workflows and business systems',['fde','workflow','erp','oa','fullstack']],
+ ['interfaces','数字交互与业务看板','Business interfaces and dashboards',['avatar','screen','platform','multimodal']],
+ ['models','模型与算法落地','Model and algorithm delivery',['algorithm','local','harness']]
+];
 function renderArchive() {
   const section = make('section', 'archive-section light-section'); section.id = 'archive';
   const inner = make('div', 'section-inner');
@@ -224,7 +240,7 @@ function renderArchive() {
   const filters = make('div', 'filter-bar reveal'); filters.setAttribute('role', 'group'); filters.setAttribute('aria-label', copy('filterNavigation'));
   [['all', copy('archiveAll')], ...Object.entries(categories).map(([key, value]) => [key, localize(value)])].forEach(([key, label]) => {
     const b = button(label, `filter-button ${filter === key ? 'active' : ''}`, () => {
-      filter = key;
+      filter = key;rememberArchive();
       $$('.filter-button').forEach(el => { el.classList.toggle('active', el.dataset.filter === key); el.setAttribute('aria-pressed', String(el.dataset.filter === key)); });
       renderArchiveRows($('#archive-list'));
     });
@@ -238,18 +254,25 @@ function renderArchive() {
   search.placeholder = copy('projectSearchHint');
   search.setAttribute('aria-controls', rows.id);
   search.addEventListener('input', () => {
-    projectQuery = search.value;
+    projectQuery = search.value;rememberArchive();
     renderArchiveRows(rows);
   });
   searchLabel.append(search);
   renderArchiveRows(rows);
-  append(inner, searchLabel, filters, rows, make('p', 'archive-note', copy('privateNote'))); section.append(inner); return section;
+  const byNeed=make('label','archive-search',language==='zh'?'业务问题':'Business need');
+  const select=make('select');select.add(new Option(language==='zh'?'全部问题':'All needs',''));
+  for(const [id,name,en] of caseNeeds)select.add(new Option(language==='zh'?name:en,id));
+  select.value=need;select.onchange=()=>{need=select.value;rememberArchive();renderArchiveRows(rows);};byNeed.append(select);
+  append(inner, searchLabel, byNeed, filters, rows, make('p', 'archive-note', copy('privateNote'))); section.append(inner); return section;
 }
 
 function renderArchiveRows(rows) {
   rows.replaceChildren();
   const query = projectQuery.trim().toLocaleLowerCase();
+  const selectedNeed=caseNeeds.find(([id])=>id===need);
+  const evidence=selectedNeed && new Set(selectedNeed[3].flatMap(topic=>linkedCases(portfolio,topic,CASE_DEFAULTS).map(p=>p.id)));
   const projects = visibleProjects().filter(project => {
+    if(evidence&&!evidence.has(project.id))return false;
     const detail=portfolio.site.pages.find(p=>p.id==='project-'+project.id);
     if(!detail||detail.hidden||!detail.blocks.some(b=>b.id==='project-detail'&&!b.hidden))return false;
     const matchesCategory = filter === 'all' || project.categories.includes(filter);
@@ -288,7 +311,9 @@ function renderFooter() {
 }
 
 function openProject(project,embedded=false) {
-  if(!embedded){location.href=base+'/?page=project-'+encodeURIComponent(project.id);return;}
+  if(!embedded){history.replaceState({...history.state,archiveY:scrollY},'');
+    try{sessionStorage.setItem('kuz-project-return',JSON.stringify({id:project.id,url:location.href,y:scrollY}));}catch{}
+    location.href=base+'/?page=project-'+encodeURIComponent(project.id)+'&from=archive';return;}
   const dialog = embedded?make('article','project-page'):$('#project-dialog');
   lastFocus = document.activeElement;
   dialog.replaceChildren();
@@ -302,6 +327,7 @@ function openProject(project,embedded=false) {
   [['role', 'roleLabel'], ['problem', 'problemLabel'], ['solution', 'solutionLabel'], ['outcome', 'outcomeLabel']].forEach(([field, key]) => { if (localize(project[field])) append(details, append(make('section', 'detail-block'), make('h3', '', copy(key)), make('p', '', localize(project[field])))); });
   const gallery = make('section', 'media-gallery'); append(gallery, make('h3', 'gallery-title', copy('gallery')));
   const media = (project.media || []).filter(m => /^\/media\/[a-zA-Z0-9._-]+$/.test(m.url));
+  if (!media.length) gallery.hidden=true;
   if (!media.length) append(gallery, append(make('div', 'gallery-empty'), make('span', 'gallery-symbol', '◎'), make('h4', '', copy('galleryEmpty')), make('p', '', copy('galleryEmptyBody'))));
   const images = make('div', 'image-gallery');
   media.forEach(m => {
@@ -331,8 +357,25 @@ function openProject(project,embedded=false) {
   if (images.children.length) gallery.append(images);
   const evidence = make('div', 'project-evidence');
   append(evidence, make('h3', '', copy('statusLabel')), make('p', '', localize(project.status)), make('h3', '', copy('evidenceLabel')), make('p', '', localize(project.evidence)));
-  append(dialog, close, head, intro, tech, details, gallery, evidence);
-  if(embedded){close.remove();dialog.id='project-detail';dialog.dataset.editBlock='project-detail';dialog.prepend(link(language==='zh'?'← 全部项目':'← All projects',base+'/?page=projects','text-link'));$('#main').replaceChildren(dialog);return;}
+  if(['datafactory','personal-os','desktop-avatar'].includes(project.id)){
+    details.classList.add('case-study');
+    const choice=details.querySelectorAll('.detail-block h3')[2];
+    if(choice)choice.textContent=language==='zh'?'关键工程选择':'Engineering decisions';
+    evidence.classList.add('case-proof');
+  }
+  append(dialog, close, head, intro, tech, details, evidence, gallery);
+  if(embedded){close.remove();dialog.id='project-detail';dialog.dataset.editBlock='project-detail';const back=link(language==='zh'?'← 全部项目':'← All projects',base+'/?page=projects','text-link');
+    if(archiveParams.get('from')==='archive'){
+      try{
+        const saved=JSON.parse(sessionStorage.getItem('kuz-project-return')||'null');
+        const url=saved&&new URL(saved.url);
+        if(saved?.id===project.id && url.origin===location.origin && url.pathname===location.pathname && url.searchParams.get('page')==='projects'){
+          back.href=url.href;
+          back.onclick=e=>{if(e.ctrlKey||e.metaKey||e.shiftKey)return;sessionStorage.setItem('kuz-archive-position',JSON.stringify({url:url.href,y:saved.y}));};
+        }
+      }catch{}
+    }
+    dialog.prepend(back);$('#main').replaceChildren(dialog);return;}
   dialog.showModal(); document.body.classList.add('dialog-open'); close.focus();
 }
 
@@ -413,6 +456,11 @@ try {
   [portfolio, inventory] = await Promise.all(responses.map(response => response.json()));
   render();
   if(location.hash)requestAnimationFrame(followLocationHash);
+  else if(archiveParams.get('page')==='projects'){
+    let y=history.state?.archiveY;
+    try{const saved=JSON.parse(sessionStorage.getItem('kuz-archive-position')||'null');sessionStorage.removeItem('kuz-archive-position');if(saved?.url===location.href)y=saved.y;}catch{}
+    if(Number.isFinite(y))requestAnimationFrame(()=>window.scrollTo({top:y,behavior:'instant'}));
+  }
 } catch (error) {
   const errorView = make('div', 'loading-screen');
   append(errorView, make('span', 'brand-mark', 'K'), make('h1', '', copy('loadError')), button(copy('retry'), 'button-primary', () => location.reload()));

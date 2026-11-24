@@ -2322,3 +2322,7 @@ html[lang="en"] .expertise-item h3 {
     [data-reading-entrance] { transition: none !important; }
     [data-reading-entrance="waiting"]:not(:focus-within) { opacity: .18; }
 }
+
+.archive-search select{width:100%;min-height:44px;font:inherit;color:inherit;background:transparent;border:0;border-bottom:1px solid currentColor}.engineering-detail{display:block;font-size:.82rem;color:var(--muted)}.hero-title{overflow-wrap:break-word}
+
+.case-study{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr));gap:1rem 2.25rem}.case-study .detail-block{margin:0;padding:1.2rem 0;border-top:1px solid #8395a24d}.case-proof{border-inline-start:2px solid #7eada7;padding-inline-start:1.2rem}.project-page .media-gallery[hidden]{display:none}
