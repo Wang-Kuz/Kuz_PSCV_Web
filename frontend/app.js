@@ -1,6 +1,6 @@
 import {centerObserver, mountReadingEntrances} from './center-observer.js?v=reading';
 import {caseActions,renderLab,mountJourney} from './journey.js';
-import {guideProjects} from './lib.js';
+import {guideProjects,customerHeadline,publicDestination,linkedCases} from './lib.js';
 import {mountScrollFlow} from './scroll-flow.js';
 import {renderEngineering,renderAigcGuide,renderContact,mountEngineeringCarousels} from './engineering.js';
 import {organizeSite} from './page-structure.js';
@@ -88,20 +88,24 @@ function renderHero() {
   const status = append(make('div', 'hero-status'), make('span', 'status-dot'), make('span', '', localize(portfolio.profile.availability)));
   const roles = make('p', 'hero-roles', localize(portfolio.profile.role));
   const title = make('h1', 'hero-title');
-  const lines = localize(portfolio.profile.headline).split('\n');
+  const lines = customerHeadline(localize(portfolio.profile.headline),language).split('\n');
   lines.forEach(line => title.append(make('span', 'hero-line', line)));
-  append(body, status, roles, title, make('p', 'hero-intro', localize(portfolio.profile.intro)));
-  const actions = append(make('div', 'hero-actions'),
-    append(link(copy('capabilitySelected'), '#work', 'button-primary'), arrow('down')),
-    append(externalLink(copy('heroSecondary'), portfolio.profile.github, 'text-link'), arrow()));
+  append(body, status, title, roles, make('p', 'hero-intro', localize(portfolio.profile.intro)));
+  const actions=make('div','hero-actions');
+  if(publicDestination(portfolio.site,'aigc','engineering-hero')){
+    const primary=link(language==='zh'?'按业务问题找方案':'Explore business needs',base+'/?page=aigc','button-primary');
+    primary.dataset.gatewayAction='';
+    actions.append(append(primary,arrow()));
+  }
+  if(publicDestination(portfolio.site,'projects','archive')) actions.append(append(link(language==='zh'?'查看项目作品':'Browse projects',base+'/?page=projects','text-link'),arrow()));
   body.append(actions);
   const art = make('div', 'hero-art'); art.setAttribute('aria-hidden', 'true');
   const canvas = make('canvas', 'field-canvas'); canvas.dataset.field = 'sculpture';
   append(art, make('div', 'field-glow'), canvas,
     append(make('div', 'field-coordinate'), make('span', '', copy('fieldTitle')), make('span', '', copy(matchMedia('(hover: hover)').matches ? 'fieldInteraction' : 'fieldTouchInteraction'))));
-  const base = append(make('div', 'hero-base'), make('p', '', copy('heroEyebrow')),
+  const foot = append(make('div', 'hero-base'), make('p', '', copy('heroEyebrow')),
     append(link(copy('heroFootnote'), '#manifest', 'scroll-hint'), make('span', 'scroll-line')));
-  append(hero, back, body, art, base);stage.append(hero);
+  append(hero, back, body, art, foot);stage.append(hero);
   return stage;
 }
 

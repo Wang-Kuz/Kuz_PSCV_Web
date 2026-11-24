@@ -64,3 +64,13 @@ export function linkedCases(portfolio, topic, defaults) {
     return p && page?.blocks.some(b=>b.id==='project-detail' && !b.hidden) ? [p] : [];
   });
 }
+
+export function customerHeadline(value,lang) {
+  const previous={zh:'把智能，\n带入现实。',en:'Intelligence.\nMade real.'};
+  const current={zh:'让企业资料能查，\n业务流程能跑。',en:'Make knowledge searchable.\nPut workflows to work.'};
+  return value===previous[lang] ? current[lang] : value;
+}
+export function publicDestination(site,id,block) {
+  const page=site.pages.find(p=>p.id===id && !p.hidden);
+  return !!page && (!block || page.blocks.some(b=>b.id===block && !b.hidden));
+}

@@ -15,10 +15,10 @@ export function renderEngineering({copy,base,site}){
  const serviceLinks = [...catalog.querySelectorAll('a')];
  // Keep the published sequence for next/previous navigation, group only the index.
  const directions=[
-  ['知识与交互','Knowledge & interaction',['rag','qa','assistant','avatar']],
-  ['业务系统','Business systems',['oa','erp','archive','ai']],
-  ['模型与自动化','Models & automation',['local','workflow','harness','algorithm']],
-  ['数据与可视化','Data & visualization',['platform','screen']]
+  ['查资料、问答案','Find documents and answers',['rag','qa','archive','assistant']],
+  ['打通审批与业务流程','Connect approvals and workflows',['oa','erp','workflow','ai']],
+  ['让业务数据看得懂、用得上','Turn data into useful interfaces',['avatar','screen','platform']],
+  ['在自己的环境部署模型','Deploy models in your environment',['local','algorithm','harness']]
  ];
  const used=new Set();
  const addDirection=(name,links)=>{
@@ -40,7 +40,7 @@ export function renderEngineering({copy,base,site}){
  const section=el('section','engineering-service section-inner reveal');section.id='service-'+service.id;
  const content=el('div','engineering-copy');
  append(content,el('p','eyebrow',String(index+1).padStart(2,'0')+' / '+copy(key+'title')),el('h2','section-title',copy(key+'promise')),el('h3','engineering-label',copy('engPain')),el('p','section-description',copy(key+'pain')),el('h3','engineering-label',copy('engApproach')),el('p','',copy(key+'approach')));
- const detail=button(copy('engDetail'),()=>{});detail.disabled=true;detail.title=copy('engSoon');append(content,append(el('div','engineering-detail'),detail,el('span','',copy('engSoon'))));
+ content.append(el('small','engineering-detail',copy('engSoon')));
  const visual=el('div','engineering-visual');visual.dataset.carousel='';visual.dataset.autoplay=String(block?.autoplay!==false);visual.dataset.seconds=String(block?.slideSeconds||7);
  const track=el('div','engineering-track');track.tabIndex=0;track.setAttribute('aria-label',copy(key+'title')+' / '+copy('engConcept')+' / '+copy('engBusiness'));
  const concept=el('figure','engineering-slide'),business=el('figure','engineering-slide business-slide');

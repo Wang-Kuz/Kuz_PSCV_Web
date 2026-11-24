@@ -16,7 +16,11 @@ export function caseActions(data,topic,base,localize){
  return linkedCases(data,topic,CASE_DEFAULTS).map(p=>link(localize(p.name),base+'/?page=project-'+encodeURIComponent(p.id)+'&topic='+topic));
 }
 function blockVisible(data,id,key){return data.site.pages.some(p=>p.id===id&&!p.hidden&&p.blocks.some(b=>b.id===key&&!b.hidden));}
-function contactLink(base,topic){return link(ui('聊聊类似需求','Discuss a similar need'),base+'/?topic='+topic+'#contact');}
+function contactLink(base,topic,project){
+ const query=new URLSearchParams({topic});
+ if(project)query.set('project',project.id);
+ return link(project?ui('讨论类似项目','Discuss a similar project'):ui('讨论这个需求','Discuss this need'),base+'/?'+query+'#contact');
+}
 
 const clauses=[
  {id:'3.1',key:'a',terms:['改签','航班','flight','change']},
@@ -68,24 +72,26 @@ export function renderLab({copy,base,portfolio,localize}){
  return wrap;
 }
 
-const draft={source:'',pain:'',outcome:''};
+const draft={source:'',pain:'',outcome:'',limits:''};
 function brief(section,env,initialTopic){
  const {base,copy,portfolio}=env;
- const details=el('details','brief-disclosure');details.open=initialTopic!=='general';details.append(el('summary','',ui('带着需求联系我','Prepare a project brief')));
+ const details=el('details','brief-disclosure');const project=portfolio.projects.find(p=>p.id===args().get('project') && p.visible!==false && blockVisible(portfolio,'project-'+p.id,'project-detail'));
+ details.open=!!project || initialTopic!=='general';details.append(el('summary','',ui('带着需求联系我','Prepare a project brief')));
  const form=el('form','brief-form');
  form.append(el('p','',ui('在本页整理摘要，再复制到微信或打开邮件草稿。','Build a brief here, then copy it to WeChat or open an email draft.')));
  const field=(label,input)=>{const line=el('label','',label);line.append(input);form.append(line);};
+ if(project)form.append(el('p','brief-project',ui('参考项目 · ','Reference project · ')+env.localize(project.name)));
  const topic=el('select');const topics=[...new Set([initialTopic,'general',...JOURNEY_TOPICS])];
  for(const id of topics){const service=ENGINEERING_SERVICES.find(s=>s.id===id);const label=service?copy('eng_'+id+'_title'):id==='general'?ui('其他方向','Other'):id.toUpperCase();topic.add(new Option(label,id));}
  field(ui('合作方向','Area of interest'),topic);
- for(const [id,zh,en] of [['source','资料或系统在哪里？','Where does the material live?'],['pain','现在最费时间的是哪一步？','Which step takes the most time?'],['outcome','希望得到什么结果？','What outcome do you need?']]){
-  const input=el('textarea');input.rows=2;input.maxLength=600;input.required=true;input.value=draft[id];input.oninput=()=>draft[id]=input.value;field(ui(zh,en),input);
+ for(const [id,zh,en] of [['source','资料或系统在哪里？','Where does the material live?'],['pain','现在最费时间的是哪一步？','Which step takes the most time?'],['outcome','希望得到什么结果？','What outcome do you need?'],['limits','有哪些部署或数据限制？','What constraints apply?']]){
+  const input=el('textarea');input.rows=2;input.maxLength=600;input.required=false;input.value=draft[id];input.oninput=()=>draft[id]=input.value;field(ui(zh,en),input);
  }
  const submit=el('button','engineering-control',ui('生成需求摘要','Build brief'));submit.type='submit';const result=el('div','brief-result');
  form.append(submit,result);const reset=()=>result.replaceChildren();form.addEventListener('input',reset);
  form.onsubmit=event=>{
   event.preventDefault();
-  const text=[topic.selectedOptions[0].text,...[...form.querySelectorAll('textarea')].map(n=>n.parentNode.firstChild.textContent+'\n'+n.value.trim())].join('\n\n');
+  const text=[topic.selectedOptions[0].text,...(project?[env.localize(project.name)]:[]),...[...form.querySelectorAll('textarea')].filter(n=>n.value.trim()).map(n=>n.parentNode.firstChild.textContent+'\n'+n.value.trim())].join('\n\n');
   const output=el('textarea');output.readOnly=true;output.rows=7;output.value=text;output.setAttribute('aria-label',ui('需求摘要','Project brief'));
   const copyButton=el('button','engineering-control',ui('复制摘要','Copy brief'));copyButton.type='button';
   const message=el('span');message.setAttribute('role','status');
@@ -104,9 +110,9 @@ export function mountJourney(env){
  const topic=route==='rag-lab'?'rag':fromTopic();
  const page=portfolio.site.pages.find(p=>p.id===route);
  if(contact&&!page.blocks.find(b=>b.id==='contact')?.buttonHidden){const current=brief(contact,env,topic);for(const action of contact.querySelectorAll('.wechat-trigger,.contact-email'))action.addEventListener('click',()=>record(base,route,'contact',current()));}
- if(route.startsWith('project-')&&topic!=='general'&&document.querySelector('#project-detail:not([hidden])')){
+ if(route.startsWith('project-')&&document.querySelector('#project-detail:not([hidden])')){
   record(base,route,'case',topic);
-  if(!page.blocks.find(b=>b.id==='project-detail')?.buttonHidden&&blockVisible(portfolio,'home','contact'))document.querySelector('#project-detail').append(contactLink(base,topic));
+  if(!page.blocks.find(b=>b.id==='project-detail')?.buttonHidden&&blockVisible(portfolio,'home','contact'))document.querySelector('#project-detail').append(contactLink(base,topic,portfolio.projects.find(p=>'project-'+p.id===route)));
  }
  const sections=[...document.querySelectorAll('.engineering-service:not([hidden]),.project-story')].filter(n=>n.getClientRects().length);
  for(const s of sections.filter(s=>s.id.startsWith('service-'))){

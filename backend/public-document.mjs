@@ -1,4 +1,4 @@
-import {guideProjects,linkedCases} from '../frontend/lib.js';
+import {guideProjects,linkedCases,customerHeadline,publicDestination} from '../frontend/lib.js';
 import {COPY_DEFAULTS} from '../frontend/copy.js';
 import {ENGINEERING_SERVICES,CASE_DEFAULTS} from '../frontend/engineering-content.js';
 
@@ -37,7 +37,9 @@ export function publicDocument(template, data, id) {
     const key=block.id, [titleKey,bodyKey]=summaries[key] || [];
     let title=copy(titleKey),body=copy(bodyKey),extra='';
     if(key==='home'){
-      title=zh(profile.headline);body=zh(profile.intro);
+      title=customerHeadline(zh(profile.headline),'zh');body=zh(profile.intro);
+      if(!block.buttonHidden && !block.href && publicDestination(site,'aigc','engineering-hero'))extra+=anchor('按业务问题找方案',pageUrl('aigc'));
+      if(publicDestination(site,'projects','archive'))extra+=anchor('查看项目作品',pageUrl('projects'));
       extra=paragraph(zh(profile.role))+anchor(profile.name,profile.github);
     } else if(id==='rag-lab'&&key==='lab-demo'){
       title=copy('labTitle');body=copy('labIntro');
@@ -72,6 +74,7 @@ export function publicDocument(template, data, id) {
       extra='<ul>'+items.map(p=>'<li>'+anchor(zh(p.name),pageUrl('project-'+p.id))+paragraph(zh(p.summary))+'</li>').join('')+'</ul>';
     } else if(key==='project-detail' && project){
       title=zh(project.name);body=zh(project.summary);
+      if(!block.buttonHidden&&canRead('home','contact'))extra+=anchor('讨论类似项目','./?project='+encodeURIComponent(project.id)+'#contact');
       for(const field of ['role','problem','solution','outcome']){
         if(zh(project[field]))extra+=subheading(copy(field+'Label'))+paragraph(zh(project[field]));
       }
