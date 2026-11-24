@@ -1,4 +1,4 @@
-import {centerObserver} from './center-observer.js';
+import {centerObserver, mountReadingEntrances} from './center-observer.js?v=reading';
 import {caseActions,renderLab,mountJourney} from './journey.js';
 import {guideProjects} from './lib.js';
 import {mountScrollFlow} from './scroll-flow.js';
@@ -343,14 +343,40 @@ function observeReveals() {
  preference.addEventListener('change',finish);
  revealCleanup=()=>{preference.removeEventListener('change',finish);for(const animation of animations)animation.cancel();animations.clear();};
  const preview=new URL(location.href).searchParams.has('preview');
- const home=!!document.querySelector('.hero-stage');
- const enter=(element,delay=0)=>{if(preference.matches||preview)return;const frames=home?[{opacity:.20,translate:'0 38px'},{opacity:.92,translate:'0 4px',offset:.68},{opacity:1,translate:'0 0'}]:[{opacity:0,translate:'0 32px'},{opacity:1,translate:'0 0'}];const animation=element.animate(frames,{duration:home?880:950,delay,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'});animations.add(animation);animation.onfinish=()=>animations.delete(animation);};
+ const countUp=target=>{
+  if(preference.matches||preview)return;
+  $$('[data-count]',target).forEach(element=>{
+   const total=Number(element.dataset.count),start=performance.now();
+   const tick=now=>{
+    if(!element.isConnected)return;
+    const t=preference.matches ? 1 : Math.min(1,(now-start)/1100);
+    element.textContent=String(Math.round(total*(1-(1-t)**3)));
+    if(t<1)requestAnimationFrame(tick);
+   };
+   requestAnimationFrame(tick);
+  });
+ };
+ if(document.querySelector('.hero-stage,.engineering-page')){
+  const targets=$$('.reveal:not(.project-story,.gateway-grid,.engineering-service,.stats-grid), .story-copy, .project-art, .gateway-grid > *, .engineering-copy, .engineering-visual, .stat-item, .manifest-inner, .hero-intro, .hero-art, .engineering-hero > .section-description');
+  const stop=preview ? ()=>{} : mountReadingEntrances(targets,{
+   art:'.project-art,.gateway-art,.engineering-visual,.about-visual,.hero-art',
+   onEnter:countUp
+  });
+  const clean=revealCleanup;
+  revealCleanup=()=>{stop();clean();};
+  return;
+ }
  revealObserver=centerObserver(entries=>entries.forEach(entry=>{
-  if(!entry.isIntersecting)return;const target=entry.target;target.classList.add('is-visible');revealObserver.unobserve(target);
-  // Individual layers avoid overriding the scene camera / pointer transforms.
-  const layers=target.matches('.engineering-service')?[...target.children]:target.matches('.project-story')?[...target.querySelectorAll('.story-topline,.story-copy,.project-art')]:target.matches('.gateway-grid')?[...target.children]:[];
-  if(layers.length)layers.forEach((layer,i)=>enter(layer,i*110));else enter(target);
-  if(!preference.matches&&!preview)$$('[data-count]',target).forEach(element=>{const total=Number(element.dataset.count),start=performance.now();const tick=now=>{if(!element.isConnected)return;const p=Math.min(1,(now-start)/1100);element.textContent=String(Math.round(total*(1-(1-p)**3)));if(p<1)requestAnimationFrame(tick);};requestAnimationFrame(tick);});
+  if(!entry.isIntersecting)return;
+  const target=entry.target;
+  revealObserver.unobserve(target);
+  target.classList.add('is-visible');
+  if(preference.matches||preview)return;
+  const animation=target.animate([{opacity:0,translate:'0 32px'},{opacity:1,translate:'0 0'}],
+   {duration:950,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'});
+  animations.add(animation);
+  animation.onfinish=()=>animations.delete(animation);
+  countUp(target);
  }));
  $$('.reveal').forEach(element=>revealObserver.observe(element));
 }
